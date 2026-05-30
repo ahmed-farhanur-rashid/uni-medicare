@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore, getDashboardPath } from '@/store/auth';
+import { authApi } from '@/lib/api';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 
@@ -14,6 +15,8 @@ export default function LoginPage() {
   const [eId, setEId] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
 
   useEffect(() => {
     loadFromStorage();
@@ -25,11 +28,23 @@ export default function LoginPage() {
     }
   }, [isAuthenticated, role, router]);
 
+  const handleResendVerification = async () => {
+    if (!eId.trim()) return;
+    setResendLoading(true);
+    try {
+      await authApi.resendVerification(eId.trim());
+      setResendSuccess(true);
+    } catch {
+      setResendSuccess(true);
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const numericEid = parseInt(eId, 10);
-    if (isNaN(numericEid)) return;
-    const success = await login(numericEid, password);
+    if (!eId.trim()) return;
+    const success = await login(eId.trim(), password);
     if (success) {
       const currentRole = useAuthStore.getState().role;
       if (currentRole) {
@@ -172,45 +187,63 @@ export default function LoginPage() {
             className="space-y-5 animate-fade-in-up stagger-2"
           >
             {error && (
-              <div className="p-4 rounded-xl bg-rose/5 border border-rose/20 text-rose text-sm flex items-center gap-3 animate-scale-in">
-                <svg
-                  className="w-5 h-5 shrink-0"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                {error}
-                <button
-                  type="button"
-                  onClick={clearError}
-                  className="ml-auto p-1 rounded-lg hover:bg-rose/10"
-                >
+              <div className="p-4 rounded-xl bg-rose/5 border border-rose/20 text-rose text-sm animate-scale-in">
+                <div className="flex items-center gap-3">
                   <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
+                    className="w-5 h-5 shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                      clipRule="evenodd"
                     />
                   </svg>
-                </button>
+                  {error}
+                  <button
+                    type="button"
+                    onClick={clearError}
+                    className="ml-auto p-1 rounded-lg hover:bg-rose/10"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                {error.includes('verify your email') && (
+                  <div className="mt-2 pt-2 border-t border-rose/10">
+                    {resendSuccess ? (
+                      <span className="text-emerald-deep">Verification email resent. Check your inbox.</span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleResendVerification}
+                        disabled={resendLoading}
+                        className="text-emerald-deep font-medium hover:underline disabled:opacity-50"
+                      >
+                        {resendLoading ? 'Sending...' : 'Resend verification email'}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
             <Input
-              label="Employee / Student ID"
-              type="number"
-              placeholder="Enter your ID"
+              label="Email or Student/Staff ID"
+              type="text"
+              placeholder="Enter your email or ID"
               value={eId}
               onChange={(e) => setEId(e.target.value)}
               required

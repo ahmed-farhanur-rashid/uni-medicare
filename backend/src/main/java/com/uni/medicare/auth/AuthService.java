@@ -37,8 +37,13 @@ public class AuthService {
      */
     public LoginResponse login(LoginRequest req) {
 
+        String eId = req.eId().trim();
+        boolean isNumeric = eId.matches("\\d+");
+
         // ── Try staff ────────────────────────────────────────────────
-        var staffOpt = staffRepo.findByMedicalStaffId(req.eId());
+        var staffOpt = isNumeric
+                ? staffRepo.findByMedicalStaffId(Integer.parseInt(eId))
+                : staffRepo.findByEmail(eId);
         if (staffOpt.isPresent()) {
             MedicalStaff staff = staffOpt.get();
 
@@ -49,13 +54,15 @@ public class AuthService {
                 throw new IllegalArgumentException("Invalid credentials");
             }
 
-            String role  = staff.getRole().getRoleName().toUpperCase(); // e.g. "DOCTOR"
+            String role  = staff.getRole().getRoleName().toUpperCase();
             String token = jwtUtil.generateToken(staff.getMedicalStaffId(), role, "staff");
             return new LoginResponse(token, staff.getMedicalStaffId(), role, "staff");
         }
 
         // ── Try student ──────────────────────────────────────────────
-        var studentOpt = studentRepo.findByStudentId(req.eId());
+        var studentOpt = isNumeric
+                ? studentRepo.findByStudentId(Integer.parseInt(eId))
+                : studentRepo.findByEmail(eId);
         if (studentOpt.isPresent()) {
             Student student = studentOpt.get();
 

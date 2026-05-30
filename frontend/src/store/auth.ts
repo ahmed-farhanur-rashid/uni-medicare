@@ -13,7 +13,7 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
 
-  login: (eId: number, password: string) => Promise<boolean>;
+  login: (eId: string, password: string) => Promise<boolean>;
   logout: () => void;
   loadFromStorage: () => void;
   clearError: () => void;
@@ -28,7 +28,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoading: false,
   error: null,
 
-  login: async (eId: number, password: string) => {
+  login: async (eId: string, password: string) => {
     set({ isLoading: true, error: null });
     try {
       const res = await authApi.login({ eId, password });

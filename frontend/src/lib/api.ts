@@ -33,7 +33,7 @@ api.interceptors.response.use(
 );
 
 export interface LoginRequest {
-  eId: number;
+  eId: string;
   password: string;
 }
 
