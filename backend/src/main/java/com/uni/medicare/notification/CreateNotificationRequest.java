@@ -7,5 +7,6 @@ public record CreateNotificationRequest(
         @NotNull String recipientType,
         @NotNull Integer recipientId,
         @NotBlank String title,
-        @NotBlank String message
+        @NotBlank String message,
+        String channel
 ) {}

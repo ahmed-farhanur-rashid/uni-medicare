@@ -1,6 +1,9 @@
 package com.uni.medicare.appointment;
 
 import com.uni.medicare.auth.AppUserDetails;
+import com.uni.medicare.shared.dto.AppointmentResponse;
+import com.uni.medicare.shared.entity.Patient;
+import com.uni.medicare.shared.repository.PatientRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,42 +20,46 @@ import java.util.Map;
 public class AppointmentController {
 
     private final AppointmentService service;
+    private final PatientRepository   patientRepo;
 
     /** GET /api/appointments — RECEPTIONIST, ADMIN */
     @GetMapping
     @PreAuthorize("hasAnyRole('RECEPTIONIST','ADMIN')")
-    public List<Appointment> getAll() {
-        return service.getAll();
+    public List<AppointmentResponse> getAll() {
+        return service.getAll().stream().map(AppointmentResponse::fromEntity).toList();
     }
 
     /** GET /api/appointments/my — STUDENT sees own, DOCTOR sees own schedule */
     @GetMapping("/my")
     @PreAuthorize("hasAnyRole('STUDENT','DOCTOR')")
-    public List<Appointment> getMy(@AuthenticationPrincipal AppUserDetails user) {
+    public List<AppointmentResponse> getMy(@AuthenticationPrincipal AppUserDetails user) {
         if ("student".equals(user.getType())) {
-            // studentId → patientId lookup would normally go via PatientRepository;
-            // simplified here — in production resolve patient from student id
-            return service.getForPatient(user.getId());
+            Patient patient = patientRepo.findByStudent_StudentId(user.getId())
+                    .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException(
+                            "No patient profile found for this student"));
+            return service.getForPatient(patient.getPatientId())
+                    .stream().map(AppointmentResponse::fromEntity).toList();
         }
-        return service.getForDoctor(user.getId());
+        return service.getForDoctor(user.getId())
+                .stream().map(AppointmentResponse::fromEntity).toList();
     }
 
     /** POST /api/appointments — STUDENT, RECEPTIONIST, NURSE */
     @PostMapping
     @PreAuthorize("hasAnyRole('STUDENT','RECEPTIONIST','NURSE')")
-    public ResponseEntity<Appointment> book(
+    public ResponseEntity<AppointmentResponse> book(
             @Valid @RequestBody BookAppointmentRequest req,
             @AuthenticationPrincipal AppUserDetails user) {
-        return ResponseEntity.ok(service.book(req, user));
+        return ResponseEntity.ok(AppointmentResponse.fromEntity(service.book(req, user)));
     }
 
     /** PATCH /api/appointments/{id}/status — RECEPTIONIST, ADMIN */
     @PatchMapping("/{id}/status")
     @PreAuthorize("hasAnyRole('RECEPTIONIST','ADMIN')")
-    public ResponseEntity<Appointment> updateStatus(
+    public ResponseEntity<AppointmentResponse> updateStatus(
             @PathVariable int id,
             @RequestBody Map<String, String> body) {
-        return ResponseEntity.ok(
-                service.updateStatus(id, body.get("status"), body.get("reason")));
+        return ResponseEntity.ok(AppointmentResponse.fromEntity(
+                service.updateStatus(id, body.get("status"), body.get("reason"))));
     }
 }

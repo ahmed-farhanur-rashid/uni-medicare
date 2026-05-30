@@ -40,7 +40,7 @@ public class NotificationService {
         n.setRecipientId(req.recipientId());
         n.setTitle(req.title());
         n.setMessage(req.message());
-        n.setChannel("in_app");
+        n.setChannel(req.channel() != null ? req.channel() : "in_app");
         return repo.save(n);
     }
 }

@@ -4,6 +4,7 @@ import com.uni.medicare.shared.entity.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
@@ -22,18 +23,21 @@ public class BillingService {
     private final InvoiceRepository invoiceRepo;
     private final EntityManager     em;
     private final DataSource        dataSource;
+    private final MockPaymentGateway paymentGateway;
+
+    @Value("${app.medical-center-account-id:1}")
+    private int medicalCenterAccountId;
 
     public List<Invoice> getStudentInvoices(int studentId) {
         return invoiceRepo.findByStudent_StudentId(studentId);
     }
 
     /**
-     * Pay invoice by calling the transfer_funds stored procedure.
-     * The procedure pays the oldest pending invoice automatically.
+     * Pay invoice via MockPaymentGateway, then call transfer_funds DB function.
      * Rule 5: student cannot overpay — the procedure signals an error on insufficient funds.
      */
     @Transactional
-    public void payInvoice(int invoiceId, int studentId) {
+    public PaymentGatewayResponse payInvoice(int invoiceId, int studentId) {
         Invoice invoice = invoiceRepo.findById(invoiceId)
                 .orElseThrow(() -> new EntityNotFoundException("Invoice not found"));
 
@@ -44,9 +48,15 @@ public class BillingService {
             throw new IllegalStateException("Invoice is already " + invoice.getTransactionStatus());
         }
 
-        // Medical center account_id = 1 (system account — configure as a property in production)
-        int medicalCenterAccountId = 1;
+        // Process through mock payment gateway (90% success / 10% failure)
+        PaymentGatewayResponse gatewayResponse = paymentGateway.processPayment(
+                invoice.getTotalAmount(), studentId, "Invoice #" + invoiceId);
 
+        if (!gatewayResponse.success()) {
+            return gatewayResponse;
+        }
+
+        // Gateway approved — execute the fund transfer
         SimpleJdbcCall call = new SimpleJdbcCall(dataSource)
                 .withProcedureName("transfer_funds");
 
@@ -56,6 +66,8 @@ public class BillingService {
         params.put("p_amount", invoice.getTotalAmount());
 
         call.execute(params);   // throws DataAccessException on SIGNAL (insufficient funds)
+
+        return gatewayResponse;
     }
 
     /**

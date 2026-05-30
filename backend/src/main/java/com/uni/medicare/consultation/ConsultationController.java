@@ -1,6 +1,9 @@
 package com.uni.medicare.consultation;
 
 import com.uni.medicare.auth.AppUserDetails;
+import com.uni.medicare.shared.dto.ConsultationResponse;
+import com.uni.medicare.shared.entity.Patient;
+import com.uni.medicare.shared.repository.PatientRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,26 +20,33 @@ import java.util.Map;
 public class ConsultationController {
 
     private final ConsultationService service;
+    private final PatientRepository   patientRepo;
 
     @GetMapping("/my")
     @PreAuthorize("hasAnyRole('STUDENT','DOCTOR')")
-    public List<Consultation> getMy(@AuthenticationPrincipal AppUserDetails user) {
-        if ("student".equals(user.getType()))
-            return service.getForPatient(user.getId());
-        return service.getForDoctor(user.getId());
+    public List<ConsultationResponse> getMy(@AuthenticationPrincipal AppUserDetails user) {
+        if ("student".equals(user.getType())) {
+            Patient patient = patientRepo.findByStudent_StudentId(user.getId())
+                    .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException(
+                            "No patient profile found for this student"));
+            return service.getForPatient(patient.getPatientId())
+                    .stream().map(ConsultationResponse::fromEntity).toList();
+        }
+        return service.getForDoctor(user.getId())
+                .stream().map(ConsultationResponse::fromEntity).toList();
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('NURSE','RECEPTIONIST')")
-    public ResponseEntity<Consultation> open(@Valid @RequestBody OpenConsultationRequest req) {
-        return ResponseEntity.ok(service.open(req));
+    public ResponseEntity<ConsultationResponse> open(@Valid @RequestBody OpenConsultationRequest req) {
+        return ResponseEntity.ok(ConsultationResponse.fromEntity(service.open(req)));
     }
 
     @PatchMapping("/{id}/notes")
     @PreAuthorize("hasRole('DOCTOR')")
-    public ResponseEntity<Consultation> addNotes(
+    public ResponseEntity<ConsultationResponse> addNotes(
             @PathVariable int id,
             @RequestBody Map<String, String> body) {
-        return ResponseEntity.ok(service.addNotes(id, body.get("notes")));
+        return ResponseEntity.ok(ConsultationResponse.fromEntity(service.addNotes(id, body.get("notes"))));
     }
 }

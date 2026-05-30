@@ -71,6 +71,13 @@ public class PrescriptionService {
                     com.uni.medicare.lab.LabTestCatalog.class, req.catalogId()));
         }
         em.persist(lt);
+
+        // Create corresponding LabResult row with status=pending
+        com.uni.medicare.lab.LabResult labResult = new com.uni.medicare.lab.LabResult();
+        labResult.setLabTest(lt);
+        labResult.setResultStatus("pending");
+        em.persist(labResult);
+
         return lt;
     }
 }

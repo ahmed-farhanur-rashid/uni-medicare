@@ -1,9 +1,9 @@
 package com.uni.medicare.audit;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -11,9 +11,9 @@ public class AuditService {
 
     private final AuditLogRepository repo;
 
-    /** Admin read-only — fetch all logs */
-    public List<AuditLog> getAll() {
-        return repo.findAll();
+    /** Admin read-only — fetch logs with pagination */
+    public Page<AuditLog> getAll(Pageable pageable) {
+        return repo.findAll(pageable);
     }
 
     /**

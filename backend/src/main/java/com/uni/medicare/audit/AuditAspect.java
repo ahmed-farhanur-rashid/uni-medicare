@@ -54,6 +54,19 @@ public class AuditAspect {
                  null, "{\"status\":\"" + newStatus + "\"}");
     }
 
+    /** Audit login events */
+    @AfterReturning(
+        pointcut = "execution(* com.uni.medicare.auth.AuthService.login(..))",
+        returning = "result"
+    )
+    public void afterLogin(JoinPoint jp, Object result) {
+        Object[] args = jp.getArgs();
+        com.uni.medicare.auth.LoginRequest req = (com.uni.medicare.auth.LoginRequest) args[0];
+        com.uni.medicare.auth.LoginResponse resp = (com.uni.medicare.auth.LoginResponse) result;
+        writeLog(resp.type(), resp.id(), "LOGIN", null, null,
+                 null, "{\"role\":\"" + resp.role() + "\"}");
+    }
+
     // ── Helpers ────────────────────────────────────────────────────────────
 
     private void writeLog(String actorType, int actorId, String action,

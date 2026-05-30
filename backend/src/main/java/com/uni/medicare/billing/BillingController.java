@@ -1,6 +1,7 @@
 package com.uni.medicare.billing;
 
 import com.uni.medicare.auth.AppUserDetails;
+import com.uni.medicare.shared.dto.InvoiceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,17 +20,21 @@ public class BillingController {
 
     @GetMapping("/invoices/my")
     @PreAuthorize("hasRole('STUDENT')")
-    public List<Invoice> getMyInvoices(@AuthenticationPrincipal AppUserDetails user) {
-        return service.getStudentInvoices(user.getId());
+    public List<InvoiceResponse> getMyInvoices(@AuthenticationPrincipal AppUserDetails user) {
+        return service.getStudentInvoices(user.getId())
+                .stream().map(InvoiceResponse::fromEntity).toList();
     }
 
     @PostMapping("/invoices/{id}/pay")
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<Void> pay(
+    public ResponseEntity<?> pay(
             @PathVariable int id,
             @AuthenticationPrincipal AppUserDetails user) {
-        service.payInvoice(id, user.getId());
-        return ResponseEntity.ok().build();
+        PaymentGatewayResponse response = service.payInvoice(id, user.getId());
+        if (!response.success()) {
+            return ResponseEntity.status(402).body(response);
+        }
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/invoices/{id}/line-items")
@@ -43,9 +48,9 @@ public class BillingController {
 
     @PatchMapping("/invoices/{id}/status")
     @PreAuthorize("hasAnyRole('RECEPTIONIST','ADMIN')")
-    public ResponseEntity<Invoice> updateStatus(
+    public ResponseEntity<InvoiceResponse> updateStatus(
             @PathVariable int id,
             @RequestBody Map<String, String> body) {
-        return ResponseEntity.ok(service.updateStatus(id, body.get("status")));
+        return ResponseEntity.ok(InvoiceResponse.fromEntity(service.updateStatus(id, body.get("status"))));
     }
 }

@@ -2,6 +2,7 @@ package com.uni.medicare.prescription;
 
 import com.uni.medicare.auth.AppUserDetails;
 import com.uni.medicare.lab.PrescriptionLabTest;
+import com.uni.medicare.shared.dto.PrescriptionResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,34 +19,33 @@ public class PrescriptionController {
 
     @PostMapping
     @PreAuthorize("hasRole('DOCTOR')")
-    public ResponseEntity<Prescription> create(
+    public ResponseEntity<PrescriptionResponse> create(
             @Valid @RequestBody CreatePrescriptionRequest req,
             @AuthenticationPrincipal AppUserDetails user) {
-        return ResponseEntity.ok(service.create(req, user.getId()));
+        return ResponseEntity.ok(PrescriptionResponse.fromEntity(service.create(req, user.getId())));
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('DOCTOR','NURSE','STUDENT','ADMIN')")
-    public ResponseEntity<Prescription> getById(
+    public ResponseEntity<PrescriptionResponse> getById(
             @PathVariable int id,
             @AuthenticationPrincipal AppUserDetails user) {
         Prescription p = service.getById(id);
-        // Students can only see their own prescriptions
         if ("student".equals(user.getType())) {
             int patientStudentId = p.getConsultation().getPatient().getStudent().getStudentId();
             if (patientStudentId != user.getId()) {
                 return ResponseEntity.status(403).build();
             }
         }
-        return ResponseEntity.ok(p);
+        return ResponseEntity.ok(PrescriptionResponse.fromEntity(p));
     }
 
     @PostMapping("/{id}/medicines")
     @PreAuthorize("hasRole('DOCTOR')")
-    public ResponseEntity<Prescription> addMedicine(
+    public ResponseEntity<PrescriptionResponse> addMedicine(
             @PathVariable int id,
             @Valid @RequestBody AddMedicineRequest req) {
-        return ResponseEntity.ok(service.addMedicine(id, req));
+        return ResponseEntity.ok(PrescriptionResponse.fromEntity(service.addMedicine(id, req)));
     }
 
     @PostMapping("/{id}/lab-tests")

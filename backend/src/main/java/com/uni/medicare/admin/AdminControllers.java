@@ -1,5 +1,6 @@
 package com.uni.medicare.admin;
 
+import com.uni.medicare.shared.dto.MedicalStaffResponse;
 import com.uni.medicare.shared.entity.Department;
 import com.uni.medicare.shared.entity.MedicalStaff;
 import com.uni.medicare.shared.entity.MedicalStaffRole;
@@ -8,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,14 +66,23 @@ class RoleController {
 class StaffAdminController {
 
     private final StaffAdminRepository repo;
+    private final PasswordEncoder     passwordEncoder;
 
-    @GetMapping          public List<MedicalStaff> all()                       { return repo.findAll(); }
-    @GetMapping("/{id}") public MedicalStaff one(@PathVariable int id)         { return repo.findById(id).orElseThrow(); }
+    @GetMapping          public List<MedicalStaffResponse> all()                       { return repo.findAll().stream().map(MedicalStaffResponse::fromEntity).toList(); }
+    @GetMapping("/{id}") public MedicalStaffResponse one(@PathVariable int id)         { return MedicalStaffResponse.fromEntity(repo.findById(id).orElseThrow()); }
     @PostMapping         @Transactional
-                         public MedicalStaff create(@RequestBody MedicalStaff s) { return repo.save(s); }
+                         public MedicalStaffResponse create(@RequestBody MedicalStaff s) {
+                             s.setPassword(passwordEncoder.encode(s.getPassword()));
+                             return MedicalStaffResponse.fromEntity(repo.save(s)); }
     @PutMapping("/{id}") @Transactional
-                         public MedicalStaff update(@PathVariable int id, @RequestBody MedicalStaff s) {
-                             s.setMedicalStaffId(id); return repo.save(s); }
+                         public MedicalStaffResponse update(@PathVariable int id, @RequestBody MedicalStaff s) {
+                             s.setMedicalStaffId(id);
+                             if (s.getPassword() != null && !s.getPassword().isEmpty()) {
+                                 s.setPassword(passwordEncoder.encode(s.getPassword()));
+                             } else {
+                                 s.setPassword(repo.findById(id).orElseThrow().getPassword());
+                             }
+                             return MedicalStaffResponse.fromEntity(repo.save(s)); }
     @DeleteMapping("/{id}") @Transactional
                          public void delete(@PathVariable int id)               { repo.deleteById(id); }
 }

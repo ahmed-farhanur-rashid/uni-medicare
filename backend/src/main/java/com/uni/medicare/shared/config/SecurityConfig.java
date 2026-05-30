@@ -29,8 +29,14 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Public endpoint — login only
+                // Public endpoints — auth flows
                 .requestMatchers("/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/verify-email").permitAll()
+                .requestMatchers("/api/auth/forgot-password").permitAll()
+                .requestMatchers("/api/auth/reset-password").permitAll()
+                // Swagger / OpenAPI
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/v3/api-docs/**").permitAll()
                 // Everything else requires a valid JWT
                 .anyRequest().authenticated()
             )

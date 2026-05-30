@@ -43,8 +43,6 @@ public class AuthService {
         }
 
         // ── Try student ──────────────────────────────────────────────
-        // NOTE: students table has no password column in v3 schema.
-        // Extend this when authentication is added for students.
         var studentOpt = studentRepo.findByStudentId(req.eId());
         if (studentOpt.isPresent()) {
             Student student = studentOpt.get();
@@ -55,8 +53,10 @@ public class AuthService {
             if (student.getExpiresOn() == null || student.getExpiresOn().isBefore(LocalDate.now())) {
                 throw new IllegalStateException("Student enrollment has expired");
             }
+            if (!passwordEncoder.matches(req.password(), student.getPassword())) {
+                throw new IllegalArgumentException("Invalid credentials");
+            }
 
-            // TODO: add password field to students and validate here
             String token = jwtUtil.generateToken(student.getStudentId(), "STUDENT", "student");
             return new LoginResponse(token, student.getStudentId(), "STUDENT", "student");
         }
