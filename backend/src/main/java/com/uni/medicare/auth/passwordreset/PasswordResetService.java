@@ -24,22 +24,13 @@ public class PasswordResetService {
     private final MedicalStaffRepository         staffRepo;
     private final PasswordEncoder                passwordEncoder;
 
-    @Value("${app.base-url:http://localhost:8080}")
-    private String baseUrl;
+    @Value("${app.front-end-url:http://localhost:3000}")
+    private String frontEndUrl;
 
-    /**
-     * Request a password reset. Always returns without error (don't reveal if email exists).
-     * Returns the token only if the user exists (for email sending).
-     */
-    @Transactional
-    public Optional<String> forgotPassword(String email) {
-        // Try student first
-        Optional<Student> studentOpt = studentRepo.findByEmail(email);
-        if (studentOpt.isPresent()) {
-            Student student = studentOpt.get();
-            PasswordResetToken token = createToken("student", student.getStudentId());
-            return Optional.of(token.getToken());
-        }
+    /** Get the reset URL pointing to the frontend page. */
+    public String getResetUrl(String token) {
+        return frontEndUrl + "/reset-password?token=" + token;
+    }
 
         // Try staff
         Optional<MedicalStaff> staffOpt = staffRepo.findByEmail(email);
