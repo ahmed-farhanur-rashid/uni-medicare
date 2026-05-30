@@ -39,6 +39,17 @@ services:
     volumes:
       - uploads:/uploads
 
+  frontend:
+    build: ./frontend
+    container_name: unimedicare_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:8080
+    restart: unless-stopped
+
 volumes:
   pgdata:
   uploads:

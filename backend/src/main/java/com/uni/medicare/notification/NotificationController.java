@@ -18,11 +18,13 @@ public class NotificationController {
     private final NotificationService service;
 
     @GetMapping("/my")
+    @PreAuthorize("isAuthenticated()")
     public List<Notification> getMy(@AuthenticationPrincipal AppUserDetails user) {
         return service.getForUser(user);
     }
 
     @PatchMapping("/{id}/read")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Notification> markRead(
             @PathVariable int id,
             @AuthenticationPrincipal AppUserDetails user) {

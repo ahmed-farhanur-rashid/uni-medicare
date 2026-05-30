@@ -12,7 +12,7 @@ public class MedicalStaffRole {
     @Id
     private Integer roleId;
 
-    @Column(length = 100)
+    @Column(nullable = false, length = 100)
     private String roleName;
 
     @Column(nullable = false)

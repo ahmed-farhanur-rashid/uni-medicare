@@ -60,7 +60,7 @@ public class PrescriptionService {
         m.setMedicineName(req.medicineName());
         m.setDosage(req.dosage());
         m.setFrequency(req.frequency());
-        m.setDuration(req.duration());
+        m.setDays(req.days());
         m.setInstructions(req.instructions());
         p.getMedicines().add(m);
         return repo.save(p);

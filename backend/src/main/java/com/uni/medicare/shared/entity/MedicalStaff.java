@@ -22,7 +22,7 @@ public class MedicalStaff {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @Column(length = 100)
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Column(unique = true, length = 150)

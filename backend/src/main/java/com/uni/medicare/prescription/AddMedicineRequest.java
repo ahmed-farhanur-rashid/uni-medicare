@@ -6,6 +6,6 @@ public record AddMedicineRequest(
         @NotBlank String medicineName,
         String dosage,
         String frequency,
-        String duration,
+        Integer days,
         String instructions
 ) {}
