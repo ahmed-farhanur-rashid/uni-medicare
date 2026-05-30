@@ -28,21 +28,21 @@ export default function StudentAppointmentsPage() {
   });
   const [submitting, setSubmitting] = useState(false);
 
+  async function loadAppointments() {
+    try {
+      const res = await appointmentsApi.getMy();
+      setAppointments(res.data);
+    } catch {
+      // handle silently
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/');
       return;
-    }
-
-    async function loadAppointments() {
-      try {
-        const res = await appointmentsApi.getMy();
-        setAppointments(res.data);
-      } catch {
-        // handle silently
-      } finally {
-        setLoading(false);
-      }
     }
     loadAppointments();
   }, [isAuthenticated, router]);

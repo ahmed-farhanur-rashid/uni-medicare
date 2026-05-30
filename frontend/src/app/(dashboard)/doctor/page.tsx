@@ -22,18 +22,18 @@ export default function DoctorDashboard() {
 
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadData() {
-      try {
-        const [appts] = await Promise.all([
-          appointmentsApi.getAll().catch(() => ({ data: [] })),
-        ]);
-        setAppointments(appts.data.filter((a) => a.doctorId === userId));
-        setConsultations((await consultationsApi.getMy().catch(() => ({ data: [] }))).data);
-      } catch {} finally { setLoading(false); }
-    }
     loadData();
   }, [isAuthenticated, router]);
+
+  async function loadData() {
+    try {
+      const [appts] = await Promise.all([
+        appointmentsApi.getAll().catch(() => ({ data: [] })),
+      ]);
+      setAppointments(appts.data.filter((a) => a.doctorId === userId));
+      setConsultations((await consultationsApi.getMy().catch(() => ({ data: [] }))).data);
+    } catch {} finally { setLoading(false); }
+  }
 
   if (loading) return <DashboardSkeleton />;
 

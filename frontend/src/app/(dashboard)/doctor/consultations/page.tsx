@@ -23,15 +23,15 @@ export default function DoctorConsultationsPage() {
 
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadData() {
-      try {
-        const res = await consultationsApi.getMy();
-        setConsultations(res.data);
-      } catch {} finally { setLoading(false); }
-    }
     loadData();
   }, [isAuthenticated, router]);
+
+  async function loadData() {
+    try {
+      const res = await consultationsApi.getMy();
+      setConsultations(res.data);
+    } catch {} finally { setLoading(false); }
+  }
 
   const handleUpdateNotes = async () => {
     if (!selectedConsult) return;

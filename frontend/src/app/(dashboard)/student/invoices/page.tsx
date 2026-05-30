@@ -19,21 +19,21 @@ export default function StudentInvoicesPage() {
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
+  async function loadInvoices() {
+    try {
+      const res = await billingApi.getMyInvoices();
+      setInvoices(res.data);
+    } catch {
+      // handle silently
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/');
       return;
-    }
-
-    async function loadInvoices() {
-      try {
-        const res = await billingApi.getMyInvoices();
-        setInvoices(res.data);
-      } catch {
-        // handle silently
-      } finally {
-        setLoading(false);
-      }
     }
     loadInvoices();
   }, [isAuthenticated, router]);

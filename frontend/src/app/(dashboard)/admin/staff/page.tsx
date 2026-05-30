@@ -22,15 +22,15 @@ export default function AdminStaffPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', roleName: '', departmentName: '' });
   const [saving, setSaving] = useState(false);
 
+  async function loadStaff() {
+    try {
+      const res = await adminApi.getStaff();
+      setStaff(res.data);
+    } catch {} finally { setLoading(false); }
+  }
+
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadStaff() {
-      try {
-        const res = await adminApi.getStaff();
-        setStaff(res.data);
-      } catch {} finally { setLoading(false); }
-    }
     loadStaff();
   }, [isAuthenticated, router]);
 

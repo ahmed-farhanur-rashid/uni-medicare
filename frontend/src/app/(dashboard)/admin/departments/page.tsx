@@ -23,15 +23,15 @@ export default function AdminDepartmentsPage() {
 
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadDepartments() {
-      try {
-        const res = await adminApi.getDepartments();
-        setDepartments(res.data);
-      } catch {} finally { setLoading(false); }
-    }
     loadDepartments();
   }, [isAuthenticated, router]);
+
+  async function loadDepartments() {
+    try {
+      const res = await adminApi.getDepartments();
+      setDepartments(res.data);
+    } catch {} finally { setLoading(false); }
+  }
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();

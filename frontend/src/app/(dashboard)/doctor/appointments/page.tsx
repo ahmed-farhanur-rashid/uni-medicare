@@ -21,15 +21,15 @@ export default function DoctorAppointmentsPage() {
 
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadAppointments() {
-      try {
-        const res = await appointmentsApi.getAll();
-        setAppointments(res.data.filter((a) => a.doctorId === userId));
-      } catch {} finally { setLoading(false); }
-    }
     loadAppointments();
   }, [isAuthenticated, router]);
+
+  async function loadAppointments() {
+    try {
+      const res = await appointmentsApi.getAll();
+      setAppointments(res.data.filter((a) => a.doctorId === userId));
+    } catch {} finally { setLoading(false); }
+  }
 
   const handleStatus = async (id: number, status: string) => {
     try {

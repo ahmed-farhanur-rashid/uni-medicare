@@ -25,15 +25,15 @@ export default function LabResultsPage() {
   const [resultNotes, setResultNotes] = useState('');
   const [saving, setSaving] = useState(false);
 
+  async function loadResults() {
+    try {
+      const res = await labResultsApi.getMy();
+      setResults(res.data);
+    } catch {} finally { setLoading(false); }
+  }
+
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadResults() {
-      try {
-        const res = await labResultsApi.getMy();
-        setResults(res.data);
-      } catch {} finally { setLoading(false); }
-    }
     loadResults();
   }, [isAuthenticated, router]);
 

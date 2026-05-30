@@ -19,15 +19,15 @@ export default function ReceptionistAppointmentsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
+  async function loadAppointments() {
+    try {
+      const res = await appointmentsApi.getAll();
+      setAppointments(res.data);
+    } catch {} finally { setLoading(false); }
+  }
+
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadAppointments() {
-      try {
-        const res = await appointmentsApi.getAll();
-        setAppointments(res.data);
-      } catch {} finally { setLoading(false); }
-    }
     loadAppointments();
   }, [isAuthenticated, router]);
 

@@ -24,15 +24,15 @@ export default function AdminServicesPage() {
   const [form, setForm] = useState({ serviceName: '', category: '', unitPrice: '', description: '' });
   const [saving, setSaving] = useState(false);
 
+  async function loadServices() {
+    try {
+      const res = await adminApi.getServices(page, 10);
+      setData(res.data);
+    } catch {} finally { setLoading(false); }
+  }
+
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadServices() {
-      try {
-        const res = await adminApi.getServices(page, 10);
-        setData(res.data);
-      } catch {} finally { setLoading(false); }
-    }
     loadServices();
   }, [isAuthenticated, router, page]);
 

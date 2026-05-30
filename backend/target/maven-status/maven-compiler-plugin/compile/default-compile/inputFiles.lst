@@ -28,6 +28,7 @@
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/billing/PaymentGatewayResponse.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/notification/NotificationRepository.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/shared/util/JwtUtil.java
+/home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/shared/dto/NotificationResponse.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/auth/StudentValidityFilter.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/upload/FileUploadRepository.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/shared/repository/HistoryRepository.java
@@ -36,7 +37,6 @@
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/shared/entity/StaffSchedule.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/auth/MedicalStaffRepository.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/UniMedicareApplication.java
-/home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/prescription/PrescriptionMedicine.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/audit/AuditAspect.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/auth/LoginResponse.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/consultation/ConsultationController.java
@@ -66,6 +66,7 @@
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/billing/BillingService.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/vital/VitalSign.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/lab/LabResult.java
+/home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/shared/repository/AccountRepository.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/vital/VitalSignRepository.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/shared/config/SecurityConfig.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/admin/AdminControllers.java
@@ -80,7 +81,6 @@
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/billing/Service.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/billing/AddLineItemRequest.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/billing/Transaction.java
-/home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/prescription/AddMedicineRequest.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/admin/ServiceAdminController.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/lab/UpdateLabResultRequest.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/auth/StudentRepository.java
@@ -88,6 +88,7 @@
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/shared/dto/StudentResponse.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/admin/AdminRepositories.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/upload/FileUploadService.java
+/home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/shared/dto/AuditLogResponse.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/consultation/ConsultationService.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/prescription/AddLabTestRequest.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/billing/InvoiceLineItem.java

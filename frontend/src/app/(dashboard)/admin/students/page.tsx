@@ -23,15 +23,15 @@ export default function AdminStudentsPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '' });
   const [saving, setSaving] = useState(false);
 
+  async function loadStudents() {
+    try {
+      const res = await adminApi.getStudents(page, 10);
+      setData(res.data);
+    } catch {} finally { setLoading(false); }
+  }
+
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadStudents() {
-      try {
-        const res = await adminApi.getStudents(page, 10);
-        setData(res.data);
-      } catch {} finally { setLoading(false); }
-    }
     loadStudents();
   }, [isAuthenticated, router, page]);
 

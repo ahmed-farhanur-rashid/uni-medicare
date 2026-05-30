@@ -21,15 +21,15 @@ export default function LabDashboard() {
 
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadData() {
-      try {
-        const res = await labResultsApi.getMy();
-        setResults(res.data);
-      } catch {} finally { setLoading(false); }
-    }
     loadData();
   }, [isAuthenticated, router]);
+
+  async function loadData() {
+    try {
+      const res = await labResultsApi.getMy();
+      setResults(res.data);
+    } catch {} finally { setLoading(false); }
+  }
 
   if (loading) return <DashboardSkeleton />;
 

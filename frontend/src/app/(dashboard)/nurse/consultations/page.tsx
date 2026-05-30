@@ -19,15 +19,15 @@ export default function NurseConsultationsPage() {
 
   useEffect(() => {
     if (!isAuthenticated) { router.push('/'); return; }
-
-    async function loadData() {
-      try {
-        const res = await consultationsApi.getMy();
-        setConsultations(res.data);
-      } catch {} finally { setLoading(false); }
-    }
     loadData();
   }, [isAuthenticated, router]);
+
+  async function loadData() {
+    try {
+      const res = await consultationsApi.getMy();
+      setConsultations(res.data);
+    } catch {} finally { setLoading(false); }
+  }
 
   return (
     <div className="space-y-6">
