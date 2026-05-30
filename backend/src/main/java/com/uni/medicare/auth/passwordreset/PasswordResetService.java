@@ -55,6 +55,13 @@ public class PasswordResetService {
     /** Reset password using a valid token. */
     @Transactional
     public void resetPassword(String tokenValue, String newPassword) {
+        if (newPassword == null || newPassword.isBlank()) {
+            throw new IllegalArgumentException("Password must not be blank");
+        }
+        if (newPassword.length() < 8) {
+            throw new IllegalArgumentException("Password must be at least 8 characters");
+        }
+
         PasswordResetToken token = tokenRepo.findByToken(tokenValue)
                 .orElseThrow(() -> new EntityNotFoundException("Invalid reset token"));
 

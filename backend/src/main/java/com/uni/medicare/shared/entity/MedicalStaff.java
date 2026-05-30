@@ -34,7 +34,7 @@ public class MedicalStaff {
     @Column(nullable = false)
     private Boolean isActive = true;
 
-    @Column(length = 255)
+    @Column(nullable = false, length = 255)
     private String password;
 
     @Column(nullable = false, updatable = false)

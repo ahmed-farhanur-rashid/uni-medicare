@@ -2,6 +2,7 @@ package com.uni.medicare.prescription;
 
 import com.uni.medicare.consultation.Consultation;
 import com.uni.medicare.lab.PrescriptionLabTest;
+import com.uni.medicare.lab.PrescriptionLabTestRepository;
 import com.uni.medicare.shared.entity.MedicalStaff;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,6 +17,7 @@ import java.util.List;
 public class PrescriptionService {
 
     private final PrescriptionRepository repo;
+    private final PrescriptionLabTestRepository labTestRepo;
     private final EntityManager          em;
 
     /** Rule 4: only doctors (can_prescribe = true) may create prescriptions. */
@@ -44,6 +46,10 @@ public class PrescriptionService {
 
     public List<Prescription> getForPatient(int patientId) {
         return repo.findByConsultation_Patient_PatientId(patientId);
+    }
+
+    public List<PrescriptionLabTest> getLabTests(int prescriptionId) {
+        return labTestRepo.findByPrescription_PrescriptionId(prescriptionId);
     }
 
     @Transactional

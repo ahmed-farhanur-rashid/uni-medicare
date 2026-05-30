@@ -53,6 +53,9 @@ public class AuthService {
             if (student.getExpiresOn() == null || student.getExpiresOn().isBefore(LocalDate.now())) {
                 throw new IllegalStateException("Student enrollment has expired");
             }
+            if (!Boolean.TRUE.equals(student.getEmailVerified())) {
+                throw new IllegalStateException("Please verify your email before logging in");
+            }
             if (!passwordEncoder.matches(req.password(), student.getPassword())) {
                 throw new IllegalArgumentException("Invalid credentials");
             }

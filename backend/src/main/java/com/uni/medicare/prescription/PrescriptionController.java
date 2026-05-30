@@ -22,7 +22,8 @@ public class PrescriptionController {
     public ResponseEntity<PrescriptionResponse> create(
             @Valid @RequestBody CreatePrescriptionRequest req,
             @AuthenticationPrincipal AppUserDetails user) {
-        return ResponseEntity.ok(PrescriptionResponse.fromEntity(service.create(req, user.getId())));
+        Prescription p = service.create(req, user.getId());
+        return ResponseEntity.ok(PrescriptionResponse.fromEntity(p, service.getLabTests(p.getPrescriptionId())));
     }
 
     @GetMapping("/{id}")
@@ -37,7 +38,7 @@ public class PrescriptionController {
                 return ResponseEntity.status(403).build();
             }
         }
-        return ResponseEntity.ok(PrescriptionResponse.fromEntity(p));
+        return ResponseEntity.ok(PrescriptionResponse.fromEntity(p, service.getLabTests(id)));
     }
 
     @PostMapping("/{id}/medicines")
@@ -45,7 +46,8 @@ public class PrescriptionController {
     public ResponseEntity<PrescriptionResponse> addMedicine(
             @PathVariable int id,
             @Valid @RequestBody AddMedicineRequest req) {
-        return ResponseEntity.ok(PrescriptionResponse.fromEntity(service.addMedicine(id, req)));
+        Prescription p = service.addMedicine(id, req);
+        return ResponseEntity.ok(PrescriptionResponse.fromEntity(p, service.getLabTests(id)));
     }
 
     @PostMapping("/{id}/lab-tests")

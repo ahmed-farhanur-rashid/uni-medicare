@@ -1,6 +1,5 @@
 package com.uni.medicare.auth;
 
-import com.uni.medicare.shared.entity.MedicalStaff;
 import com.uni.medicare.shared.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 

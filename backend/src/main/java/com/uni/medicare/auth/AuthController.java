@@ -2,6 +2,7 @@ package com.uni.medicare.auth;
 
 import com.uni.medicare.auth.emailverification.EmailVerificationService;
 import com.uni.medicare.auth.passwordreset.PasswordResetService;
+import com.uni.medicare.shared.email.EmailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ public class AuthController {
     private final AuthService                  authService;
     private final EmailVerificationService     emailVerificationService;
     private final PasswordResetService         passwordResetService;
+    private final EmailService                 emailService;
 
     /** POST /api/auth/login */
     @PostMapping("/login")
@@ -36,7 +38,9 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> forgotPassword(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         if (email != null && !email.isBlank()) {
-            passwordResetService.forgotPassword(email);
+            passwordResetService.forgotPassword(email)
+                    .ifPresent(token -> emailService.sendPasswordResetEmail(
+                            email, passwordResetService.getResetUrl(token)));
         }
         return ResponseEntity.ok(Map.of("message", "If the email exists, a reset link has been sent"));
     }
