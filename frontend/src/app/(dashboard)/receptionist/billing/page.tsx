@@ -20,7 +20,7 @@ export default function ReceptionistBillingPage() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!isAuthenticated) { router.push('/login'); return; }
+    if (!isAuthenticated) { router.push('/'); return; }
 
     async function loadInvoices() {
       try {

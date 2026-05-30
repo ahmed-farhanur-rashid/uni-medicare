@@ -117,6 +117,6 @@ export function getDashboardPath(role: UserRole | null): string {
     case 'ADMIN':
       return '/admin';
     default:
-      return '/login';
+      return '/';
   }
 }

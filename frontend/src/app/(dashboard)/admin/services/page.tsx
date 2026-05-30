@@ -25,7 +25,7 @@ export default function AdminServicesPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!isAuthenticated) { router.push('/login'); return; }
+    if (!isAuthenticated) { router.push('/'); return; }
 
     async function loadServices() {
       try {

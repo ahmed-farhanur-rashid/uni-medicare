@@ -243,9 +243,10 @@ export default function DashboardLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, role, userId, logout, loadFromStorage } =
+  const { isAuthenticated, role, userId, userType, logout, loadFromStorage } =
     useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     loadFromStorage();
@@ -253,15 +254,28 @@ export default function DashboardLayout({
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/login');
+      router.push('/');
     }
   }, [isAuthenticated, router]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !userId || !userType) return;
+    const token = localStorage.getItem('token');
+    const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+    const url = userType === 'student'
+      ? `${base}/api/admin/students/${userId}`
+      : `${base}/api/admin/staff/${userId}`;
+    fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => { if (data?.name) setUserName(data.name); })
+      .catch(() => {});
+  }, [isAuthenticated, userId, userType]);
 
   const navItems = role ? navByRole[role] || [] : [];
 
   const handleLogout = () => {
     logout();
-    router.push('/login');
+    router.push('/');
   };
 
   const roleLabel = (r: string | null) => {
@@ -343,13 +357,13 @@ export default function DashboardLayout({
         {/* User section */}
         <div className="px-3 py-4 border-t border-white/[0.06]">
           <div className="flex items-center gap-3 px-2">
-            <Avatar name={role || 'U'} size="sm" />
+            <Avatar name={userName || role || 'U'} size="sm" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">
-                {roleLabel(role)}
+                {userName || roleLabel(role)}
               </p>
               <p className="text-[11px] text-silver/50">
-                ID: {userId}
+                {roleLabel(role)} &middot; ID: {userId}
               </p>
             </div>
             <button
@@ -418,7 +432,7 @@ export default function DashboardLayout({
             <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose" />
           </button>
 
-          <Avatar name={role || 'U'} size="sm" />
+          <Avatar name={userName || role || 'U'} size="sm" />
         </header>
 
         {/* Page content */}

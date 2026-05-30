@@ -1,6 +1,7 @@
 package com.uni.medicare.notification;
 
 import com.uni.medicare.auth.AppUserDetails;
+import com.uni.medicare.shared.dto.NotificationResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,22 +20,22 @@ public class NotificationController {
 
     @GetMapping("/my")
     @PreAuthorize("isAuthenticated()")
-    public List<Notification> getMy(@AuthenticationPrincipal AppUserDetails user) {
-        return service.getForUser(user);
+    public List<NotificationResponse> getMy(@AuthenticationPrincipal AppUserDetails user) {
+        return service.getForUser(user).stream().map(NotificationResponse::fromEntity).toList();
     }
 
     @PatchMapping("/{id}/read")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Notification> markRead(
+    public ResponseEntity<NotificationResponse> markRead(
             @PathVariable int id,
             @AuthenticationPrincipal AppUserDetails user) {
-        return ResponseEntity.ok(service.markRead(id, user));
+        return ResponseEntity.ok(NotificationResponse.fromEntity(service.markRead(id, user)));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Notification> create(
+    public ResponseEntity<NotificationResponse> create(
             @Valid @RequestBody CreateNotificationRequest req) {
-        return ResponseEntity.ok(service.create(req));
+        return ResponseEntity.ok(NotificationResponse.fromEntity(service.create(req)));
     }
 }

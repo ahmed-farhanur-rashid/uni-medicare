@@ -116,17 +116,7 @@ export interface PrescriptionResponse {
   chiefComplaint: string;
   diagnosis: string;
   followUpDate: string;
-  medicines: MedicineItem[];
   labTests: LabTestItem[];
-}
-
-export interface MedicineItem {
-  medicineId: number;
-  medicineName: string;
-  dosage: string;
-  frequency: string;
-  days: number;
-  instructions: string;
 }
 
 export interface LabTestItem {
@@ -283,16 +273,6 @@ export const prescriptionsApi = {
     diagnosis: string;
     followUpDate?: string;
   }) => api.post<PrescriptionResponse>('/prescriptions', data),
-  addMedicine: (
-    id: number,
-    data: {
-      medicineName: string;
-      dosage?: string;
-      frequency?: string;
-      days?: number;
-      instructions?: string;
-    }
-  ) => api.post(`/prescriptions/${id}/medicines`, data),
   addLabTest: (id: number, data: { catalogId?: number; labTestName?: string }) =>
     api.post(`/prescriptions/${id}/lab-tests`, data),
 };

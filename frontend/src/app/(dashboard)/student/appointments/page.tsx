@@ -30,7 +30,7 @@ export default function StudentAppointmentsPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/login');
+      router.push('/');
       return;
     }
 

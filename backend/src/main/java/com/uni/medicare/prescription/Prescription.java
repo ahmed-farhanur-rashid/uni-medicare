@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "prescriptions")
@@ -32,9 +30,6 @@ public class Prescription {
     private String diagnosis;
 
     private LocalDate followUpDate;
-
-    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PrescriptionMedicine> medicines = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

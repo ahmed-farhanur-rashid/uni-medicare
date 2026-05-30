@@ -22,7 +22,7 @@ export default function AdminDepartmentsPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!isAuthenticated) { router.push('/login'); return; }
+    if (!isAuthenticated) { router.push('/'); return; }
 
     async function loadDepartments() {
       try {

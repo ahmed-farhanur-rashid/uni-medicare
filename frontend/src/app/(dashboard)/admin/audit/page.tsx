@@ -20,7 +20,7 @@ export default function AdminAuditPage() {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    if (!isAuthenticated) { router.push('/login'); return; }
+    if (!isAuthenticated) { router.push('/'); return; }
 
     async function loadLogs() {
       try {

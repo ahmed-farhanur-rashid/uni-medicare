@@ -20,7 +20,7 @@ export default function ReceptionistDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuthenticated) { router.push('/login'); return; }
+    if (!isAuthenticated) { router.push('/'); return; }
 
     async function loadData() {
       try {

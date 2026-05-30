@@ -220,19 +220,6 @@ CREATE TABLE prescriptions (
 );
 
 -- -----------------------------------------------------------------
---  PRESCRIPTION MEDICINES
--- -----------------------------------------------------------------
-CREATE TABLE prescription_medicines (
-    medicine_id     SERIAL PRIMARY KEY,
-    prescription_id INT          NOT NULL REFERENCES prescriptions(prescription_id) ON DELETE CASCADE,
-    medicine_name   VARCHAR(100) NOT NULL,
-    dosage          VARCHAR(50),
-    frequency       VARCHAR(50),
-    days            INT,
-    instructions    VARCHAR(255)
-);
-
--- -----------------------------------------------------------------
 --  LAB TEST CATALOG
 -- -----------------------------------------------------------------
 CREATE TABLE lab_test_catalog (

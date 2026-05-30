@@ -21,7 +21,7 @@ export default function StudentInvoicesPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/login');
+      router.push('/');
       return;
     }
 

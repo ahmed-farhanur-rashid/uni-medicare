@@ -1,5 +1,6 @@
 package com.uni.medicare.audit;
 
+import com.uni.medicare.shared.dto.AuditLogResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,7 @@ public class AuditController {
     /** GET /api/audit-logs — ADMIN only, paginated */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public Page<AuditLog> getAll(@PageableDefault(size = 20) Pageable pageable) {
-        return service.getAll(pageable);
+    public Page<AuditLogResponse> getAll(@PageableDefault(size = 20) Pageable pageable) {
+        return service.getAll(pageable).map(AuditLogResponse::fromEntity);
     }
 }

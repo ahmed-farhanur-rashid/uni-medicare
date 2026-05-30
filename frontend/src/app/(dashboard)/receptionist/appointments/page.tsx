@@ -20,7 +20,7 @@ export default function ReceptionistAppointmentsPage() {
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
-    if (!isAuthenticated) { router.push('/login'); return; }
+    if (!isAuthenticated) { router.push('/'); return; }
 
     async function loadAppointments() {
       try {

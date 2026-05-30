@@ -39,7 +39,7 @@ export default function NurseVitalsPage() {
     } catch {} finally { setSaving(false); }
   };
 
-  if (!isAuthenticated) { router.push('/login'); return null; }
+  if (!isAuthenticated) { router.push('/'); return null; }
 
   return (
     <div className="space-y-6 max-w-2xl">

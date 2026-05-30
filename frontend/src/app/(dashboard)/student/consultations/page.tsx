@@ -18,7 +18,7 @@ export default function StudentConsultationsPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/login');
+      router.push('/');
       return;
     }
 

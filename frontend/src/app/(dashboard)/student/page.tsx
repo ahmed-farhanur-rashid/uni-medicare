@@ -25,7 +25,7 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push('/login');
+      router.push('/');
       return;
     }
 
@@ -243,7 +243,7 @@ export default function StudentDashboard() {
                           {p.diagnosis || 'General prescription'}
                         </p>
                         <p className="text-xs text-slate-muted mt-0.5">
-                          {p.medicines.length} medicine{p.medicines.length !== 1 ? 's' : ''} · {p.labTests.length} lab test{p.labTests.length !== 1 ? 's' : ''}
+                          {p.labTests.length} lab test{p.labTests.length !== 1 ? 's' : ''}
                         </p>
                       </div>
                       <p className="text-xs text-silver shrink-0">

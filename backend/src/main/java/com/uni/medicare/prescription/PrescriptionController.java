@@ -41,15 +41,6 @@ public class PrescriptionController {
         return ResponseEntity.ok(PrescriptionResponse.fromEntity(p, service.getLabTests(id)));
     }
 
-    @PostMapping("/{id}/medicines")
-    @PreAuthorize("hasRole('DOCTOR')")
-    public ResponseEntity<PrescriptionResponse> addMedicine(
-            @PathVariable int id,
-            @Valid @RequestBody AddMedicineRequest req) {
-        Prescription p = service.addMedicine(id, req);
-        return ResponseEntity.ok(PrescriptionResponse.fromEntity(p, service.getLabTests(id)));
-    }
-
     @PostMapping("/{id}/lab-tests")
     @PreAuthorize("hasRole('DOCTOR')")
     public ResponseEntity<PrescriptionLabTest> addLabTest(

@@ -53,20 +53,6 @@ public class PrescriptionService {
     }
 
     @Transactional
-    public Prescription addMedicine(int prescriptionId, AddMedicineRequest req) {
-        Prescription p = getById(prescriptionId);
-        PrescriptionMedicine m = new PrescriptionMedicine();
-        m.setPrescription(p);
-        m.setMedicineName(req.medicineName());
-        m.setDosage(req.dosage());
-        m.setFrequency(req.frequency());
-        m.setDays(req.days());
-        m.setInstructions(req.instructions());
-        p.getMedicines().add(m);
-        return repo.save(p);
-    }
-
-    @Transactional
     public PrescriptionLabTest addLabTest(int prescriptionId, AddLabTestRequest req) {
         Prescription p = getById(prescriptionId);
         PrescriptionLabTest lt = new PrescriptionLabTest();

@@ -197,16 +197,6 @@ INSERT INTO prescriptions (consult_id, chief_complaint, diagnosis, follow_up_dat
     (4, 'Sneezing, runny nose, itchy eyes',    'Allergic rhinitis',             (NOW() + INTERVAL '7 days')::DATE);
 
 -- -----------------------------------------------------------------
---  SAMPLE PRESCRIPTION MEDICINES
--- -----------------------------------------------------------------
-INSERT INTO prescription_medicines (prescription_id, medicine_name, dosage, frequency, days, instructions) VALUES
-    (1, 'Paracetamol',      '500mg',  'Twice daily',     7,  'Take after meals'),
-    (1, 'Ibuprofen',        '200mg',  'As needed',       5,  'Max 3 times per day. Take with food.'),
-    (2, 'Salbutamol Inhaler','100mcg','As needed',       30, '2 puffs when wheezing occurs'),
-    (3, 'Cetirizine',       '10mg',   'Once daily',      14, 'Take at bedtime'),
-    (3, 'Fluticasone Spray', '50mcg', 'Twice daily',     14, '2 sprays each nostril');
-
--- -----------------------------------------------------------------
 --  SAMPLE PRESCRIPTION LAB TESTS
 -- -----------------------------------------------------------------
 INSERT INTO prescription_lab_tests (prescription_id, catalog_id, lab_test_name) VALUES

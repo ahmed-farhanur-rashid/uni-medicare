@@ -1,20 +1,15 @@
 package com.uni.medicare.billing;
 
-import com.uni.medicare.shared.entity.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +17,7 @@ public class BillingService {
 
     private final InvoiceRepository invoiceRepo;
     private final EntityManager     em;
-    private final DataSource        dataSource;
+    private final JdbcTemplate      jdbc;
     private final MockPaymentGateway paymentGateway;
 
     @Value("${app.medical-center-account-id:1}")
@@ -34,7 +29,7 @@ public class BillingService {
 
     /**
      * Pay invoice via MockPaymentGateway, then call transfer_funds DB function.
-     * Rule 5: student cannot overpay — the procedure signals an error on insufficient funds.
+     * Rule 5: student cannot overpay — the function RAISE EXCEPTION on insufficient funds.
      */
     @Transactional
     public PaymentGatewayResponse payInvoice(int invoiceId, int studentId) {
@@ -56,40 +51,31 @@ public class BillingService {
             return gatewayResponse;
         }
 
-        // Gateway approved — execute the fund transfer
-        SimpleJdbcCall call = new SimpleJdbcCall(dataSource)
-                .withProcedureName("transfer_funds");
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("sender_student_id", studentId);
-        params.put("medical_center_account_id", medicalCenterAccountId);
-        params.put("p_amount", invoice.getTotalAmount());
-
-        call.execute(params);   // throws DataAccessException on SIGNAL (insufficient funds)
+        // Gateway approved — execute the PostgreSQL function
+        jdbc.execute("""
+            SELECT transfer_funds(%d, %d, %s)
+            """.formatted(studentId, medicalCenterAccountId, invoice.getTotalAmount()));
 
         return gatewayResponse;
     }
 
     /**
-     * Add a line item by calling the add_invoice_line_item stored procedure.
-     * The procedure inserts the row and recalculates invoice total_amount.
+     * Add a line item by calling the add_invoice_line_item PostgreSQL function.
+     * The function inserts the row and recalculates invoice total_amount.
      */
     @Transactional
     public void addLineItem(int invoiceId, AddLineItemRequest req) {
         invoiceRepo.findById(invoiceId)
                 .orElseThrow(() -> new EntityNotFoundException("Invoice not found"));
 
-        SimpleJdbcCall call = new SimpleJdbcCall(dataSource)
-                .withProcedureName("add_invoice_line_item");
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("p_invoice_id",  invoiceId);
-        params.put("p_service_id",  req.serviceId());
-        params.put("p_description", req.description());
-        params.put("p_quantity",    req.quantity());
-        params.put("p_unit_price",  req.unitPrice());
-
-        call.execute(params);
+        jdbc.execute("""
+            SELECT add_invoice_line_item(%d, %d, '%s', %d, %s)
+            """.formatted(
+                invoiceId,
+                req.serviceId(),
+                req.description().replace("'", "''"),
+                req.quantity(),
+                req.unitPrice()));
     }
 
     @Transactional
