@@ -80,7 +80,7 @@ CREATE TABLE patients (
     student_id              INT     NOT NULL UNIQUE REFERENCES students(student_id),
     date_of_birth           DATE    NOT NULL,
     bloodgroup              VARCHAR(5),
-    sex                     CHAR(1) CHECK (sex IN ('M', 'F', 'O')),
+    sex                     VARCHAR(1) CHECK (sex IN ('M', 'F', 'O')),
     allergies               TEXT,
     emergency_contact_name  VARCHAR(100),
     emergency_contact_phone VARCHAR(15),
@@ -95,7 +95,7 @@ CREATE TABLE histories (
     patient_id        INT          NOT NULL REFERENCES patients(patient_id),
     condition_details VARCHAR(255),
     condition_status  VARCHAR(50),
-    year_diagnosed    SMALLINT,
+    year_diagnosed    INTEGER,
     recorded_at       TIMESTAMP    NOT NULL DEFAULT NOW()
 );
 
@@ -139,7 +139,7 @@ CREATE TABLE medical_staffs (
 CREATE TABLE staff_schedules (
     schedule_id      SERIAL PRIMARY KEY,
     medical_staff_id INT      NOT NULL REFERENCES medical_staffs(medical_staff_id),
-    day_of_week      SMALLINT NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),  -- 0=Sunday
+    day_of_week      INTEGER NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),  -- 0=Sunday
     start_time       TIME     NOT NULL,
     end_time         TIME     NOT NULL,
     UNIQUE (medical_staff_id, day_of_week)

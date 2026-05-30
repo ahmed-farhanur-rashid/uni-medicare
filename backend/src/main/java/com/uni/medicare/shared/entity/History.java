@@ -25,7 +25,7 @@ public class History {
     private String conditionStatus;
 
     @Column(name = "year_diagnosed")
-    private Short yearDiagnosed;
+    private Integer yearDiagnosed;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime recordedAt;
