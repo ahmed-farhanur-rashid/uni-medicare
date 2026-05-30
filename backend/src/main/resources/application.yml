@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: uni-medicare
+
+  # ── Database ──────────────────────────────────────────────────────
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/unimedicare}
+    username: ${DB_USERNAME:unimedicare}
+    password: ${DB_PASSWORD:changeme}
+    driver-class-name: org.postgresql.Driver
+
+  # ── JPA / Hibernate ──────────────────────────────────────────────
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  # ── Email ────────────────────────────────────────────────────────
+  mail:
+    host: ${MAIL_HOST:sandbox.smtp.mailtrap.io}
+    port: ${MAIL_PORT:2525}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+# ── Application Config ──────────────────────────────────────────
+app:
+  jwt:
+    secret: ${JWT_SECRET:dW5pbWVkaWNhcmUtc3VwZXItc2VjcmV0LWtleS0yNTYtYml0cy1sb25nMQ==}
+    expiration-ms: 86400000   # 24 hours
+  upload:
+    base-path: ${UPLOAD_BASE_PATH:/uploads}
+    max-file-size-mb: 10
+  medical-center-account-id: 1
+  base-url: ${APP_BASE_URL:http://localhost:8080}
+
+# ── Server ──────────────────────────────────────────────────────
+server:
+  port: 8080
