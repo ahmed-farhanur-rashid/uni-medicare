@@ -19,7 +19,7 @@ export default function AdminStaffPage() {
   const [staff, setStaff] = useState<MedicalStaffResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', roleName: '', departmentName: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', roleName: '', departmentName: '', specialty: '' });
   const [saving, setSaving] = useState(false);
 
   async function loadStaff() {
@@ -40,7 +40,7 @@ export default function AdminStaffPage() {
     try {
       await adminApi.createStaff(form);
       setShowCreate(false);
-      setForm({ name: '', email: '', phone: '', password: '', roleName: '', departmentName: '' });
+      setForm({ name: '', email: '', phone: '', password: '', roleName: '', departmentName: '', specialty: '' });
       loadStaff();
     } catch {} finally { setSaving(false); }
   };
@@ -73,7 +73,7 @@ export default function AdminStaffPage() {
                       <p className="font-semibold text-obsidian">{s.name}</p>
                       <StatusBadge status={s.isActive ? 'completed' : 'cancelled'} />
                     </div>
-                    <p className="text-sm text-slate-muted mt-0.5">{s.roleName} · {s.departmentName}</p>
+                    <p className="text-sm text-slate-muted mt-0.5">{s.roleName} · {s.departmentName}{s.specialty ? ` · ${s.specialty}` : ''}</p>
                   </div>
                   <div className="flex gap-2 shrink-0">
                     <Button variant="danger" size="sm" onClick={() => handleDelete(s.medicalStaffId)}>Delete</Button>
@@ -93,6 +93,9 @@ export default function AdminStaffPage() {
           <Input label="Password" type="password" placeholder="Set a password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
           <Input label="Role" placeholder="e.g. Doctor, Nurse" value={form.roleName} onChange={(e) => setForm({ ...form, roleName: e.target.value })} required />
           <Input label="Department" placeholder="e.g. Cardiology" value={form.departmentName} onChange={(e) => setForm({ ...form, departmentName: e.target.value })} required />
+          {form.roleName.toUpperCase() === 'DOCTOR' && (
+            <Input label="Specialty" placeholder="e.g. General Medicine, Cardiology" value={form.specialty} onChange={(e) => setForm({ ...form, specialty: e.target.value })} />
+          )}
           <div className="flex justify-end gap-3">
             <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>Cancel</Button>
             <Button type="submit" isLoading={saving}>Create Staff</Button>

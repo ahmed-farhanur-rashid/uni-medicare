@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 interface DepartmentRepository  extends JpaRepository<Department,     Integer> {}
 interface StaffRoleRepository   extends JpaRepository<MedicalStaffRole,Integer> {}
-interface StaffAdminRepository  extends JpaRepository<MedicalStaff,   Integer> {}
+public interface StaffAdminRepository  extends JpaRepository<MedicalStaff,   Integer> {}
 interface ScheduleRepository    extends JpaRepository<StaffSchedule,  Integer> {}

@@ -12,6 +12,7 @@ public record MedicalStaffResponse(
         String name,
         String email,
         String phone,
+        String specialty,
         Boolean isActive,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
@@ -22,8 +23,8 @@ public record MedicalStaffResponse(
                 s.getRole() != null ? s.getRole().getRoleName() : null,
                 s.getRole() != null ? s.getRole().getCanPrescribe() : null,
                 s.getDepartment() != null ? s.getDepartment().getName() : null,
-                s.getName(), s.getEmail(), s.getPhone(), s.getIsActive(),
-                s.getCreatedAt(), s.getUpdatedAt()
+                s.getName(), s.getEmail(), s.getPhone(), s.getSpecialty(),
+                s.getIsActive(), s.getCreatedAt(), s.getUpdatedAt()
         );
     }
 }

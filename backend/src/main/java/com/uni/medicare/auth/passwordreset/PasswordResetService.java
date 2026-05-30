@@ -27,12 +27,15 @@ public class PasswordResetService {
     @Value("${app.front-end-url:http://localhost:3000}")
     private String frontEndUrl;
 
-    /** Get the reset URL pointing to the frontend page. */
-    public String getResetUrl(String token) {
-        return frontEndUrl + "/reset-password?token=" + token;
-    }
+    @Transactional
+    public Optional<String> forgotPassword(String email) {
+        Optional<Student> studentOpt = studentRepo.findByEmail(email);
+        if (studentOpt.isPresent()) {
+            Student student = studentOpt.get();
+            PasswordResetToken token = createToken("student", student.getStudentId());
+            return Optional.of(token.getToken());
+        }
 
-        // Try staff
         Optional<MedicalStaff> staffOpt = staffRepo.findByEmail(email);
         if (staffOpt.isPresent()) {
             MedicalStaff staff = staffOpt.get();
@@ -43,7 +46,6 @@ public class PasswordResetService {
         return Optional.empty();
     }
 
-    /** Reset password using a valid token. */
     @Transactional
     public void resetPassword(String tokenValue, String newPassword) {
         if (newPassword == null || newPassword.isBlank()) {
@@ -78,9 +80,8 @@ public class PasswordResetService {
         }
     }
 
-    /** Get the reset URL for email templates. */
     public String getResetUrl(String token) {
-        return baseUrl + "/reset-password?token=" + token;
+        return frontEndUrl + "/reset-password?token=" + token;
     }
 
     private PasswordResetToken createToken(String userType, int userId) {

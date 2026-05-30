@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record BookAppointmentRequest(
-        @NotNull Integer patientId,
+        Integer patientId,
         @NotNull Integer doctorId,
         @NotNull LocalDateTime scheduledTime,
         String reason

@@ -31,6 +31,9 @@ public class MedicalStaff {
     @Column(length = 15)
     private String phone;
 
+    @Column(length = 100)
+    private String specialty;
+
     @Column(nullable = false)
     private Boolean isActive = true;
 

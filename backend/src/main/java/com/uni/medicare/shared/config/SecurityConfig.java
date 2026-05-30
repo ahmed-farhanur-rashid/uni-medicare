@@ -41,6 +41,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/verify-email").permitAll()
                 .requestMatchers("/api/auth/forgot-password").permitAll()
                 .requestMatchers("/api/auth/reset-password").permitAll()
+                .requestMatchers("/api/auth/resend-verification").permitAll()
+                // Public — doctor listing
+                .requestMatchers("/api/doctors/**").permitAll()
                 // Swagger / OpenAPI
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v3/api-docs/**").permitAll()

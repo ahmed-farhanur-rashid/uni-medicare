@@ -4,6 +4,7 @@ import com.uni.medicare.auth.AppUserDetails;
 import com.uni.medicare.shared.entity.MedicalStaff;
 import com.uni.medicare.shared.entity.Patient;
 import com.uni.medicare.shared.entity.StaffSchedule;
+import com.uni.medicare.shared.repository.PatientRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepo;
+    private final PatientRepository     patientRepo;
     private final EntityManager         em;
 
     /** RECEPTIONIST, ADMIN — all appointments */
@@ -39,11 +41,17 @@ public class AppointmentService {
     @Transactional
     public Appointment book(BookAppointmentRequest req, AppUserDetails actor) {
 
-        Patient      patient = em.find(Patient.class, req.patientId());
-        MedicalStaff doctor  = em.find(MedicalStaff.class, req.doctorId());
+        Patient patient;
+        if ("student".equals(actor.getType())) {
+            patient = patientRepo.findByStudent_StudentId(actor.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("No patient profile found"));
+        } else {
+            patient = em.find(Patient.class, req.patientId());
+            if (patient == null) throw new EntityNotFoundException("Patient not found");
+        }
+        MedicalStaff doctor = em.find(MedicalStaff.class, req.doctorId());
 
-        if (patient == null) throw new EntityNotFoundException("Patient not found");
-        if (doctor  == null) throw new EntityNotFoundException("Doctor not found");
+        if (doctor == null) throw new EntityNotFoundException("Doctor not found");
 
         // Rule 2: doctor must have a schedule entry for the requested day
         int dayOfWeek = req.scheduledTime().getDayOfWeek().getValue() % 7; // 0=Sun … 6=Sat

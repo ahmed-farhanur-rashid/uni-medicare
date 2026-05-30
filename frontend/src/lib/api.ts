@@ -66,6 +66,7 @@ export interface MedicalStaffResponse {
   name: string;
   email: string;
   phone: string;
+  specialty: string | null;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -241,7 +242,7 @@ export const appointmentsApi = {
   getAll: () => api.get<AppointmentResponse[]>('/appointments'),
   getMy: () => api.get<AppointmentResponse[]>('/appointments/my'),
   create: (data: {
-    patientId: number;
+    patientId?: number;
     doctorId: number;
     scheduledTime: string;
     reason: string;
@@ -348,6 +349,30 @@ export const uploadsApi = {
     });
   },
   getUrl: (uploadId: number) => `${API_BASE}/api/uploads/${uploadId}`,
+};
+
+// Doctors API
+export interface DoctorResponse {
+  id: number;
+  name: string;
+  specialty: string;
+  department: string;
+  email: string;
+  phone: string;
+}
+
+export interface StaffScheduleResponse {
+  scheduleId: number;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+}
+
+export const doctorsApi = {
+  getSpecialties: () => api.get<string[]>('/doctors/specialties'),
+  getAll: (specialty?: string) =>
+    api.get<DoctorResponse[]>('/doctors', { params: specialty ? { specialty } : {} }),
+  getSchedule: (id: number) => api.get<StaffScheduleResponse[]>(`/doctors/${id}/schedule`),
 };
 
 // Admin API

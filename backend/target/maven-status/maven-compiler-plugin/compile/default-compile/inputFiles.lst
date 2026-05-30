@@ -96,5 +96,6 @@
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/auth/emailverification/EmailVerificationToken.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/consultation/Consultation.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/auth/AuthService.java
+/home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/auth/RegisterRequest.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/auth/AppUserDetails.java
 /home/farhan/my-projects/uni-medicare/backend/src/main/java/com/uni/medicare/upload/FileUploadController.java

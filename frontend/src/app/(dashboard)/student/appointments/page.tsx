@@ -3,7 +3,12 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth';
-import { appointmentsApi, type AppointmentResponse } from '@/lib/api';
+import {
+  appointmentsApi,
+  doctorsApi,
+  type AppointmentResponse,
+  type DoctorResponse,
+} from '@/lib/api';
 import { formatDateTime } from '@/lib/utils';
 import PageHeader from '@/components/ui/PageHeader';
 import Card, { CardContent } from '@/components/ui/Card';
@@ -21,12 +26,18 @@ export default function StudentAppointmentsPage() {
   const [loading, setLoading] = useState(true);
   const [showBooking, setShowBooking] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [submitting, setSubmitting] = useState(false);
+
+  const [specialties, setSpecialties] = useState<string[]>([]);
+  const [doctors, setDoctors] = useState<DoctorResponse[]>([]);
+  const [loadingDoctors, setLoadingDoctors] = useState(false);
+
   const [bookingData, setBookingData] = useState({
+    specialty: '',
     doctorId: '',
     scheduledTime: '',
     reason: '',
   });
-  const [submitting, setSubmitting] = useState(false);
 
   async function loadAppointments() {
     try {
@@ -45,26 +56,50 @@ export default function StudentAppointmentsPage() {
       return;
     }
     loadAppointments();
+    doctorsApi.getSpecialties().then((res) => setSpecialties(res.data)).catch(() => {});
   }, [isAuthenticated, router]);
+
+  const handleSpecialtyChange = async (specialty: string) => {
+    setBookingData({ ...bookingData, specialty, doctorId: '' });
+    if (!specialty) {
+      setDoctors([]);
+      return;
+    }
+    setLoadingDoctors(true);
+    try {
+      const res = await doctorsApi.getAll(specialty);
+      setDoctors(res.data);
+    } catch {
+      setDoctors([]);
+    } finally {
+      setLoadingDoctors(false);
+    }
+  };
 
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     try {
       await appointmentsApi.create({
-        patientId: 0,
         doctorId: parseInt(bookingData.doctorId, 10),
         scheduledTime: bookingData.scheduledTime,
         reason: bookingData.reason,
       });
       setShowBooking(false);
-      setBookingData({ doctorId: '', scheduledTime: '', reason: '' });
+      setBookingData({ specialty: '', doctorId: '', scheduledTime: '', reason: '' });
+      setDoctors([]);
       loadAppointments();
     } catch {
       // handle error
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleCloseBooking = () => {
+    setShowBooking(false);
+    setBookingData({ specialty: '', doctorId: '', scheduledTime: '', reason: '' });
+    setDoctors([]);
   };
 
   const filtered =
@@ -161,20 +196,53 @@ export default function StudentAppointmentsPage() {
       {/* Booking Modal */}
       <Modal
         isOpen={showBooking}
-        onClose={() => setShowBooking(false)}
+        onClose={handleCloseBooking}
         title="Book Appointment"
       >
         <form onSubmit={handleBook} className="space-y-4">
-          <Input
-            label="Doctor ID"
-            type="number"
-            placeholder="Enter doctor's employee ID"
-            value={bookingData.doctorId}
-            onChange={(e) =>
-              setBookingData({ ...bookingData, doctorId: e.target.value })
-            }
-            required
-          />
+          <div>
+            <label className="block text-sm font-medium text-slate-mid mb-1.5">
+              Specialty
+            </label>
+            <select
+              className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-obsidian transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted"
+              value={bookingData.specialty}
+              onChange={(e) => handleSpecialtyChange(e.target.value)}
+              required
+            >
+              <option value="">Select a specialty</option>
+              {specialties.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-mid mb-1.5">
+              Doctor
+            </label>
+            <select
+              className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-obsidian transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted disabled:opacity-50 disabled:cursor-not-allowed"
+              value={bookingData.doctorId}
+              onChange={(e) =>
+                setBookingData({ ...bookingData, doctorId: e.target.value })
+              }
+              required
+              disabled={!bookingData.specialty || loadingDoctors}
+            >
+              <option value="">
+                {loadingDoctors ? 'Loading doctors...' : 'Select a doctor'}
+              </option>
+              {doctors.map((d) => (
+                <option key={d.id} value={d.id}>
+                  Dr. {d.name} — {d.department}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <Input
             label="Appointment Date & Time"
             type="datetime-local"
@@ -187,6 +255,7 @@ export default function StudentAppointmentsPage() {
             }
             required
           />
+
           <div>
             <label className="block text-sm font-medium text-slate-mid mb-1.5">
               Reason
@@ -200,11 +269,12 @@ export default function StudentAppointmentsPage() {
               }
             />
           </div>
+
           <div className="flex justify-end gap-3 pt-2">
             <Button
               type="button"
               variant="ghost"
-              onClick={() => setShowBooking(false)}
+              onClick={handleCloseBooking}
             >
               Cancel
             </Button>

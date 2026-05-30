@@ -11,7 +11,7 @@ function VerifyEmailContent() {
   const token = searchParams.get('token');
   const email = searchParams.get('email') || '';
 
-  const [status, setStatus] = useState<'verifying' | 'success' | 'error'>(
+  const [status, setStatus] = useState<'verifying' | 'success' | 'error' | 'idle'>(
     token ? 'verifying' : 'idle'
   );
   const [errorMsg, setErrorMsg] = useState('');

@@ -21,8 +21,8 @@ spring:
 
   # ── Email ────────────────────────────────────────────────────────
   mail:
-    host: ${MAIL_HOST:sandbox.smtp.mailtrap.io}
-    port: ${MAIL_PORT:2525}
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
     username: ${MAIL_USERNAME:}
     password: ${MAIL_PASSWORD:}
     properties:
@@ -39,6 +39,7 @@ app:
     max-file-size-mb: 10
   medical-center-account-id: 1
   base-url: ${APP_BASE_URL:http://localhost:8080}
+  front-end-url: ${APP_FRONT_END_URL:http://localhost:3000}
 
 # ── Server ──────────────────────────────────────────────────────
 server:

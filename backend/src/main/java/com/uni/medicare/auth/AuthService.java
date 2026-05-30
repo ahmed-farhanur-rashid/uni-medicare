@@ -11,6 +11,7 @@ import com.uni.medicare.shared.repository.PatientRepository;
 import com.uni.medicare.shared.util.JwtUtil;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final StudentRepository      studentRepo;
@@ -121,15 +123,21 @@ public class AuthService {
         return emailVerificationService.generateToken(student.getStudentId());
     }
 
-    /** Resend verification email for the given email address. */
-    public void resendVerification(String email) {
-        var student = studentRepo.findByEmail(email)
-                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("No account found with that email"));
-        if (Boolean.TRUE.equals(student.getEmailVerified())) {
-            return; // already verified, silently succeed
+    /** Resend verification email for the given email or student ID. */
+    public void resendVerification(String emailOrId) {
+        var student = emailOrId.matches("\\d+")
+                ? studentRepo.findByStudentId(Integer.parseInt(emailOrId))
+                : studentRepo.findByEmail(emailOrId);
+        var s = student.orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("No account found"));
+        if (Boolean.TRUE.equals(s.getEmailVerified())) {
+            return;
         }
-        String token = emailVerificationService.generateToken(student.getStudentId());
+        if (s.getEmail() == null || s.getEmail().isBlank()) {
+            throw new IllegalStateException("No email address associated with this account");
+        }
+        String token = emailVerificationService.generateToken(s.getStudentId());
         String url = emailVerificationService.getVerificationUrl(token);
-        emailService.sendVerificationEmail(email, url);
+        log.info("Verification URL for {}: {}", s.getEmail(), url);
+        emailService.sendVerificationEmail(s.getEmail(), url);
     }
 }

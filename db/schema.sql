@@ -127,6 +127,7 @@ CREATE TABLE medical_staffs (
     name             VARCHAR(100) NOT NULL,
     email            VARCHAR(150) UNIQUE,
     phone            VARCHAR(15),
+    specialty        VARCHAR(100),
     password         VARCHAR(255) NOT NULL,       -- bcrypt hash
     is_active        BOOLEAN      NOT NULL DEFAULT TRUE,
     created_at       TIMESTAMP    NOT NULL DEFAULT NOW(),

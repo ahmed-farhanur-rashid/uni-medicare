@@ -368,16 +368,16 @@ export default function LoginPage() {
 
             <div className="mt-4 p-4 rounded-xl bg-white/60 border border-border/40 text-xs text-slate-muted space-y-1.5">
               <p>
-                <span className="font-semibold text-obsidian">Student:</span>{' '}
-                ID 1001 — Password: Password123!
+                <span className="font-semibold text-obsidian">Admin:</span>{' '}
+                admin@unimedicare.com / Admin1234!
               </p>
               <p>
                 <span className="font-semibold text-obsidian">Doctor:</span>{' '}
-                ID 2001 — Password: Password123!
+                doctor@unimedicare.com / Doctor1234!
               </p>
               <p>
-                <span className="font-semibold text-obsidian">Admin:</span>{' '}
-                ID 5001 — Password: Password123!
+                <span className="font-semibold text-obsidian">Patient:</span>{' '}
+                patient@unimedicare.com / Patient1234!
               </p>
             </div>
           </div>

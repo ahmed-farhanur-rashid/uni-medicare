@@ -1,11 +1,12 @@
 -- =================================================================
 --  Uni Medicare — Seed Data
 --  PostgreSQL 16+
---  All passwords are bcrypt hash of "Password123!"
 -- =================================================================
 
 -- bcrypt hash of "Password123!"
 -- $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
+-- bcrypt hash of "Admin1234!"  / "Doctor1234!" / "Patient1234!"
+-- $2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC
 
 -- -----------------------------------------------------------------
 --  ACCOUNTS (medical center + 20 student accounts)
@@ -19,6 +20,13 @@ INSERT INTO accounts (balance) SELECT 5000.00 FROM generate_series(1, 20);  -- a
 INSERT INTO departments (name, description) VALUES
     ('General Medicine',  'Primary care and general health services'),
     ('Cardiology',        'Heart and cardiovascular system'),
+    ('Ophthalmology',     'Eye care and vision'),
+    ('ENT',               'Ear, nose, and throat'),
+    ('Gynecology',        'Women reproductive health'),
+    ('Pediatrics',        'Child and adolescent medicine'),
+    ('Dermatology',       'Skin, hair, and nail conditions'),
+    ('Orthopedics',       'Bones, joints, and musculoskeletal'),
+    ('Neurology',         'Brain and nervous system'),
     ('Laboratory',        'Diagnostic testing and lab services'),
     ('Emergency',         'Emergency and urgent care'),
     ('Administration',    'Administrative operations');
@@ -34,61 +42,101 @@ INSERT INTO medical_staff_roles (role_id, role_name, can_prescribe) VALUES
     (5, 'ADMIN',           FALSE);
 
 -- -----------------------------------------------------------------
---  MEDICAL STAFFS
+--  MEDICAL STAFFS (10 doctors + 2 nurses + 2 lab techs + 2 receptionists + 2 admins)
 -- -----------------------------------------------------------------
-INSERT INTO medical_staffs (medical_staff_id, role_id, department_id, name, email, phone, password) VALUES
-    (1001, 1, 1, 'Dr. Sarah Ahmed',       'sarah.ahmed@unimedicare.edu',    '01712345001', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-    (1002, 1, 2, 'Dr. Kamal Hossain',     'kamal.hossain@unimedicare.edu',  '01712345002', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-    (1003, 2, 1, 'Nurse Fatima Rahman',    'fatima.rahman@unimedicare.edu',  '01712345003', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-    (1004, 2, 4, 'Nurse Rahim Uddin',      'rahim.uddin@unimedicare.edu',    '01712345004', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-    (1005, 3, 3, 'Lab Tech Nadia Islam',   'nadia.islam@unimedicare.edu',    '01712345005', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-    (1006, 3, 3, 'Lab Tech Arif Khan',     'arif.khan@unimedicare.edu',      '01712345006', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-    (1007, 4, 5, 'Receptionist Mina Das',  'mina.das@unimedicare.edu',       '01712345007', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-    (1008, 4, 5, 'Receptionist Tanvir Ali','tanvir.ali@unimedicare.edu',     '01712345008', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-    (1009, 5, 5, 'Admin Rashid Hasan',     'rashid.hasan@unimedicare.edu',   '01712345009', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
-    (1010, 5, 5, 'Admin Sumaiya Begum',    'sumaiya.begum@unimedicare.edu',  '01712345010', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
+-- Doctor password hash: $2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC (Doctor1234!)
+-- Other staff password hash: $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy (Password123!)
+INSERT INTO medical_staffs (medical_staff_id, role_id, department_id, name, specialty, email, phone, password) VALUES
+    -- Doctors (10)
+    (1001, 1, 1,  'Dr. Sarah Ahmed',       'General Medicine', 'doctor@unimedicare.com',        '01712345001', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    (1002, 1, 2,  'Dr. Kamal Hossain',     'Cardiology',       'kamal.hossain@unimedicare.edu', '01712345002', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    (1003, 1, 3,  'Dr. Nadia Rahman',      'Ophthalmology',    'nadia.rahman@unimedicare.edu',  '01712345003', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    (1004, 1, 4,  'Dr. Aminul Islam',      'ENT',              'aminul.islam@unimedicare.edu',  '01712345004', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    (1005, 1, 5,  'Dr. Fatema Begum',      'Gynecology',       'fatema.begum@unimedicare.edu',  '01712345005', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    (1006, 1, 6,  'Dr. Rashid Khan',       'Pediatrics',       'rashid.khan@unimedicare.edu',   '01712345006', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    (1007, 1, 7,  'Dr. Sabrina Akter',     'Dermatology',      'sabrina.akter@unimedicare.edu', '01712345007', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    (1008, 1, 8,  'Dr. Tanvir Hasan',      'Orthopedics',      'tanvir.hasan@unimedicare.edu',  '01712345008', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    (1009, 1, 9,  'Dr. Nusrat Jahan',      'Neurology',        'nusrat.jahan@unimedicare.edu',  '01712345009', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    (1010, 1, 1,  'Dr. Imran Hossain',     'General Medicine', 'imran.hossain@unimedicare.edu', '01712345010', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    -- Nurses
+    (1011, 2, 1,  'Nurse Ayesha Siddiqui', NULL,               'ayesha.s@unimedicare.edu',      '01712345011', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+    (1012, 2, 11, 'Nurse Rahim Uddin',     NULL,               'rahim.u@unimedicare.edu',       '01712345012', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+    -- Lab Technicians
+    (1013, 3, 10, 'Lab Tech Nadia Islam',  NULL,               'nadia.i@unimedicare.edu',       '01712345013', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+    (1014, 3, 10, 'Lab Tech Arif Khan',    NULL,               'arif.k@unimedicare.edu',        '01712345014', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+    -- Receptionists
+    (1015, 4, 12, 'Receptionist Mina Das', NULL,               'mina.d@unimedicare.edu',        '01712345015', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+    (1016, 4, 12, 'Receptionist Tanvir A', NULL,               'tanvir.a@unimedicare.edu',      '01712345016', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy'),
+    -- Admins
+    (1017, 5, 12, 'Admin Rashid Hasan',    NULL,               'admin@unimedicare.com',         '01712345017', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC'),
+    (1018, 5, 12, 'Admin Sumaiya Begum',   NULL,               'sumaiya.b@unimedicare.edu',     '01712345018', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
 
 -- -----------------------------------------------------------------
---  STAFF SCHEDULES (doctors + nurses: Sun-Thu, 0=Sun..4=Thu)
+--  STAFF SCHEDULES (all 10 doctors, Sun-Thu or Mon-Fri patterns)
 -- -----------------------------------------------------------------
 INSERT INTO staff_schedules (medical_staff_id, day_of_week, start_time, end_time) VALUES
-    -- Dr. Sarah Ahmed: Sun-Thu 09:00-14:00
+    -- Dr. Sarah Ahmed (General Medicine): Sun-Thu 09:00-14:00
     (1001, 0, '09:00', '14:00'), (1001, 1, '09:00', '14:00'), (1001, 2, '09:00', '14:00'),
     (1001, 3, '09:00', '14:00'), (1001, 4, '09:00', '14:00'),
-    -- Dr. Kamal Hossain: Sun-Thu 10:00-16:00
+    -- Dr. Kamal Hossain (Cardiology): Sun-Thu 10:00-16:00
     (1002, 0, '10:00', '16:00'), (1002, 1, '10:00', '16:00'), (1002, 2, '10:00', '16:00'),
     (1002, 3, '10:00', '16:00'), (1002, 4, '10:00', '16:00'),
-    -- Nurse Fatima: Sun-Thu 08:00-15:00
-    (1003, 0, '08:00', '15:00'), (1003, 1, '08:00', '15:00'), (1003, 2, '08:00', '15:00'),
-    (1003, 3, '08:00', '15:00'), (1003, 4, '08:00', '15:00'),
-    -- Nurse Rahim: Mon-Fri (1=Mon..5=Fri)
-    (1004, 1, '08:00', '15:00'), (1004, 2, '08:00', '15:00'), (1004, 3, '08:00', '15:00'),
-    (1004, 4, '08:00', '15:00'), (1004, 5, '08:00', '15:00');
+    -- Dr. Nadia Rahman (Ophthalmology): Mon-Fri 09:00-13:00
+    (1003, 1, '09:00', '13:00'), (1003, 2, '09:00', '13:00'), (1003, 3, '09:00', '13:00'),
+    (1003, 4, '09:00', '13:00'), (1003, 5, '09:00', '13:00'),
+    -- Dr. Aminul Islam (ENT): Sun-Thu 10:00-15:00
+    (1004, 0, '10:00', '15:00'), (1004, 1, '10:00', '15:00'), (1004, 2, '10:00', '15:00'),
+    (1004, 3, '10:00', '15:00'), (1004, 4, '10:00', '15:00'),
+    -- Dr. Fatema Begum (Gynecology): Mon-Sat 09:00-14:00
+    (1005, 1, '09:00', '14:00'), (1005, 2, '09:00', '14:00'), (1005, 3, '09:00', '14:00'),
+    (1005, 4, '09:00', '14:00'), (1005, 5, '09:00', '14:00'), (1005, 6, '09:00', '14:00'),
+    -- Dr. Rashid Khan (Pediatrics): Sun-Thu 08:00-13:00
+    (1006, 0, '08:00', '13:00'), (1006, 1, '08:00', '13:00'), (1006, 2, '08:00', '13:00'),
+    (1006, 3, '08:00', '13:00'), (1006, 4, '08:00', '13:00'),
+    -- Dr. Sabrina Akter (Dermatology): Mon-Fri 10:00-15:00
+    (1007, 1, '10:00', '15:00'), (1007, 2, '10:00', '15:00'), (1007, 3, '10:00', '15:00'),
+    (1007, 4, '10:00', '15:00'), (1007, 5, '10:00', '15:00'),
+    -- Dr. Tanvir Hasan (Orthopedics): Sun-Thu 09:00-15:00
+    (1008, 0, '09:00', '15:00'), (1008, 1, '09:00', '15:00'), (1008, 2, '09:00', '15:00'),
+    (1008, 3, '09:00', '15:00'), (1008, 4, '09:00', '15:00'),
+    -- Dr. Nusrat Jahan (Neurology): Mon-Fri 11:00-16:00
+    (1009, 1, '11:00', '16:00'), (1009, 2, '11:00', '16:00'), (1009, 3, '11:00', '16:00'),
+    (1009, 4, '11:00', '16:00'), (1009, 5, '11:00', '16:00'),
+    -- Dr. Imran Hossain (General Medicine): Sun-Thu 14:00-19:00
+    (1010, 0, '14:00', '19:00'), (1010, 1, '14:00', '19:00'), (1010, 2, '14:00', '19:00'),
+    (1010, 3, '14:00', '19:00'), (1010, 4, '14:00', '19:00'),
+    -- Nurse Ayesha: Sun-Thu 08:00-15:00
+    (1011, 0, '08:00', '15:00'), (1011, 1, '08:00', '15:00'), (1011, 2, '08:00', '15:00'),
+    (1011, 3, '08:00', '15:00'), (1011, 4, '08:00', '15:00'),
+    -- Nurse Rahim: Mon-Fri 08:00-15:00
+    (1012, 1, '08:00', '15:00'), (1012, 2, '08:00', '15:00'), (1012, 3, '08:00', '15:00'),
+    (1012, 4, '08:00', '15:00'), (1012, 5, '08:00', '15:00');
 
 -- -----------------------------------------------------------------
 --  STUDENTS (20 students, account_id = 2..21)
 -- -----------------------------------------------------------------
+-- Patient password hash: $2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC (Patient1234!)
 INSERT INTO students (student_id, name, email, phone, password, issued_on, account_id) VALUES
-    (2021001, 'Anika Tabassum',   'anika.t@student.edu',    '01811001001', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2023-01-15', 2),
-    (2021002, 'Rafiq Mahmud',     'rafiq.m@student.edu',    '01811001002', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2023-01-15', 3),
-    (2021003, 'Sadia Akter',      'sadia.a@student.edu',    '01811001003', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2023-01-15', 4),
-    (2021004, 'Hassan Chowdhury', 'hassan.c@student.edu',   '01811001004', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2023-06-01', 5),
-    (2021005, 'Tasnim Ferdous',   'tasnim.f@student.edu',   '01811001005', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2023-06-01', 6),
-    (2021006, 'Imran Hossain',    'imran.h@student.edu',    '01811001006', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2022-01-10', 7),
-    (2021007, 'Nusrat Jahan',     'nusrat.j@student.edu',   '01811001007', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2022-06-01', 8),
-    (2021008, 'Shakib Rahman',    'shakib.r@student.edu',   '01811001008', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2024-01-15', 9),
-    (2021009, 'Mehzabin Alam',    'mehzabin.a@student.edu', '01811001009', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2024-01-15', 10),
-    (2021010, 'Farhan Rashid',    'farhan.r@student.edu',   '01811001010', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2024-06-01', 11),
-    (2021011, 'Labiba Khan',      'labiba.k@student.edu',   '01811001011', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2024-06-01', 12),
-    (2021012, 'Tamim Iqbal',      'tamim.i@student.edu',    '01811001012', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2023-01-15', 13),
-    (2021013, 'Rubina Sultana',   'rubina.s@student.edu',   '01811001013', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2023-06-01', 14),
-    (2021014, 'Sabbir Ahmed',     'sabbir.a@student.edu',   '01811001014', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2022-01-10', 15),
-    (2021015, 'Farzana Yasmin',   'farzana.y@student.edu',  '01811001015', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2024-01-15', 16),
-    (2021016, 'Mahfuz Haque',     'mahfuz.h@student.edu',   '01811001016', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2024-06-01', 17),
-    (2021017, 'Sharmin Nahar',    'sharmin.n@student.edu',  '01811001017', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2023-01-15', 18),
-    (2021018, 'Zahid Islam',      'zahid.i@student.edu',    '01811001018', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2022-06-01', 19),
-    (2021019, 'Parveen Akter',    'parveen.a@student.edu',  '01811001019', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2024-01-15', 20),
-    (2021020, 'Nazmul Karim',     'nazmul.k@student.edu',   '01811001020', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '2024-06-01', 21);
+    (2021001, 'Anika Tabassum',   'patient@unimedicare.com',  '01811001001', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2023-01-15', 2),
+    (2021002, 'Rafiq Mahmud',     'rafiq.m@student.edu',      '01811001002', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2023-01-15', 3),
+    (2021003, 'Sadia Akter',      'sadia.a@student.edu',      '01811001003', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2023-01-15', 4),
+    (2021004, 'Hassan Chowdhury', 'hassan.c@student.edu',     '01811001004', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2023-06-01', 5),
+    (2021005, 'Tasnim Ferdous',   'tasnim.f@student.edu',     '01811001005', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2023-06-01', 6),
+    (2021006, 'Imran Hossain',    'imran.h@student.edu',      '01811001006', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2022-01-10', 7),
+    (2021007, 'Nusrat Jahan',     'nusrat.j@student.edu',     '01811001007', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2022-06-01', 8),
+    (2021008, 'Shakib Rahman',    'shakib.r@student.edu',     '01811001008', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2024-01-15', 9),
+    (2021009, 'Mehzabin Alam',    'mehzabin.a@student.edu',   '01811001009', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2024-01-15', 10),
+    (2021010, 'Farhan Rashid',    'farhan.r@student.edu',     '01811001010', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2024-06-01', 11),
+    (2021011, 'Labiba Khan',      'labiba.k@student.edu',     '01811001011', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2024-06-01', 12),
+    (2021012, 'Tamim Iqbal',      'tamim.i@student.edu',      '01811001012', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2023-01-15', 13),
+    (2021013, 'Rubina Sultana',   'rubina.s@student.edu',     '01811001013', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2023-06-01', 14),
+    (2021014, 'Sabbir Ahmed',     'sabbir.a@student.edu',     '01811001014', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2022-01-10', 15),
+    (2021015, 'Farzana Yasmin',   'farzana.y@student.edu',    '01811001015', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2024-01-15', 16),
+    (2021016, 'Mahfuz Haque',     'mahfuz.h@student.edu',     '01811001016', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2024-06-01', 17),
+    (2021017, 'Sharmin Nahar',    'sharmin.n@student.edu',    '01811001017', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2023-01-15', 18),
+    (2021018, 'Zahid Islam',      'zahid.i@student.edu',      '01811001018', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2022-06-01', 19),
+    (2021019, 'Parveen Akter',    'parveen.a@student.edu',    '01811001019', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2024-01-15', 20),
+    (2021020, 'Nazmul Karim',     'nazmul.k@student.edu',     '01811001020', '$2a$10$EqKcp1WFKVQISheBxnFOheYMKMeFSmVPfaAJMRPIlVtMVaKMr8SOC', '2024-06-01', 21);
 
 -- -----------------------------------------------------------------
 --  PATIENTS (one per student)
@@ -116,14 +164,14 @@ INSERT INTO patients (student_id, date_of_birth, bloodgroup, sex, allergies, eme
     (2021020, '2002-08-19', 'B+',  'M', NULL,                    'Nazrul Karim',    '01911001020');
 
 -- -----------------------------------------------------------------
---  HISTORIES (sample medical histories for some patients)
+--  HISTORIES
 -- -----------------------------------------------------------------
 INSERT INTO histories (patient_id, condition_details, condition_status, year_diagnosed) VALUES
-    (2,  'Mild asthma',             'Controlled',   2015),
-    (4,  'Allergic rhinitis',       'Active',       2018),
-    (6,  'Childhood eczema',        'Resolved',     2010),
+    (2,  'Mild asthma',             'Controlled',      2015),
+    (4,  'Allergic rhinitis',       'Active',          2018),
+    (6,  'Childhood eczema',        'Resolved',        2010),
     (9,  'Iron deficiency anemia',  'Under treatment', 2023),
-    (12, 'Migraine disorder',       'Active',       2019);
+    (12, 'Migraine disorder',       'Active',          2019);
 
 -- -----------------------------------------------------------------
 --  SERVICES (fee catalog)
@@ -169,14 +217,14 @@ INSERT INTO appointments (patient_id, medical_staff_id, scheduled_time, reason, 
     (1, 1001, NOW() + INTERVAL '5 days',  'Follow-up headache',         'scheduled');
 
 -- -----------------------------------------------------------------
---  SAMPLE CONSULTATIONS (for completed appointments + 1 walk-in)
+--  SAMPLE CONSULTATIONS
 -- -----------------------------------------------------------------
 INSERT INTO consultations (patient_id, medical_staff_id, appointment_id, consult_time, notes) VALUES
     (1, 1001, 1, NOW() - INTERVAL '10 days', 'Patient presents with recurring headaches. No neurological signs. Advised lifestyle changes.'),
     (2, 1001, 2, NOW() - INTERVAL '7 days',  'Asthma well controlled on current inhaler. Continue current medication.'),
     (3, 1002, 3, NOW() - INTERVAL '5 days',  'Chest pain non-cardiac in origin. Likely musculoskeletal. ECG normal.'),
     (4, 1001, 4, NOW() - INTERVAL '3 days',  'Allergic rhinitis flare-up. Prescribed antihistamines.'),
-    (5, 1003, NULL, NOW() - INTERVAL '2 days', 'Walk-in: Minor cut on left hand. Cleaned and dressed wound.');
+    (5, 1011, NULL, NOW() - INTERVAL '2 days', 'Walk-in: Minor cut on left hand. Cleaned and dressed wound.');
 
 -- -----------------------------------------------------------------
 --  SAMPLE VITAL SIGNS
@@ -208,8 +256,8 @@ INSERT INTO prescription_lab_tests (prescription_id, catalog_id, lab_test_name) 
 --  SAMPLE LAB RESULTS
 -- -----------------------------------------------------------------
 INSERT INTO lab_results (lab_test_id, performed_by, result_value, result_notes, result_status, resulted_at) VALUES
-    (1, 1005, '8.2 x10^3/µL',  'Within normal range',          'completed', NOW() - INTERVAL '9 days'),
-    (2, 1005, '92 mg/dL',       'Normal fasting glucose',       'completed', NOW() - INTERVAL '9 days'),
+    (1, 1013, '8.2 x10^3/µL',  'Within normal range',          'completed', NOW() - INTERVAL '9 days'),
+    (2, 1013, '92 mg/dL',       'Normal fasting glucose',       'completed', NOW() - INTERVAL '9 days'),
     (3, NULL,  NULL,             NULL,                           'pending',   NULL);
 
 -- -----------------------------------------------------------------
@@ -220,4 +268,4 @@ INSERT INTO notifications (recipient_type, recipient_id, title, message) VALUES
     ('student', 2021001, 'Upcoming Appointment',      'Reminder: You have a follow-up appointment in 5 days.'),
     ('student', 2021005, 'Appointment Confirmed',     'Your annual health checkup has been confirmed.'),
     ('staff',   1001,    'New Patient Assignment',     'You have 3 new appointments scheduled this week.'),
-    ('staff',   1005,    'Pending Lab Tests',          'There are 1 pending lab tests awaiting processing.');
+    ('staff',   1013,    'Pending Lab Tests',          'There are 1 pending lab tests awaiting processing.');

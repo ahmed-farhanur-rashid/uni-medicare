@@ -21,12 +21,20 @@ public class EmailVerificationService {
     @Value("${app.front-end-url:http://localhost:3000}")
     private String frontEndUrl;
 
-    /** Get the verification URL pointing to the frontend page. */
-    public String getVerificationUrl(String token) {
-        return frontEndUrl + "/verify-email?token=" + token;
+    @Transactional
+    public String generateToken(int studentId) {
+        Student student = studentRepo.findById(studentId)
+                .orElseThrow(() -> new EntityNotFoundException("Student not found"));
+
+        EmailVerificationToken token = new EmailVerificationToken();
+        token.setStudent(student);
+        token.setToken(UUID.randomUUID().toString());
+        token.setExpiresAt(LocalDateTime.now().plusHours(24));
+        tokenRepo.save(token);
+
+        return token.getToken();
     }
 
-    /** Verify email: validate token, stamp used_at, mark student as verified. */
     @Transactional
     public void verifyEmail(String tokenValue) {
         EmailVerificationToken token = tokenRepo.findByToken(tokenValue)
@@ -44,8 +52,7 @@ public class EmailVerificationService {
         studentRepo.save(student);
     }
 
-    /** Get the verification URL for email templates. */
     public String getVerificationUrl(String token) {
-        return baseUrl + "/api/auth/verify-email?token=" + token;
+        return frontEndUrl + "/verify-email?token=" + token;
     }
 }
