@@ -1,11 +1,19 @@
 package com.uni.medicare.auth;
 
+import com.uni.medicare.auth.emailverification.EmailVerificationService;
+import com.uni.medicare.shared.email.EmailService;
+import com.uni.medicare.shared.entity.Account;
 import com.uni.medicare.shared.entity.MedicalStaff;
+import com.uni.medicare.shared.entity.Patient;
 import com.uni.medicare.shared.entity.Student;
+import com.uni.medicare.shared.repository.AccountRepository;
+import com.uni.medicare.shared.repository.PatientRepository;
 import com.uni.medicare.shared.util.JwtUtil;
+import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -15,8 +23,12 @@ public class AuthService {
 
     private final StudentRepository      studentRepo;
     private final MedicalStaffRepository staffRepo;
+    private final AccountRepository      accountRepo;
+    private final PatientRepository      patientRepo;
     private final JwtUtil                jwtUtil;
     private final PasswordEncoder        passwordEncoder;
+    private final EmailVerificationService emailVerificationService;
+    private final EmailService             emailService;
 
     /**
      * Attempt login with eID + password.
@@ -65,5 +77,52 @@ public class AuthService {
         }
 
         throw new IllegalArgumentException("Invalid credentials");
+    }
+
+    @Transactional
+    public String register(RegisterRequest req) {
+        // Check student ID not already taken
+        if (studentRepo.findByStudentId(req.studentId()).isPresent()) {
+            throw new EntityExistsException("Student ID already registered");
+        }
+
+        // Create bank account
+        Account account = accountRepo.save(new Account());
+
+        // Create student
+        Student student = new Student();
+        student.setStudentId(req.studentId());
+        student.setName(req.name());
+        student.setEmail(req.email());
+        student.setPhone(req.phone());
+        student.setPassword(passwordEncoder.encode(req.password()));
+        student.setIssuedOn(LocalDate.now());
+        student.setIsActive(true);
+        student.setEmailVerified(false);
+        student.setAccount(account);
+        student = studentRepo.save(student);
+
+        // Create patient profile
+        Patient patient = new Patient();
+        patient.setStudent(student);
+        patient.setDateOfBirth(req.dateOfBirth());
+        patient.setBloodgroup(req.bloodgroup());
+        patient.setSex(req.sex());
+        patientRepo.save(patient);
+
+        // Generate email verification token and return it
+        return emailVerificationService.generateToken(student.getStudentId());
+    }
+
+    /** Resend verification email for the given email address. */
+    public void resendVerification(String email) {
+        var student = studentRepo.findByEmail(email)
+                .orElseThrow(() -> new jakarta.persistence.EntityNotFoundException("No account found with that email"));
+        if (Boolean.TRUE.equals(student.getEmailVerified())) {
+            return; // already verified, silently succeed
+        }
+        String token = emailVerificationService.generateToken(student.getStudentId());
+        String url = emailVerificationService.getVerificationUrl(token);
+        emailService.sendVerificationEmail(email, url);
     }
 }

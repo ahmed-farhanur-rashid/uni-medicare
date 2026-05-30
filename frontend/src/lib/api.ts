@@ -219,10 +219,21 @@ export interface AuditLog {
 // Auth API
 export const authApi = {
   login: (data: LoginRequest) => api.post<LoginResponse>('/auth/login', data),
+  register: (data: {
+    studentId: number;
+    name: string;
+    email?: string;
+    phone?: string;
+    password: string;
+    dateOfBirth: string;
+    bloodgroup?: string;
+    sex?: string;
+  }) => api.post<{ message: string; verificationUrl: string }>('/auth/register', data),
   verifyEmail: (token: string) => api.get(`/auth/verify-email?token=${token}`),
   forgotPassword: (email: string) => api.post('/auth/forgot-password', { email }),
   resetPassword: (token: string, newPassword: string) =>
     api.post('/auth/reset-password', { token, newPassword }),
+  resendVerification: (email: string) => api.post('/auth/resend-verification', { email }),
 };
 
 // Appointments API

@@ -5,6 +5,7 @@ import com.uni.medicare.auth.passwordreset.PasswordResetService;
 import com.uni.medicare.shared.email.EmailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
     private final AuthService                  authService;
@@ -24,6 +26,24 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    /** POST /api/auth/register — new student self-registration */
+    @PostMapping("/register")
+    public ResponseEntity<Map<String, String>> register(@Valid @RequestBody RegisterRequest request) {
+        String verificationToken = authService.register(request);
+        String verificationUrl = emailVerificationService.getVerificationUrl(verificationToken);
+        log.info("Email verification URL for {}: {}", request.email(), verificationUrl);
+
+        // Send verification email if email is provided
+        if (request.email() != null && !request.email().isBlank()) {
+            emailService.sendVerificationEmail(request.email(), verificationUrl);
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "message", "Registration successful. Please check your email to verify your account.",
+                "verificationUrl", verificationUrl
+        ));
     }
 
     /** GET /api/auth/verify-email?token=<uuid> */
@@ -39,8 +59,11 @@ public class AuthController {
         String email = body.get("email");
         if (email != null && !email.isBlank()) {
             passwordResetService.forgotPassword(email)
-                    .ifPresent(token -> emailService.sendPasswordResetEmail(
-                            email, passwordResetService.getResetUrl(token)));
+                    .ifPresent(token -> {
+                        String resetUrl = passwordResetService.getResetUrl(token);
+                        log.info("Password reset URL for {}: {}", email, resetUrl);
+                        emailService.sendPasswordResetEmail(email, resetUrl);
+                    });
         }
         return ResponseEntity.ok(Map.of("message", "If the email exists, a reset link has been sent"));
     }
@@ -52,5 +75,15 @@ public class AuthController {
         String newPassword = body.get("newPassword");
         passwordResetService.resetPassword(token, newPassword);
         return ResponseEntity.ok(Map.of("message", "Password reset successfully"));
+    }
+
+    /** POST /api/auth/resend-verification */
+    @PostMapping("/resend-verification")
+    public ResponseEntity<Map<String, String>> resendVerification(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        if (email != null && !email.isBlank()) {
+            authService.resendVerification(email);
+        }
+        return ResponseEntity.ok(Map.of("message", "If the email exists, a verification link has been sent"));
     }
 }

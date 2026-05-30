@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuthStore, getDashboardPath } from '@/store/auth';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -296,6 +297,12 @@ export default function LoginPage() {
               </button>
             </div>
 
+            <div className="flex justify-end">
+              <Link href="/forgot-password" className="text-xs text-emerald-deep hover:underline">
+                Forgot password?
+              </Link>
+            </div>
+
             <Button
               type="submit"
               className="w-full h-12 text-base"
@@ -304,6 +311,15 @@ export default function LoginPage() {
               {isLoading ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
+
+          <div className="mt-6 text-center animate-fade-in-up stagger-3">
+            <p className="text-sm text-slate-muted">
+              Don&apos;t have an account?{' '}
+              <Link href="/register" className="text-emerald-deep font-medium hover:underline">
+                Create one here
+              </Link>
+            </p>
+          </div>
 
           <div className="mt-8 animate-fade-in-up stagger-3">
             <div className="relative">
