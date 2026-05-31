@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
+import { notificationsApi, type NotificationResponse } from '@/lib/api';
 import Avatar from '@/components/ui/Avatar';
 import { cn } from '@/lib/utils';
 
@@ -247,6 +248,11 @@ export default function DashboardLayout({
     useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userName, setUserName] = useState('');
+  const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     loadFromStorage();
@@ -270,6 +276,29 @@ export default function DashboardLayout({
       .then((data) => { if (data?.name) setUserName(data.name); })
       .catch(() => {});
   }, [isAuthenticated, userId, userType]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    notificationsApi.getMy().then((r) => setNotifications(r.data)).catch(() => {});
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) setShowNotifications(false);
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) setShowProfileMenu(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const markNotificationRead = async (id: number) => {
+    try {
+      await notificationsApi.markRead(id);
+      setNotifications((prev) => prev.map((n) => n.notificationId === id ? { ...n, isRead: true } : n));
+    } catch {}
+  };
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const navItems = role ? navByRole[role] || [] : [];
 
@@ -412,24 +441,85 @@ export default function DashboardLayout({
           <div className="flex-1" />
 
           {/* Notification bell */}
-          <button className="relative p-2 rounded-xl text-slate-muted hover:text-obsidian hover:bg-cream transition-colors">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
+          <div ref={notifRef} className="relative">
+            <button
+              onClick={() => { setShowNotifications(!showNotifications); setShowProfileMenu(false); }}
+              className="relative p-2 rounded-xl text-slate-muted hover:text-obsidian hover:bg-cream transition-colors"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-              />
-            </svg>
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose" />
-          </button>
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+              </svg>
+              {unreadCount > 0 && (
+                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose" />
+              )}
+            </button>
+            {showNotifications && (
+              <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-lg border border-border/40 overflow-hidden z-50">
+                <div className="px-4 py-3 border-b border-border/40 flex items-center justify-between">
+                  <p className="text-sm font-semibold text-obsidian">Notifications</p>
+                  {unreadCount > 0 && <span className="text-xs text-emerald-deep font-medium">{unreadCount} new</span>}
+                </div>
+                <div className="max-h-80 overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-8 text-center text-sm text-slate-muted">No notifications yet.</div>
+                  ) : (
+                    notifications.slice(0, 10).map((n) => (
+                      <button
+                        key={n.notificationId}
+                        onClick={() => markNotificationRead(n.notificationId)}
+                        className={cn(
+                          'w-full text-left px-4 py-3 border-b border-border/20 hover:bg-cream/50 transition-colors',
+                          !n.isRead && 'bg-emerald/5'
+                        )}
+                      >
+                        <p className="text-sm font-medium text-obsidian">{n.title}</p>
+                        <p className="text-xs text-slate-muted mt-0.5 line-clamp-2">{n.message}</p>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
 
-          <Avatar name={userName || role || 'U'} size="sm" />
+          {/* Profile dropdown */}
+          <div ref={profileRef} className="relative">
+            <button
+              onClick={() => { setShowProfileMenu(!showProfileMenu); setShowNotifications(false); }}
+              className="flex items-center gap-2 p-1 rounded-xl hover:bg-cream transition-colors"
+            >
+              <Avatar name={userName || role || 'U'} size="sm" />
+            </button>
+            {showProfileMenu && (
+              <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-lg border border-border/40 overflow-hidden z-50">
+                <div className="px-4 py-3 border-b border-border/40">
+                  <p className="text-sm font-semibold text-obsidian truncate">{userName || roleLabel(role)}</p>
+                  <p className="text-xs text-slate-muted">{roleLabel(role)} &middot; ID: {userId}</p>
+                </div>
+                <div className="py-1">
+                  <Link
+                    href={`/${role?.toLowerCase() || ''}`}
+                    onClick={() => setShowProfileMenu(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-soft hover:bg-cream hover:text-obsidian transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                    My Profile
+                  </Link>
+                  <button
+                    onClick={() => { handleLogout(); setShowProfileMenu(false); }}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-rose hover:bg-rose/5 transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                    </svg>
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </header>
 
         {/* Page content */}
