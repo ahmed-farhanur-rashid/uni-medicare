@@ -354,34 +354,6 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <div className="mt-8 animate-fade-in-up stagger-3">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border" />
-              </div>
-              <div className="relative flex justify-center text-xs">
-                <span className="bg-cream-warm px-3 text-silver">
-                  Test credentials
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-4 p-4 rounded-xl bg-white/60 border border-border/40 text-xs text-slate-muted space-y-1.5">
-              <p>
-                <span className="font-semibold text-obsidian">Admin:</span>{' '}
-                admin@unimedicare.com / Admin1234!
-              </p>
-              <p>
-                <span className="font-semibold text-obsidian">Doctor:</span>{' '}
-                doctor@unimedicare.com / Doctor1234!
-              </p>
-              <p>
-                <span className="font-semibold text-obsidian">Patient:</span>{' '}
-                patient@unimedicare.com / Patient1234!
-              </p>
-            </div>
-          </div>
-
           <p className="mt-8 text-center text-xs text-silver animate-fade-in-up stagger-4">
             © 2026 Uni Medicare. All rights reserved.
           </p>
