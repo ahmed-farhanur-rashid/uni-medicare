@@ -525,4 +525,11 @@ export const auditApi = {
     ),
 };
 
+// Wallet API
+export const walletApi = {
+  getBalance: () => api.get<{ balance: number }>('/wallet/balance'),
+  topUp: (amount: number) =>
+    api.post<{ balance: number; message: string }>('/wallet/topup', { amount }),
+};
+
 export default api;
