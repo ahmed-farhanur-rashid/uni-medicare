@@ -84,7 +84,7 @@ export default function StudentPrescriptionsPage() {
                 </div>
 
                 {p.chiefComplaint && (
-                  <div className="mb-4 p-3 rounded-xl bg-cream-warm dark:bg-white/5 border border-border/40 dark:border-white/[0.06]">
+                  <div className="mb-4 p-3 rounded-xl bg-cream-warm dark:bg-white/5 border border-gray-200 dark:border-[#1e2737]">
                     <p className="text-xs font-medium text-slate-muted dark:text-gray-500 mb-1">Chief Complaint</p>
                     <p className="text-sm text-obsidian dark:text-gray-100">{p.chiefComplaint}</p>
                   </div>

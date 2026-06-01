@@ -125,10 +125,10 @@ export default function StudentInvoicesPage() {
                 </div>
 
                 {expandedId === inv.invoiceId && (
-                  <div className="border-t border-border/40 dark:border-white/[0.06]">
+                  <div className="border-t border-gray-200 dark:border-[#1e2737]">
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="border-b border-border/30">
+                        <tr className="border-b border-gray-200">
                           <th className="text-left px-5 py-2.5 font-medium text-slate-muted dark:text-gray-500">Service</th>
                           <th className="text-left px-5 py-2.5 font-medium text-slate-muted dark:text-gray-500 hidden sm:table-cell">Description</th>
                           <th className="text-center px-5 py-2.5 font-medium text-slate-muted dark:text-gray-500">Qty</th>
@@ -136,7 +136,7 @@ export default function StudentInvoicesPage() {
                           <th className="text-right px-5 py-2.5 font-medium text-slate-muted dark:text-gray-500">Total</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-border/30">
+                      <tbody className="divide-y divide-gray-200">
                         {inv.lineItems.map((item) => (
                           <tr key={item.lineItemId} className="hover:bg-cream-warm/30 dark:hover:bg-white/[0.02]">
                             <td className="px-5 py-3 font-medium text-obsidian dark:text-gray-100">{item.serviceName}</td>
@@ -149,7 +149,7 @@ export default function StudentInvoicesPage() {
                       </tbody>
                     </table>
                     {inv.transactionStatus === 'pending' && (
-                      <div className="px-5 py-4 border-t border-border/30 flex justify-end">
+                      <div className="px-5 py-4 border-t border-gray-200 flex justify-end">
                         <Button onClick={() => handlePay(inv.invoiceId)}>
                           Pay Now — {formatCurrency(inv.totalAmount)}
                         </Button>

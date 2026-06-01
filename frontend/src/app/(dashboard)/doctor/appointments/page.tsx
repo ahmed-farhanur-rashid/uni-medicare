@@ -60,7 +60,7 @@ export default function DoctorAppointmentsPage() {
 
       <div className="flex gap-2 overflow-x-auto pb-2">
         {['all', 'booked', 'arrived', 'in_progress', 'completed', 'no_show'].map((f) => (
-          <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filter === f ? 'bg-emerald text-white shadow-sm' : 'bg-white dark:bg-gray-900 text-slate-muted dark:text-gray-500 border border-border dark:border-white/[0.08] hover:border-emerald hover:text-emerald'}`}>
+          <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filter === f ? 'bg-emerald text-white shadow-sm' : 'bg-white dark:bg-gray-900 text-slate-muted dark:text-gray-500 border border-gray-200 dark:border-[#1e2737] hover:border-emerald hover:text-emerald'}`}>
             {f === 'all' ? 'All' : f.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
           </button>
         ))}

@@ -16,7 +16,7 @@ export default function Card({
   return (
     <div
       className={cn(
-        'rounded-2xl bg-white dark:bg-gray-900 border border-border/60 dark:border-white/[0.06] shadow-sm',
+        'rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-[#1e2737] shadow-sm',
         hover && 'card-hover',
         grain && 'grain',
         className
@@ -37,7 +37,7 @@ export function CardHeader({
   return (
     <div
       className={cn(
-        'px-6 py-5 border-b border-border/40 dark:border-white/[0.06]',
+        'px-6 py-5 border-b border-gray-200 dark:border-[#1e2737]',
         className
       )}
     >
@@ -66,7 +66,7 @@ export function CardFooter({
   return (
     <div
       className={cn(
-        'px-6 py-4 border-t border-border/40 dark:border-white/[0.06] bg-cream-warm/50 dark:bg-white/[0.02] rounded-b-2xl',
+        'px-6 py-4 border-t border-gray-200 dark:border-[#1e2737] bg-cream-warm/50 dark:bg-white/[0.02] rounded-b-2xl',
         className
       )}
     >

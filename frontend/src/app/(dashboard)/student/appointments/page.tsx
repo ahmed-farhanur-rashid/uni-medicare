@@ -197,7 +197,7 @@ export default function StudentAppointmentsPage() {
             className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
               filter === f
                 ? 'bg-emerald text-white shadow-sm'
-                : 'bg-white dark:bg-gray-900 text-slate-muted dark:text-gray-500 border border-border dark:border-white/[0.08] hover:border-emerald hover:text-emerald'
+                : 'bg-white dark:bg-gray-900 text-slate-muted dark:text-gray-500 border border-gray-200 dark:border-[#1e2737] hover:border-emerald hover:text-emerald'
             }`}
           >
             {f === 'all' ? 'All' : f.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
@@ -290,7 +290,7 @@ export default function StudentAppointmentsPage() {
             <div>
               <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Specialty</label>
               <select
-                className="w-full rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted"
+                className="w-full rounded-xl border border-gray-200 dark:border-[#1e2737] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted"
                 value={bookingData.specialty}
                 onChange={(e) => handleSpecialtyChange(e.target.value)}
                 required
@@ -306,7 +306,7 @@ export default function StudentAppointmentsPage() {
             <div>
               <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Doctor</label>
               <select
-                className="w-full rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full rounded-xl border border-gray-200 dark:border-[#1e2737] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted disabled:opacity-50 disabled:cursor-not-allowed"
                 value={bookingData.doctorId}
                 onChange={(e) => handleDoctorChange(e.target.value)}
                 required
@@ -354,7 +354,7 @@ export default function StudentAppointmentsPage() {
                         bookingData.slotTime === slot.time
                           ? 'bg-emerald text-white border-emerald shadow-sm'
                           : slot.status === 'available'
-                            ? 'bg-white dark:bg-gray-900 text-obsidian dark:text-gray-100 border-border dark:border-white/[0.08] hover:border-emerald hover:text-emerald cursor-pointer'
+                            ? 'bg-white dark:bg-gray-900 text-obsidian dark:text-gray-100 border-gray-200 dark:border-[#1e2737] hover:border-emerald hover:text-emerald cursor-pointer'
                             : slot.status === 'break'
                               ? 'bg-amber/10 text-amber border-amber/20 dark:bg-amber/20 dark:text-amber dark:border-amber/30 cursor-not-allowed'
                               : 'bg-slate-muted/10 text-slate-muted dark:bg-white/5 dark:text-gray-500 border-transparent cursor-not-allowed'
@@ -375,7 +375,7 @@ export default function StudentAppointmentsPage() {
             <div>
               <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Reason</label>
               <textarea
-                className="w-full h-24 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none"
+                className="w-full h-24 rounded-xl border border-gray-200 dark:border-[#1e2737] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none"
                 placeholder="Describe your reason for the visit"
                 value={bookingData.reason}
                 onChange={(e) => setBookingData({ ...bookingData, reason: e.target.value })}
@@ -415,7 +415,7 @@ export default function StudentAppointmentsPage() {
           <div>
             <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Reason (optional)</label>
             <textarea
-              className="w-full h-20 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none"
+              className="w-full h-20 rounded-xl border border-gray-200 dark:border-[#1e2737] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none"
               placeholder="Reason for cancellation"
               value={cancelReason}
               onChange={(e) => setCancelReason(e.target.value)}

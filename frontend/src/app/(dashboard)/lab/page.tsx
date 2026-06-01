@@ -54,11 +54,11 @@ export default function LabDashboard() {
 
       <Card className="animate-fade-in-up stagger-3 opacity-0">
         <CardContent className="p-0">
-          <div className="px-6 py-4 border-b border-border/40 dark:border-white/[0.06] flex items-center justify-between">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-[#1e2737] flex items-center justify-between">
             <h2 className="font-semibold text-obsidian dark:text-gray-100 font-display">Pending Lab Results</h2>
             <Button variant="ghost" size="sm" onClick={() => router.push('/lab/results')}>View all</Button>
           </div>
-          <div className="divide-y divide-border/30 dark:divide-white/[0.06]">
+          <div className="divide-y divide-gray-200 dark:divide-[#1e2737]">
             {pending.length === 0 ? (
               <EmptyState icon={<svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5" /></svg>} title="No pending results" description="All lab results have been completed." />
             ) : pending.slice(0, 5).map((r) => (

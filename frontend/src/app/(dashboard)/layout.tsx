@@ -314,7 +314,7 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen flex bg-cream-warm dark:bg-gray-950">
+    <div className="min-h-screen flex flex-col bg-cream-warm dark:bg-gray-950">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -323,101 +323,15 @@ export default function DashboardLayout({
         />
       )}
 
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          'fixed inset-y-0 left-0 z-50 w-64 bg-obsidian dark:bg-gray-950 flex flex-col transition-transform duration-300 ease-out border-r border-white/[0.06]',
-          'lg:translate-x-0 lg:static lg:z-auto',
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        )}
-      >
-        {/* Logo */}
-        <div className="flex items-center gap-3 px-5 py-5 border-b border-white/[0.06]">
-          <div className="w-9 h-9 rounded-xl bg-emerald/20 flex items-center justify-center shrink-0">
-            <svg
-              className="w-5 h-5 text-emerald-light"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-              />
-            </svg>
-          </div>
-          <div>
-            <p className="text-sm font-bold text-white font-display tracking-wide">
-              Uni Medicare
-            </p>
-            <p className="text-[10px] text-silver/50 uppercase tracking-widest">
-              Medical Portal
-            </p>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setSidebarOpen(false)}
-                className={cn(
-                  'sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
-                  isActive
-                    ? 'active text-emerald-light bg-emerald/10'
-                    : 'text-silver/70 hover:text-white hover:bg-white/[0.04]'
-                )}
-              >
-                {item.icon}
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* User section */}
-        <div className="px-3 py-4 border-t border-white/[0.06]">
-          <div className="flex items-center gap-3 px-2">
-            <Avatar name={userName || role || 'U'} size="sm" />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">
-                {userName || roleLabel(role)}
-              </p>
-              <p className="text-[11px] text-silver/50">
-                {roleLabel(role)} &middot; ID: {userId}
-              </p>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top bar */}
-        <header className="sticky top-0 z-30 h-16 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-border/40 dark:border-white/[0.06]">
-          <div className="h-full flex items-center gap-4 px-6">
+      {/* Header - full width */}
+      <header className="sticky top-0 z-30 h-16 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-[#1e2737]">
+        <div className="h-full flex items-center gap-4 px-6">
           <button
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden p-2 rounded-xl text-slate-muted hover:text-obsidian hover:bg-cream dark:hover:text-gray-200 dark:hover:bg-white/10 transition-colors"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           </button>
 
@@ -440,8 +354,8 @@ export default function DashboardLayout({
               )}
             </button>
             {showNotifications && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-border/40 dark:border-white/[0.06] overflow-hidden z-50">
-                <div className="px-4 py-3 border-b border-border/40 dark:border-white/[0.06] flex items-center justify-between">
+              <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-[#1e2737] overflow-hidden z-50">
+                <div className="px-4 py-3 border-b border-gray-200 dark:border-[#1e2737] flex items-center justify-between">
                   <p className="text-sm font-semibold text-obsidian dark:text-gray-100">Notifications</p>
                   {unreadCount > 0 && <span className="text-xs text-emerald-deep font-medium">{unreadCount} new</span>}
                 </div>
@@ -454,7 +368,7 @@ export default function DashboardLayout({
                         key={n.notificationId}
                         onClick={() => markNotificationRead(n.notificationId)}
                         className={cn(
-                          'w-full text-left px-4 py-3 border-b border-border/20 dark:border-white/[0.04] hover:bg-cream/50 dark:hover:bg-white/5 transition-colors',
+                          'w-full text-left px-4 py-3 border-b border-gray-200 dark:border-[#1e2737] hover:bg-cream/50 dark:hover:bg-white/5 transition-colors',
                           !n.isRead && 'bg-emerald/5 dark:bg-emerald/10'
                         )}
                       >
@@ -477,8 +391,8 @@ export default function DashboardLayout({
               <Avatar name={userName || role || 'U'} size="sm" />
             </button>
             {showProfileMenu && (
-              <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-border/40 dark:border-white/[0.06] overflow-hidden z-50">
-                <div className="px-4 py-3 border-b border-border/40 dark:border-white/[0.06]">
+              <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-[#1e2737] overflow-hidden z-50">
+                <div className="px-4 py-3 border-b border-gray-200 dark:border-[#1e2737]">
                   <p className="text-sm font-semibold text-obsidian dark:text-gray-100 truncate">{userName || roleLabel(role)}</p>
                   <p className="text-xs text-slate-muted dark:text-gray-500">{roleLabel(role)} &middot; ID: {userId}</p>
                 </div>
@@ -506,10 +420,86 @@ export default function DashboardLayout({
               </div>
             )}
           </div>
-          </div>
-        </header>
+        </div>
+      </header>
 
-        {/* Page content */}
+      {/* Sidebar + content below header */}
+      <div className="flex flex-1 min-h-0">
+        {/* Sidebar */}
+        <aside
+          className={cn(
+            'fixed top-16 bottom-0 left-0 z-50 w-64 bg-obsidian dark:bg-gray-950 flex flex-col transition-transform duration-300 ease-out border-r border-[#2a3548]',
+            'lg:translate-x-0 lg:static lg:z-auto',
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          )}
+        >
+          {/* Logo */}
+          <div className="flex items-center gap-3 px-5 py-5 border-b border-[#2a3548]">
+            <div className="w-9 h-9 rounded-xl bg-emerald/20 flex items-center justify-center shrink-0">
+              <svg
+                className="w-5 h-5 text-emerald-light"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white font-display tracking-wide">
+                Uni Medicare
+              </p>
+              <p className="text-[10px] text-silver/50 uppercase tracking-widest">
+                Medical Portal
+              </p>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setSidebarOpen(false)}
+                  className={cn(
+                    'sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all',
+                    isActive
+                      ? 'active text-emerald-light bg-emerald/10'
+                      : 'text-silver/70 hover:text-white hover:bg-white/[0.04]'
+                  )}
+                >
+                  {item.icon}
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* User section */}
+          <div className="px-3 py-4 border-t border-[#2a3548]">
+            <div className="flex items-center gap-3 px-2">
+              <Avatar name={userName || role || 'U'} size="sm" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-white truncate">
+                  {userName || roleLabel(role)}
+                </p>
+                <p className="text-[11px] text-silver/50">
+                  {roleLabel(role)} &middot; ID: {userId}
+                </p>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Main content */}
         <main className="flex-1 p-6 lg:p-8 overflow-auto dark:text-gray-200">{children}</main>
       </div>
     </div>

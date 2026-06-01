@@ -57,7 +57,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="animate-fade-in-up stagger-3 opacity-0">
           <CardContent className="p-0">
-            <div className="px-6 py-4 border-b border-border/40 dark:border-white/[0.06] flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-[#1e2737] flex items-center justify-between">
               <h2 className="font-semibold text-obsidian dark:text-gray-100 font-display">Quick Actions</h2>
             </div>
             <div className="p-6 grid grid-cols-2 gap-3">
@@ -68,7 +68,7 @@ export default function AdminDashboard() {
                 { label: 'Services', href: '/admin/services', color: 'amber' },
                 { label: 'Audit Logs', href: '/admin/audit', color: 'rose' },
               ].map((item) => (
-                <button key={item.href} onClick={() => router.push(item.href)} className={`p-4 rounded-xl border border-border dark:border-white/[0.08] hover:border-${item.color} hover:bg-${item.color}/5 transition-all text-center group`}>
+                <button key={item.href} onClick={() => router.push(item.href)} className={`p-4 rounded-xl border border-gray-200 dark:border-[#1e2737] hover:border-${item.color} hover:bg-${item.color}/5 transition-all text-center group`}>
                   <p className="text-sm font-medium text-obsidian dark:text-gray-100 group-hover:text-current">{item.label}</p>
                 </button>
               ))}
@@ -78,11 +78,11 @@ export default function AdminDashboard() {
 
         <Card className="animate-fade-in-up stagger-4 opacity-0">
           <CardContent className="p-0">
-            <div className="px-6 py-4 border-b border-border/40 dark:border-white/[0.06] flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-[#1e2737] flex items-center justify-between">
               <h2 className="font-semibold text-obsidian dark:text-gray-100 font-display">Recent Staff</h2>
               <Button variant="ghost" size="sm" onClick={() => router.push('/admin/staff')}>View all</Button>
             </div>
-            <div className="divide-y divide-border/30">
+            <div className="divide-y divide-gray-200">
               {staff.length === 0 ? (
                 <div className="px-6 py-8 text-center text-sm text-slate-muted dark:text-gray-500">No staff members found.</div>
               ) : staff.slice(0, 5).map((s) => (

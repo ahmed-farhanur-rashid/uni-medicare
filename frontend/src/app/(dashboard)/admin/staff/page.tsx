@@ -189,7 +189,7 @@ export default function AdminStaffPage() {
             <select
               value={form.roleName}
               onChange={(e) => setForm({ ...form, roleName: e.target.value, specialty: '', departmentId: '' })}
-              className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white dark:bg-white/5 text-obsidian dark:text-gray-100"
+              className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-[#1e2737] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white dark:bg-white/5 text-obsidian dark:text-gray-100"
               required
             >
               <option value="">Select role</option>
@@ -202,7 +202,7 @@ export default function AdminStaffPage() {
               <select
                 value={form.specialty}
                 onChange={(e) => setForm({ ...form, specialty: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white dark:bg-white/5 text-obsidian dark:text-gray-100"
+                className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-[#1e2737] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white dark:bg-white/5 text-obsidian dark:text-gray-100"
                 required
               >
                 <option value="">Select specialty</option>
@@ -216,7 +216,7 @@ export default function AdminStaffPage() {
               <select
                 value={form.departmentId}
                 onChange={(e) => setForm({ ...form, departmentId: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white dark:bg-white/5 text-obsidian dark:text-gray-100"
+                className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-[#1e2737] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white dark:bg-white/5 text-obsidian dark:text-gray-100"
               >
                 <option value="">No department</option>
                 {departments.map((d) => <option key={d.departmentId} value={d.departmentId}>{d.name}</option>)}

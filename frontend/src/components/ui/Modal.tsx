@@ -61,7 +61,7 @@ export default function Modal({
         )}
       >
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-border/40 dark:border-white/[0.06]">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-[#1e2737]">
             <h2 className="text-lg font-semibold text-obsidian dark:text-gray-100 font-display">
               {title}
             </h2>

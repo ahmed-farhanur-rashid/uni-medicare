@@ -149,7 +149,7 @@ export default function ProfilePage() {
                     type="text"
                     value={editForm.name}
                     onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-[#1e2737] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div>
@@ -158,7 +158,7 @@ export default function ProfilePage() {
                     type="text"
                     value={editForm.phone}
                     onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-[#1e2737] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                   />
                 </div>
                 {isStudent && (
@@ -168,7 +168,7 @@ export default function ProfilePage() {
                       type="email"
                       value={editForm.email}
                       onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                      className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-[#1e2737] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                     />
                   </div>
                 )}
@@ -187,7 +187,7 @@ export default function ProfilePage() {
                     type="password"
                     value={passwordForm.currentPassword}
                     onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-[#1e2737] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div>
@@ -196,7 +196,7 @@ export default function ProfilePage() {
                     type="password"
                     value={passwordForm.newPassword}
                     onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-[#1e2737] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div>
@@ -205,7 +205,7 @@ export default function ProfilePage() {
                     type="password"
                     value={passwordForm.confirmPassword}
                     onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-[#1e2737] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div className="flex gap-2 pt-2">
@@ -243,7 +243,7 @@ export default function ProfilePage() {
 
 function InfoRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="py-2 border-b border-border/30 dark:border-white/[0.06]">
+    <div className="py-2 border-b border-gray-200 dark:border-[#1e2737]">
       <p className="text-xs text-slate-muted dark:text-gray-500">{label}</p>
       <p className={`text-sm mt-0.5 ${highlight ? 'text-rose font-medium' : 'text-obsidian dark:text-gray-100'}`}>{value}</p>
     </div>

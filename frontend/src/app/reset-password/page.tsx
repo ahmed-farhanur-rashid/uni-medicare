@@ -112,7 +112,7 @@ function ResetPasswordForm() {
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    className={`w-full rounded-xl border bg-white dark:bg-gray-900 px-4 py-3 pr-12 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-gray-600 ${errors.password ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border dark:border-white/[0.08]'}`}
+                    className={`w-full rounded-xl border bg-white dark:bg-gray-900 px-4 py-3 pr-12 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-[#2a3548] ${errors.password ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-gray-200 dark:border-[#1e2737]'}`}
                     placeholder="Min 8 characters"
                     {...register('password')}
                   />
@@ -141,7 +141,7 @@ function ResetPasswordForm() {
                 <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Confirm Password</label>
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  className={`w-full rounded-xl border bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-gray-600 ${errors.confirmPassword ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border dark:border-white/[0.08]'}`}
+                  className={`w-full rounded-xl border bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-[#2a3548] ${errors.confirmPassword ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-gray-200 dark:border-[#1e2737]'}`}
                   placeholder="Re-enter your password"
                   {...register('confirmPassword')}
                 />

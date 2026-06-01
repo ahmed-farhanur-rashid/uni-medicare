@@ -144,7 +144,7 @@ export default function AdminDepartmentsPage() {
                   </div>
 
                   {sched && (
-                    <div className="mt-3 pt-3 border-t border-border dark:border-white/[0.06]">
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-[#1e2737]">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-medium text-slate-mid dark:text-gray-300">Appointment Schedule</span>
                         <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${sched.isBookable ? 'bg-emerald/10 text-emerald-deep dark:bg-emerald/20 dark:text-emerald-light' : 'bg-slate-muted/20 text-slate-muted dark:bg-white/5 dark:text-gray-400'}`}>
@@ -177,7 +177,7 @@ export default function AdminDepartmentsPage() {
                   )}
 
                   {!sched && (
-                    <div className="mt-3 pt-3 border-t border-border dark:border-white/[0.06]">
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-[#1e2737]">
                       <Button variant="ghost" size="sm" className="w-full" onClick={() => openScheduleEdit(d)}>
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                         Set Schedule
@@ -197,7 +197,7 @@ export default function AdminDepartmentsPage() {
           <Input label="Name" placeholder="Department name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
           <div>
             <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Description</label>
-            <textarea className="w-full h-24 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-gray-500 resize-none" placeholder="Brief description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            <textarea className="w-full h-24 rounded-xl border border-gray-200 dark:border-[#1e2737] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-[#2a3548] resize-none" placeholder="Brief description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           </div>
           <div className="flex justify-end gap-3">
             <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>Cancel</Button>
@@ -229,7 +229,7 @@ export default function AdminDepartmentsPage() {
           <div>
             <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Slot Duration (minutes)</label>
             <select
-              className="w-full rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted"
+              className="w-full rounded-xl border border-gray-200 dark:border-[#1e2737] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted"
               value={schedForm.slotDurationMinutes}
               onChange={(e) => setSchedForm({ ...schedForm, slotDurationMinutes: parseInt(e.target.value) })}
             >

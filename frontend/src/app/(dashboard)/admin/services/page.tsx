@@ -111,7 +111,7 @@ export default function AdminServicesPage() {
           <Input label="Price" type="number" step="0.01" placeholder="0.00" value={form.unitPrice} onChange={(e) => setForm({ ...form, unitPrice: e.target.value })} required />
           <div>
             <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Description</label>
-            <textarea className="w-full h-24 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-gray-500 resize-none" placeholder="Brief description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            <textarea className="w-full h-24 rounded-xl border border-gray-200 dark:border-[#1e2737] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-[#2a3548] resize-none" placeholder="Brief description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           </div>
           <div className="flex justify-end gap-3">
             <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>Cancel</Button>

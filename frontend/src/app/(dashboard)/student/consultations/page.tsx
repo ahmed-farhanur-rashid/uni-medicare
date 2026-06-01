@@ -82,7 +82,7 @@ export default function StudentConsultationsPage() {
                       With {c.staffName} · {formatDateTime(c.consultTime)}
                     </p>
                     {c.notes && (
-                      <div className="mt-3 p-3 rounded-xl bg-cream-warm dark:bg-white/5 border border-border/40 dark:border-white/[0.06]">
+                      <div className="mt-3 p-3 rounded-xl bg-cream-warm dark:bg-white/5 border border-gray-200 dark:border-[#1e2737]">
                         <p className="text-xs font-medium text-slate-muted dark:text-gray-500 mb-1">Clinical Notes</p>
                         <p className="text-sm text-obsidian dark:text-gray-100">{c.notes}</p>
                       </div>

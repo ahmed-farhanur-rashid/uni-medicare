@@ -21,7 +21,7 @@ export default function StatsCard({
   return (
     <div
       className={cn(
-        'rounded-2xl bg-white dark:bg-gray-900 border border-border/60 dark:border-white/[0.06] p-5 shadow-sm card-hover grain',
+        'rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-[#1e2737] p-5 shadow-sm card-hover grain',
         className
       )}
     >

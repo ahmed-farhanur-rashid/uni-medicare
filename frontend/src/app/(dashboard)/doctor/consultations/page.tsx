@@ -74,12 +74,12 @@ export default function DoctorConsultationsPage() {
       <Modal isOpen={!!selectedConsult} onClose={() => setSelectedConsult(null)} title="Update Consultation Notes">
         <div className="space-y-4">
           {selectedConsult && (
-            <div className="p-3 rounded-xl bg-cream-warm dark:bg-white/[0.02] border border-border/40 dark:border-white/[0.06]">
+            <div className="p-3 rounded-xl bg-cream-warm dark:bg-white/[0.02] border border-gray-200 dark:border-[#1e2737]">
               <p className="text-sm font-medium text-obsidian dark:text-gray-100">{selectedConsult.patientName}</p>
               <p className="text-xs text-slate-muted dark:text-gray-500">{formatDateTime(selectedConsult.consultTime)}</p>
             </div>
           )}
-          <textarea className="w-full h-32 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none" placeholder="Enter consultation notes..." value={notes} onChange={(e) => setNotes(e.target.value)} />
+          <textarea className="w-full h-32 rounded-xl border border-gray-200 dark:border-[#1e2737] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none" placeholder="Enter consultation notes..." value={notes} onChange={(e) => setNotes(e.target.value)} />
           <div className="flex justify-end gap-3">
             <Button variant="ghost" onClick={() => setSelectedConsult(null)}>Cancel</Button>
             <Button isLoading={saving} onClick={handleUpdateNotes}>Save Notes</Button>

@@ -32,9 +32,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={cn(
-              'w-full h-11 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-white/5 px-4 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-600 transition-all duration-200',
+              'w-full h-11 rounded-xl border border-gray-200 dark:border-[#1e2737] bg-white dark:bg-white/5 px-4 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-600 transition-all duration-200',
               'focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald',
-              'hover:border-slate-muted dark:hover:border-white/[0.15]',
+              'hover:border-slate-muted dark:hover:border-[#2a3548]',
               icon && 'pl-10',
               error && 'border-rose focus:ring-rose/30 focus:border-rose',
               className

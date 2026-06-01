@@ -60,11 +60,11 @@ export default function ReceptionistDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="animate-fade-in-up stagger-3 opacity-0">
           <CardContent className="p-0">
-            <div className="px-6 py-4 border-b border-border/40 dark:border-white/[0.06] flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-[#1e2737] flex items-center justify-between">
               <h2 className="font-semibold text-obsidian dark:text-gray-100 font-display">Today&apos;s Schedule</h2>
               <Button variant="ghost" size="sm" onClick={() => router.push('/receptionist/appointments')}>View all</Button>
             </div>
-            <div className="divide-y divide-border/30 dark:divide-white/[0.06]">
+            <div className="divide-y divide-gray-200 dark:divide-[#1e2737]">
               {todayAppts.length === 0 ? (
                 <EmptyState icon={<svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>} title="No appointments today" description="The schedule is clear for today." />
               ) : todayAppts.slice(0, 5).map((apt) => (
@@ -88,17 +88,17 @@ export default function ReceptionistDashboard() {
 
         <Card className="animate-fade-in-up stagger-4 opacity-0">
           <CardContent className="p-0">
-            <div className="px-6 py-4 border-b border-border/40 dark:border-white/[0.06] flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-[#1e2737] flex items-center justify-between">
               <h2 className="font-semibold text-obsidian dark:text-gray-100 font-display">Quick Actions</h2>
             </div>
             <div className="p-6 grid grid-cols-2 gap-3">
-              <button onClick={() => router.push('/receptionist/appointments')} className="p-4 rounded-xl border border-border dark:border-white/[0.08] hover:border-emerald hover:bg-emerald/5 transition-all text-center group">
+              <button onClick={() => router.push('/receptionist/appointments')} className="p-4 rounded-xl border border-gray-200 dark:border-[#1e2737] hover:border-emerald hover:bg-emerald/5 transition-all text-center group">
                 <div className="w-10 h-10 rounded-xl bg-emerald/10 flex items-center justify-center text-emerald-deep mx-auto mb-2 group-hover:scale-110 transition-transform">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
                 </div>
                 <p className="text-sm font-medium text-obsidian dark:text-gray-100">Appointments</p>
               </button>
-              <button onClick={() => router.push('/receptionist/billing')} className="p-4 rounded-xl border border-border dark:border-white/[0.08] hover:border-amber hover:bg-amber/5 transition-all text-center group">
+              <button onClick={() => router.push('/receptionist/billing')} className="p-4 rounded-xl border border-gray-200 dark:border-[#1e2737] hover:border-amber hover:bg-amber/5 transition-all text-center group">
                 <div className="w-10 h-10 rounded-xl bg-amber/10 flex items-center justify-center text-amber mx-auto mb-2 group-hover:scale-110 transition-transform">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg>
                 </div>
