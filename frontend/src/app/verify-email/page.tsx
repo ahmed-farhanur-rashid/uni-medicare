@@ -5,11 +5,13 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { authApi } from '@/lib/api';
 import Button from '@/components/ui/Button';
+import { useToast } from '@/components/ui/Toast';
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const email = searchParams.get('email') || '';
+  const { toast } = useToast();
 
   const [status, setStatus] = useState<'verifying' | 'success' | 'error' | 'idle'>(
     token ? 'verifying' : 'idle'
@@ -37,8 +39,10 @@ function VerifyEmailContent() {
     try {
       await authApi.resendVerification(email);
       setResent(true);
+      toast('Verification email resent. Check your inbox.', 'success');
     } catch {
       setResent(true);
+      toast('Failed to resend verification email.', 'error');
     } finally {
       setResendLoading(false);
     }

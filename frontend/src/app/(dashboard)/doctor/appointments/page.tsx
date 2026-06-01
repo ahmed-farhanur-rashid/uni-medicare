@@ -11,10 +11,12 @@ import { StatusBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import EmptyState from '@/components/ui/EmptyState';
 import { TableSkeleton } from '@/components/ui/Skeleton';
+import { useToast } from '@/components/ui/Toast';
 
 export default function DoctorAppointmentsPage() {
   const router = useRouter();
   const { isAuthenticated, userId } = useAuthStore();
+  const { toast } = useToast();
   const [appointments, setAppointments] = useState<AppointmentResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
@@ -28,14 +30,15 @@ export default function DoctorAppointmentsPage() {
     try {
       const res = await appointmentsApi.getAll();
       setAppointments(res.data.filter((a) => a.doctorId === userId));
-    } catch {} finally { setLoading(false); }
+    } catch { toast('Failed to load appointments.', 'error'); } finally { setLoading(false); }
   }
 
   const handleStatus = async (id: number, status: string) => {
     try {
       await appointmentsApi.updateStatus(id, { status });
       loadAppointments();
-    } catch {}
+      toast(`Appointment ${status} successfully.`, 'success');
+    } catch { toast('Failed to update appointment status.', 'error'); }
   };
 
   const filtered = filter === 'all' ? appointments : appointments.filter((a) => a.status === filter);

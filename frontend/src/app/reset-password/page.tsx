@@ -3,19 +3,29 @@
 import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { authApi } from '@/lib/api';
+import { resetPasswordSchema } from '@/lib/validations';
 import Button from '@/components/ui/Button';
+
+type ResetPasswordFormData = {
+  password: string;
+  confirmPassword: string;
+};
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+
+  const { register, handleSubmit, formState: { errors } } = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
+  });
 
   if (!token) {
     return (
@@ -50,23 +60,12 @@ function ResetPasswordForm() {
     );
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: ResetPasswordFormData) => {
     setError('');
     setSuccess('');
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match.');
-      return;
-    }
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters.');
-      return;
-    }
-
     setLoading(true);
     try {
-      await authApi.resetPassword(token, password);
+      await authApi.resetPassword(token, data.password);
       setSuccess('Your password has been reset successfully.');
     } catch {
       setError('This reset link is invalid or has expired. Please request a new one.');
@@ -107,18 +106,15 @@ function ResetPasswordForm() {
           )}
 
           {!success && (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-mid mb-1.5">New Password</label>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
-                    className="w-full rounded-xl border border-border bg-white px-4 py-3 pr-12 text-sm text-obsidian placeholder:text-silver transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted"
+                    className={`w-full rounded-xl border bg-white px-4 py-3 pr-12 text-sm text-obsidian placeholder:text-silver transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted ${errors.password ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border'}`}
                     placeholder="Min 8 characters"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={8}
+                    {...register('password')}
                   />
                   <button
                     type="button"
@@ -132,18 +128,31 @@ function ResetPasswordForm() {
                     )}
                   </button>
                 </div>
+                {errors.password && (
+                  <p className="mt-1.5 text-xs text-rose flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-mid mb-1.5">Confirm Password</label>
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-obsidian placeholder:text-silver transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted"
+                  className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-obsidian placeholder:text-silver transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted ${errors.confirmPassword ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border'}`}
                   placeholder="Re-enter your password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  minLength={8}
+                  {...register('confirmPassword')}
                 />
+                {errors.confirmPassword && (
+                  <p className="mt-1.5 text-xs text-rose flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
               <Button type="submit" isLoading={loading} className="w-full">
                 Reset Password

@@ -1,4 +1,4 @@
-# Uni Medicare
+related to docker compose till # Uni Medicare
 
 University medical center management system — full-stack monorepo with Spring Boot backend, Next.js frontend, and PostgreSQL database.
 

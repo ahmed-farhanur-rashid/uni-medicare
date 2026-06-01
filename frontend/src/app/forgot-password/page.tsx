@@ -2,24 +2,33 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { authApi } from '@/lib/api';
+import { forgotPasswordSchema } from '@/lib/validations';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 
+type ForgotPasswordFormData = {
+  email: string;
+};
+
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const { register, handleSubmit, formState: { errors } } = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+  });
+
+  const onSubmit = async (data: ForgotPasswordFormData) => {
     setError('');
     setSuccess('');
     setLoading(true);
 
     try {
-      await authApi.forgotPassword(email);
+      await authApi.forgotPassword(data.email);
       setSuccess('If an account exists with that email, you will receive a password reset link shortly.');
     } catch {
       setSuccess('If an account exists with that email, you will receive a password reset link shortly.');
@@ -59,14 +68,13 @@ export default function ForgotPasswordPage() {
             <div className="mb-4 p-3 rounded-xl bg-emerald/10 border border-emerald/20 text-sm text-emerald-deep">{success}</div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
               label="Email"
               type="email"
               placeholder="you@student.edu"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              error={errors.email?.message}
+              {...register('email')}
             />
             <Button type="submit" isLoading={loading} className="w-full">
               Send Reset Link

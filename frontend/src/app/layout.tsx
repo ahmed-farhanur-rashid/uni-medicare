@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ToastProvider } from '@/components/ui/Toast';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -14,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col noise-overlay">{children}</body>
+      <body className="min-h-full flex flex-col noise-overlay">
+        <ToastProvider>{children}</ToastProvider>
+      </body>
     </html>
   );
 }

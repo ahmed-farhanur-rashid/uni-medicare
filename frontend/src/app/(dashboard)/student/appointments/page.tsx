@@ -18,10 +18,12 @@ import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import EmptyState from '@/components/ui/EmptyState';
 import { TableSkeleton } from '@/components/ui/Skeleton';
+import { useToast } from '@/components/ui/Toast';
 
 export default function StudentAppointmentsPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
+  const { toast } = useToast();
   const [appointments, setAppointments] = useState<AppointmentResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [showBooking, setShowBooking] = useState(false);
@@ -44,7 +46,7 @@ export default function StudentAppointmentsPage() {
       const res = await appointmentsApi.getMy();
       setAppointments(res.data);
     } catch {
-      // handle silently
+      toast('Failed to load appointments.', 'error');
     } finally {
       setLoading(false);
     }
@@ -56,7 +58,7 @@ export default function StudentAppointmentsPage() {
       return;
     }
     loadAppointments();
-    doctorsApi.getSpecialties().then((res) => setSpecialties(res.data)).catch(() => {});
+    doctorsApi.getSpecialties().then((res) => setSpecialties(res.data)).catch(() => { toast('Failed to load specialties.', 'error'); });
   }, [isAuthenticated, router]);
 
   const handleSpecialtyChange = async (specialty: string) => {
@@ -70,6 +72,7 @@ export default function StudentAppointmentsPage() {
       const res = await doctorsApi.getAll(specialty);
       setDoctors(res.data);
     } catch {
+      toast('Failed to load doctors.', 'error');
       setDoctors([]);
     } finally {
       setLoadingDoctors(false);
@@ -89,8 +92,9 @@ export default function StudentAppointmentsPage() {
       setBookingData({ specialty: '', doctorId: '', scheduledTime: '', reason: '' });
       setDoctors([]);
       loadAppointments();
+      toast('Appointment booked successfully.', 'success');
     } catch {
-      // handle error
+      toast('Failed to book appointment.', 'error');
     } finally {
       setSubmitting(false);
     }

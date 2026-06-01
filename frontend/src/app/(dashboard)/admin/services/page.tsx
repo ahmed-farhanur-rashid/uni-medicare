@@ -13,10 +13,12 @@ import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import EmptyState from '@/components/ui/EmptyState';
 import { TableSkeleton } from '@/components/ui/Skeleton';
+import { useToast } from '@/components/ui/Toast';
 
 export default function AdminServicesPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
+  const { toast } = useToast();
   const [data, setData] = useState<PaginatedResponse<Service> | null>(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
@@ -28,7 +30,7 @@ export default function AdminServicesPage() {
     try {
       const res = await adminApi.getServices(page, 10);
       setData(res.data);
-    } catch {} finally { setLoading(false); }
+    } catch { toast('Failed to load services.', 'error'); } finally { setLoading(false); }
   }
 
   useEffect(() => {
@@ -50,14 +52,16 @@ export default function AdminServicesPage() {
       setShowCreate(false);
       setForm({ serviceName: '', category: '', unitPrice: '', description: '' });
       loadServices();
-    } catch {} finally { setSaving(false); }
+      toast('Service created successfully.', 'success');
+    } catch { toast('Failed to create service.', 'error'); } finally { setSaving(false); }
   };
 
   const handleToggle = async (id: number) => {
     try {
       await adminApi.toggleServiceActive(id);
       loadServices();
-    } catch {}
+      toast('Service status updated.', 'success');
+    } catch { toast('Failed to update service status.', 'error'); }
   };
 
   return (

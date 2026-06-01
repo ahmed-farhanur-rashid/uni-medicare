@@ -12,10 +12,12 @@ import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import EmptyState from '@/components/ui/EmptyState';
 import { TableSkeleton } from '@/components/ui/Skeleton';
+import { useToast } from '@/components/ui/Toast';
 
 export default function AdminStaffPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
+  const { toast } = useToast();
   const [staff, setStaff] = useState<MedicalStaffResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -26,7 +28,7 @@ export default function AdminStaffPage() {
     try {
       const res = await adminApi.getStaff();
       setStaff(res.data);
-    } catch {} finally { setLoading(false); }
+    } catch { toast('Failed to load staff.', 'error'); } finally { setLoading(false); }
   }
 
   useEffect(() => {
@@ -42,7 +44,8 @@ export default function AdminStaffPage() {
       setShowCreate(false);
       setForm({ name: '', email: '', phone: '', password: '', roleName: '', departmentName: '', specialty: '' });
       loadStaff();
-    } catch {} finally { setSaving(false); }
+      toast('Staff member created successfully.', 'success');
+    } catch { toast('Failed to create staff member.', 'error'); } finally { setSaving(false); }
   };
 
   const handleDelete = async (id: number) => {
@@ -50,7 +53,8 @@ export default function AdminStaffPage() {
     try {
       await adminApi.deleteStaff(id);
       loadStaff();
-    } catch {}
+      toast('Staff member deleted successfully.', 'success');
+    } catch { toast('Failed to delete staff member.', 'error'); }
   };
 
   return (

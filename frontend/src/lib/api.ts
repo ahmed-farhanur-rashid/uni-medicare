@@ -44,6 +44,21 @@ export interface LoginResponse {
   type: string;
 }
 
+export interface ProfileResponse {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  type: string;
+  role: string;
+  specialty?: string;
+  department?: string;
+  emailVerified?: boolean;
+  isActive?: boolean;
+  issuedOn?: string;
+  expiresOn?: string;
+}
+
 export interface StudentResponse {
   studentId: number;
   name: string;
@@ -235,6 +250,7 @@ export const authApi = {
   resetPassword: (token: string, newPassword: string) =>
     api.post('/auth/reset-password', { token, newPassword }),
   resendVerification: (email: string) => api.post('/auth/resend-verification', { email }),
+  getProfile: () => api.get<ProfileResponse>('/me'),
 };
 
 // Appointments API

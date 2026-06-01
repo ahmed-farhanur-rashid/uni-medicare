@@ -3,43 +3,42 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { authApi } from '@/lib/api';
+import { z } from 'zod';
+import { registerSchema } from '@/lib/validations';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+
+type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [form, setForm] = useState({
-    studentId: '',
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    dateOfBirth: '',
-    bloodgroup: '',
-    sex: '',
+
+  const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: RegisterFormData) => {
     setError('');
     setLoading(true);
 
     try {
       await authApi.register({
-        studentId: parseInt(form.studentId),
-        name: form.name,
-        email: form.email || undefined,
-        phone: form.phone || undefined,
-        password: form.password,
-        dateOfBirth: form.dateOfBirth,
-        bloodgroup: form.bloodgroup || undefined,
-        sex: form.sex || undefined,
+        studentId: parseInt(data.studentId),
+        name: data.name,
+        email: data.email || undefined,
+        phone: data.phone || undefined,
+        password: data.password,
+        dateOfBirth: data.dateOfBirth,
+        bloodgroup: data.bloodgroup || undefined,
+        sex: data.sex || undefined,
       });
-      router.push(`/verify-email?email=${encodeURIComponent(form.email)}`);
+      router.push(`/verify-email?email=${encodeURIComponent(data.email ?? '')}`);
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
@@ -49,8 +48,6 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
-
-  const update = (field: string, value: string) => setForm({ ...form, [field]: value });
 
   return (
     <div className="min-h-screen flex bg-cream-warm">
@@ -82,46 +79,41 @@ export default function RegisterPage() {
             <div className="mb-4 p-3 rounded-xl bg-rose/10 border border-rose/20 text-sm text-rose">{error}</div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
               label="Student ID"
               type="number"
               placeholder="e.g. 2021021"
-              value={form.studentId}
-              onChange={(e) => update('studentId', e.target.value)}
-              required
+              error={errors.studentId?.message}
+              {...register('studentId')}
             />
             <Input
               label="Full Name"
               placeholder="Your full name"
-              value={form.name}
-              onChange={(e) => update('name', e.target.value)}
-              required
+              error={errors.name?.message}
+              {...register('name')}
             />
             <Input
               label="Email"
               type="email"
               placeholder="you@student.edu"
-              value={form.email}
-              onChange={(e) => update('email', e.target.value)}
+              error={errors.email?.message}
+              {...register('email')}
             />
             <Input
               label="Phone"
               placeholder="01XXXXXXXXX"
-              value={form.phone}
-              onChange={(e) => update('phone', e.target.value)}
+              error={errors.phone?.message}
+              {...register('phone')}
             />
             <div>
               <label className="block text-sm font-medium text-slate-mid mb-1.5">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  className="w-full rounded-xl border border-border bg-white px-4 py-3 pr-12 text-sm text-obsidian placeholder:text-silver transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted"
+                  className={`w-full rounded-xl border bg-white px-4 py-3 pr-12 text-sm text-obsidian placeholder:text-silver transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted ${errors.password ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border'}`}
                   placeholder="Min 8 characters"
-                  value={form.password}
-                  onChange={(e) => update('password', e.target.value)}
-                  required
-                  minLength={8}
+                  {...register('password')}
                 />
                 <button
                   type="button"
@@ -135,21 +127,27 @@ export default function RegisterPage() {
                   )}
                 </button>
               </div>
+              {errors.password && (
+                <p className="mt-1.5 text-xs text-rose flex items-center gap-1">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                  {errors.password.message}
+                </p>
+              )}
             </div>
             <Input
               label="Date of Birth"
               type="date"
-              value={form.dateOfBirth}
-              onChange={(e) => update('dateOfBirth', e.target.value)}
-              required
+              error={errors.dateOfBirth?.message}
+              {...register('dateOfBirth')}
             />
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-slate-mid mb-1.5">Blood Group</label>
                 <select
-                  className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-obsidian transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted"
-                  value={form.bloodgroup}
-                  onChange={(e) => update('bloodgroup', e.target.value)}
+                  className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-obsidian transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted ${errors.bloodgroup ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border'}`}
+                  {...register('bloodgroup')}
                 >
                   <option value="">Select</option>
                   <option value="A+">A+</option>
@@ -165,9 +163,8 @@ export default function RegisterPage() {
               <div>
                 <label className="block text-sm font-medium text-slate-mid mb-1.5">Sex</label>
                 <select
-                  className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-obsidian transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted"
-                  value={form.sex}
-                  onChange={(e) => update('sex', e.target.value)}
+                  className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-obsidian transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted ${errors.sex ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border'}`}
+                  {...register('sex')}
                 >
                   <option value="">Select</option>
                   <option value="M">Male</option>

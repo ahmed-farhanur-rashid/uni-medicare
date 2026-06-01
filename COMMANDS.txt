@@ -1,0 +1,52 @@
+# Uni Medicare - Commands Reference
+
+## Docker Commands
+docker compose up -d                              # Start all services
+docker compose down                               # Stop all services
+docker compose down -v && docker compose up --build -d  # Clean rebuild
+docker compose logs -f                            # View logs (all services)
+docker compose logs -f backend                    # View backend logs
+docker compose logs -f frontend                   # View frontend logs
+docker compose logs -f db                         # View database logs
+docker compose ps                                 # Check container status
+docker compose restart backend                    # Restart backend
+
+## Database Commands
+docker exec -it unimedicare_db psql -U postgres -d unimedicare              # Connect to PostgreSQL
+docker exec unimedicare_db psql -U postgres -d unimedicare -c "\dt"         # List tables
+docker exec unimedicare_db psql -U postgres -d unimedicare -c "SELECT id, name, email, role, email_verified FROM users ORDER BY id;"  # Check users
+docker exec unimedicare_db psql -U postgres -d unimedicare -c "SELECT id, student_id, name, email FROM students;"                    # Check students
+docker exec unimedicare_db psql -U postgres -d unimedicare -c "SELECT id, name, specialty FROM medical_staffs WHERE role='DOCTOR';"   # Check doctors
+docker exec unimedicare_db psql -U postgres -d unimedicare -c "SELECT * FROM appointments;"                                           # Check appointments
+
+## Backend Tests
+docker exec unimedicare_backend ./mvnw test                                              # Run all tests
+docker exec unimedicare_backend ./mvnw test -Dtest="AuthServiceTest"                     # Run specific test
+docker exec unimedicare_backend ./mvnw test -Dtest="AuthServiceTest" -Dsurefire.useFile=false  # Verbose output
+
+## Frontend Tests
+cd ~/my-projects/uni-medicare/frontend && npm test       # Run tests (watch mode)
+npm run test:run                                          # Run tests once
+npm run test:coverage                                     # Run with coverage
+
+## API Testing
+curl http://localhost:8080/actuator/health                                     # Health check
+curl -X POST http://localhost:8080/api/auth/login -H "Content-Type: application/json" -d '{"eId":"admin@university.edu","password":"Admin1234!"}'  # Login admin
+curl -X POST http://localhost:8080/api/auth/login -H "Content-Type: application/json" -d '{"eId":"dr.smith@university.edu","password":"Doctor1234!"}'  # Login doctor
+curl -X POST http://localhost:8080/api/auth/login -H "Content-Type: application/json" -d '{"eId":"STU001","password":"Patient1234!"}'  # Login student
+curl http://localhost:8080/api/doctors                  # Get doctors list
+curl http://localhost:8080/api/doctors/specialties       # Get specialties
+
+## Account Credentials
+Admin:     admin@university.edu / Admin1234!
+Doctor:    dr.smith@university.edu / Doctor1234!
+Nurse:     nurse.jones@university.edu / Nurse1234!
+Student:   STU001 / Patient1234!
+Lab Tech:  lab.davis@university.edu / Nurse1234!
+Pharmacist: pharm.wilson@university.edu / Nurse1234!
+
+## Access URLs
+Frontend:  http://localhost:3000
+Backend:   http://localhost:8080
+Swagger:   http://localhost:8080/swagger-ui.html
+Database:  localhost:5432

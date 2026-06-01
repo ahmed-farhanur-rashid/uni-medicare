@@ -12,10 +12,12 @@ import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import EmptyState from '@/components/ui/EmptyState';
 import { TableSkeleton } from '@/components/ui/Skeleton';
+import { useToast } from '@/components/ui/Toast';
 
 export default function AdminStudentsPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
+  const { toast } = useToast();
   const [data, setData] = useState<PaginatedResponse<StudentResponse> | null>(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
@@ -27,7 +29,7 @@ export default function AdminStudentsPage() {
     try {
       const res = await adminApi.getStudents(page, 10);
       setData(res.data);
-    } catch {} finally { setLoading(false); }
+    } catch { toast('Failed to load students.', 'error'); } finally { setLoading(false); }
   }
 
   useEffect(() => {
@@ -43,14 +45,16 @@ export default function AdminStudentsPage() {
       setShowCreate(false);
       setForm({ name: '', email: '', phone: '', password: '' });
       loadStudents();
-    } catch {} finally { setSaving(false); }
+      toast('Student created successfully.', 'success');
+    } catch { toast('Failed to create student.', 'error'); } finally { setSaving(false); }
   };
 
   const handleToggle = async (id: number) => {
     try {
       await adminApi.toggleStudentActive(id);
       loadStudents();
-    } catch {}
+      toast('Student status updated.', 'success');
+    } catch { toast('Failed to update student status.', 'error'); }
   };
 
   return (

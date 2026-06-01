@@ -11,10 +11,12 @@ import { StatusBadge } from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import EmptyState from '@/components/ui/EmptyState';
 import { TableSkeleton } from '@/components/ui/Skeleton';
+import { useToast } from '@/components/ui/Toast';
 
 export default function ReceptionistBillingPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
+  const { toast } = useToast();
   const [invoices, setInvoices] = useState<InvoiceResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -23,7 +25,7 @@ export default function ReceptionistBillingPage() {
     try {
       const res = await billingApi.getMyInvoices();
       setInvoices(res.data);
-    } catch {} finally { setLoading(false); }
+    } catch { toast('Failed to load invoices.', 'error'); } finally { setLoading(false); }
   }
 
   useEffect(() => {
@@ -35,7 +37,8 @@ export default function ReceptionistBillingPage() {
     try {
       await billingApi.pay(invoiceId);
       loadInvoices();
-    } catch {}
+      toast('Payment processed successfully.', 'success');
+    } catch { toast('Failed to process payment.', 'error'); }
   };
 
   return (

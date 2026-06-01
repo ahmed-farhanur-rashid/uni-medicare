@@ -11,10 +11,12 @@ import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import EmptyState from '@/components/ui/EmptyState';
 import { TableSkeleton } from '@/components/ui/Skeleton';
+import { useToast } from '@/components/ui/Toast';
 
 export default function AdminDepartmentsPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
+  const { toast } = useToast();
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -30,7 +32,7 @@ export default function AdminDepartmentsPage() {
     try {
       const res = await adminApi.getDepartments();
       setDepartments(res.data);
-    } catch {} finally { setLoading(false); }
+    } catch { toast('Failed to load departments.', 'error'); } finally { setLoading(false); }
   }
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -41,7 +43,8 @@ export default function AdminDepartmentsPage() {
       setShowCreate(false);
       setForm({ name: '', description: '' });
       loadDepartments();
-    } catch {} finally { setSaving(false); }
+      toast('Department created successfully.', 'success');
+    } catch { toast('Failed to create department.', 'error'); } finally { setSaving(false); }
   };
 
   const handleDelete = async (id: number) => {
@@ -49,7 +52,8 @@ export default function AdminDepartmentsPage() {
     try {
       await adminApi.deleteDepartment(id);
       loadDepartments();
-    } catch {}
+      toast('Department deleted successfully.', 'success');
+    } catch { toast('Failed to delete department.', 'error'); }
   };
 
   return (

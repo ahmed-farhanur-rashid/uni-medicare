@@ -498,7 +498,7 @@ export default function DashboardLayout({
                 </div>
                 <div className="py-1">
                   <Link
-                    href={`/${role?.toLowerCase() || ''}`}
+                    href="/profile"
                     onClick={() => setShowProfileMenu(false)}
                     className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-soft hover:bg-cream hover:text-obsidian transition-colors"
                   >

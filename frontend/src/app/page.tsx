@@ -3,20 +3,32 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore, getDashboardPath } from '@/store/auth';
 import { authApi } from '@/lib/api';
+import { loginSchema } from '@/lib/validations';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
+
+type LoginFormData = {
+  eId: string;
+  password: string;
+};
 
 export default function LoginPage() {
   const router = useRouter();
   const { login, isLoading, error, isAuthenticated, role, loadFromStorage, clearError } =
     useAuthStore();
-  const [eId, setEId] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
+
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const eIdValue = watch('eId');
 
   useEffect(() => {
     loadFromStorage();
@@ -29,10 +41,10 @@ export default function LoginPage() {
   }, [isAuthenticated, role, router]);
 
   const handleResendVerification = async () => {
-    if (!eId.trim()) return;
+    if (!eIdValue?.trim()) return;
     setResendLoading(true);
     try {
-      await authApi.resendVerification(eId.trim());
+      await authApi.resendVerification(eIdValue.trim());
       setResendSuccess(true);
     } catch {
       setResendSuccess(true);
@@ -41,10 +53,8 @@ export default function LoginPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!eId.trim()) return;
-    const success = await login(eId.trim(), password);
+  const onSubmit = async (data: LoginFormData) => {
+    const success = await login(data.eId.trim(), data.password);
     if (success) {
       const currentRole = useAuthStore.getState().role;
       if (currentRole) {
@@ -183,7 +193,7 @@ export default function LoginPage() {
           </div>
 
           <form
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             className="space-y-5 animate-fade-in-up stagger-2"
           >
             {error && (
@@ -244,9 +254,7 @@ export default function LoginPage() {
               label="Email or Student/Staff ID"
               type="text"
               placeholder="Enter your email or ID"
-              value={eId}
-              onChange={(e) => setEId(e.target.value)}
-              required
+              error={errors.eId?.message}
               icon={
                 <svg
                   className="w-4 h-4"
@@ -262,6 +270,7 @@ export default function LoginPage() {
                   />
                 </svg>
               }
+              {...register('eId')}
             />
 
             <div className="relative">
@@ -269,9 +278,7 @@ export default function LoginPage() {
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+                error={errors.password?.message}
                 icon={
                   <svg
                     className="w-4 h-4"
@@ -287,6 +294,7 @@ export default function LoginPage() {
                     />
                   </svg>
                 }
+                {...register('password')}
               />
               <button
                 type="button"
