@@ -97,6 +97,16 @@ export function getStatusColor(status: string): {
       text: 'text-sky',
       dot: 'bg-sky',
     },
+    booked: {
+      bg: 'bg-silver/15',
+      text: 'text-slate-soft',
+      dot: 'bg-slate-soft',
+    },
+    arrived: {
+      bg: 'bg-violet/10',
+      text: 'text-violet',
+      dot: 'bg-violet',
+    },
   };
   return (
     statusMap[status] || {

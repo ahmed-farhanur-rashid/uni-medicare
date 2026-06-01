@@ -48,6 +48,10 @@ export default function StudentAppointmentsPage() {
     reason: '',
   });
 
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancellingId, setCancellingId] = useState<number | null>(null);
+  const [cancelReason, setCancelReason] = useState('');
+
   async function loadAppointments() {
     try {
       const res = await appointmentsApi.getMy();
@@ -123,9 +127,10 @@ export default function StudentAppointmentsPage() {
       });
       handleCloseBooking();
       loadAppointments();
-      toast('Appointment booked successfully.', 'success');
-    } catch {
-      toast('Failed to book appointment.', 'error');
+      toast('Appointment booked. 50.00 deposit deducted from your account.', 'success');
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message || 'Failed to book appointment.';
+      toast(msg, 'error');
     } finally {
       setSubmitting(false);
     }
@@ -139,10 +144,26 @@ export default function StudentAppointmentsPage() {
     setStep(1);
   };
 
+  const handleCancel = async () => {
+    if (!cancellingId) return;
+    setSubmitting(true);
+    try {
+      await appointmentsApi.cancel(cancellingId, cancelReason || undefined);
+      setShowCancelModal(false);
+      setCancellingId(null);
+      setCancelReason('');
+      loadAppointments();
+      toast('Appointment cancelled.', 'success');
+    } catch {
+      toast('Failed to cancel appointment.', 'error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const filtered = filter === 'all' ? appointments : appointments.filter((a) => a.status === filter);
 
   const selectedDoctor = doctors.find(d => d.id === parseInt(bookingData.doctorId));
-
   const today = new Date().toISOString().split('T')[0];
 
   return (
@@ -160,9 +181,16 @@ export default function StudentAppointmentsPage() {
         }
       />
 
+      {/* Deposit info banner */}
+      <div className="rounded-xl bg-emerald/5 dark:bg-emerald/10 border border-emerald/20 dark:border-emerald/30 px-4 py-3">
+        <p className="text-sm text-emerald-deep dark:text-emerald-light">
+          A <strong>50.00 deposit</strong> is required to book. Cancel 2+ hours before for a 2/3 refund. Late cancellation or no-show forfeits the full deposit.
+        </p>
+      </div>
+
       {/* Filters */}
       <div className="flex gap-2 overflow-x-auto pb-2">
-        {['all', 'scheduled', 'confirmed', 'completed', 'cancelled'].map((f) => (
+        {['all', 'booked', 'arrived', 'in_progress', 'completed', 'cancelled', 'no_show'].map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
@@ -172,7 +200,7 @@ export default function StudentAppointmentsPage() {
                 : 'bg-white dark:bg-gray-900 text-slate-muted dark:text-gray-500 border border-border dark:border-white/[0.08] hover:border-emerald hover:text-emerald'
             }`}
           >
-            {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1).replace(/_/g, ' ')}
+            {f === 'all' ? 'All' : f.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
           </button>
         ))}
       </div>
@@ -213,6 +241,10 @@ export default function StudentAppointmentsPage() {
                     <p className="text-sm text-slate-muted dark:text-gray-500 mt-0.5">
                       {apt.department || 'General'} · {apt.reason || 'General checkup'}
                     </p>
+                    <div className="flex items-center gap-3 mt-1 text-xs text-slate-muted dark:text-gray-500">
+                      <span>Deposit: ${apt.depositAmount}</span>
+                      {apt.refundAmount > 0 && <span className="text-emerald-deep dark:text-emerald-light">Refunded: ${apt.refundAmount}</span>}
+                    </div>
                   </div>
                   <div className="text-right shrink-0">
                     <p className="text-sm font-medium text-obsidian dark:text-gray-100">
@@ -220,6 +252,16 @@ export default function StudentAppointmentsPage() {
                     </p>
                     {apt.cancellationReason && (
                       <p className="text-xs text-rose mt-1">{apt.cancellationReason}</p>
+                    )}
+                    {apt.status === 'booked' && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="mt-2 text-rose hover:text-rose hover:bg-rose/10"
+                        onClick={() => { setCancellingId(apt.appointmentId); setShowCancelModal(true); }}
+                      >
+                        Cancel
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -341,20 +383,49 @@ export default function StudentAppointmentsPage() {
             </div>
           )}
 
-          {/* Selected summary */}
+          {/* Selected summary + deposit */}
           {bookingData.slotTime && selectedDoctor && (
-            <div className="rounded-xl bg-emerald/5 dark:bg-emerald/10 border border-emerald/20 dark:border-emerald/30 p-3">
+            <div className="rounded-xl bg-emerald/5 dark:bg-emerald/10 border border-emerald/20 dark:border-emerald/30 p-3 space-y-1">
               <p className="text-xs font-medium text-emerald-deep dark:text-emerald-light">
                 {selectedDoctor.name} · {bookingData.date} at {bookingData.slotTime}
+              </p>
+              <p className="text-xs text-emerald-deep/70 dark:text-emerald-light/70">
+                50.00 deposit will be deducted from your account
               </p>
             </div>
           )}
 
           <div className="flex justify-end gap-3 pt-2">
             <Button type="button" variant="ghost" onClick={handleCloseBooking}>Cancel</Button>
-            <Button type="submit" isLoading={submitting} disabled={!bookingData.slotTime || !bookingData.reason}>Book Appointment</Button>
+            <Button type="submit" isLoading={submitting} disabled={!bookingData.slotTime || !bookingData.reason}>
+              Pay 50.00 & Book
+            </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Cancel Modal */}
+      <Modal isOpen={showCancelModal} onClose={() => { setShowCancelModal(false); setCancellingId(null); setCancelReason(''); }} title="Cancel Appointment">
+        <div className="space-y-4">
+          <div className="rounded-xl bg-amber/5 dark:bg-amber/10 border border-amber/20 dark:border-amber/30 p-3">
+            <p className="text-sm text-amber-deep dark:text-amber">
+              Cancelling more than 2 hours before your appointment returns 2/3 of your deposit (33.33). Within 2 hours, you forfeit the full deposit.
+            </p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Reason (optional)</label>
+            <textarea
+              className="w-full h-20 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none"
+              placeholder="Reason for cancellation"
+              value={cancelReason}
+              onChange={(e) => setCancelReason(e.target.value)}
+            />
+          </div>
+          <div className="flex justify-end gap-3">
+            <Button variant="ghost" onClick={() => { setShowCancelModal(false); setCancellingId(null); setCancelReason(''); }}>Keep Appointment</Button>
+            <Button variant="danger" isLoading={submitting} onClick={handleCancel}>Confirm Cancellation</Button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

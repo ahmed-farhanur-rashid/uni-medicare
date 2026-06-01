@@ -15,7 +15,7 @@ import { useToast } from '@/components/ui/Toast';
 
 export default function DoctorAppointmentsPage() {
   const router = useRouter();
-  const { isAuthenticated, userId } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const { toast } = useToast();
   const [appointments, setAppointments] = useState<AppointmentResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,17 +28,28 @@ export default function DoctorAppointmentsPage() {
 
   async function loadAppointments() {
     try {
-      const res = await appointmentsApi.getAll();
-      setAppointments(res.data.filter((a) => a.doctorId === userId));
+      const res = await appointmentsApi.getMy();
+      setAppointments(res.data);
     } catch { toast('Failed to load appointments.', 'error'); } finally { setLoading(false); }
   }
 
-  const handleStatus = async (id: number, status: string) => {
+  const handleAdvance = async (id: number) => {
     try {
-      await appointmentsApi.updateStatus(id, { status });
+      const apt = appointments.find(a => a.appointmentId === id);
+      if (!apt) return;
+      const next = apt.status === 'booked' ? 'arrived' : apt.status === 'arrived' ? 'in_progress' : 'completed';
+      await appointmentsApi.advanceStatus(id, next);
       loadAppointments();
-      toast(`Appointment ${status} successfully.`, 'success');
-    } catch { toast('Failed to update appointment status.', 'error'); }
+      toast(`Appointment marked as ${next.replace('_', ' ')}.`, 'success');
+    } catch { toast('Failed to update status.', 'error'); }
+  };
+
+  const handleNoShow = async (id: number) => {
+    try {
+      await appointmentsApi.markNoShow(id);
+      loadAppointments();
+      toast('Appointment marked as no-show.', 'success');
+    } catch { toast('Failed to mark no-show.', 'error'); }
   };
 
   const filtered = filter === 'all' ? appointments : appointments.filter((a) => a.status === filter);
@@ -48,9 +59,9 @@ export default function DoctorAppointmentsPage() {
       <PageHeader title="Appointments" description="Manage your patient appointments." />
 
       <div className="flex gap-2 overflow-x-auto pb-2">
-        {['all', 'scheduled', 'confirmed', 'completed', 'cancelled'].map((f) => (
+        {['all', 'booked', 'arrived', 'in_progress', 'completed', 'no_show'].map((f) => (
           <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filter === f ? 'bg-emerald text-white shadow-sm' : 'bg-white dark:bg-gray-900 text-slate-muted dark:text-gray-500 border border-border dark:border-white/[0.08] hover:border-emerald hover:text-emerald'}`}>
-            {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
+            {f === 'all' ? 'All' : f.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
           </button>
         ))}
       </div>
@@ -75,11 +86,17 @@ export default function DoctorAppointmentsPage() {
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <p className="text-sm font-medium text-obsidian dark:text-gray-100">{formatDateTime(apt.scheduledTime)}</p>
-                    {apt.status === 'scheduled' && (
+                    {apt.status === 'booked' && (
                       <div className="flex gap-1">
-                        <Button size="sm" onClick={() => handleStatus(apt.appointmentId, 'confirmed')}>Confirm</Button>
-                        <Button size="sm" variant="danger" onClick={() => handleStatus(apt.appointmentId, 'cancelled')}>Cancel</Button>
+                        <Button size="sm" onClick={() => handleAdvance(apt.appointmentId)}>Arrived</Button>
+                        <Button size="sm" variant="danger" onClick={() => handleNoShow(apt.appointmentId)}>No Show</Button>
                       </div>
+                    )}
+                    {apt.status === 'arrived' && (
+                      <Button size="sm" onClick={() => handleAdvance(apt.appointmentId)}>Start</Button>
+                    )}
+                    {apt.status === 'in_progress' && (
+                      <Button size="sm" onClick={() => handleAdvance(apt.appointmentId)}>Complete</Button>
                     )}
                   </div>
                 </div>

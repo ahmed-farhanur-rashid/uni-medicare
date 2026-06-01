@@ -56,20 +56,21 @@ export default function Badge({
 }
 
 export function StatusBadge({ status }: { status: string }) {
-  const colors = getStatusColor(status);
   const label = status.replace(/_/g, ' ');
   return (
     <Badge
       variant={
         status === 'completed' || status === 'paid'
           ? 'success'
-          : status === 'cancelled'
+          : status === 'cancelled' || status === 'no_show'
             ? 'danger'
-            : status === 'pending' || status === 'no_show'
-              ? 'warning'
+            : status === 'arrived'
+              ? 'purple'
               : status === 'in_progress' || status === 'confirmed'
                 ? 'info'
-                : 'default'
+                : status === 'pending' || status === 'booked'
+                  ? 'warning'
+                  : 'default'
       }
       dot
     >

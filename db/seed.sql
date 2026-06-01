@@ -214,15 +214,15 @@ INSERT INTO lab_test_catalog (test_name, description, normal_range, unit, servic
 -- -----------------------------------------------------------------
 --  SAMPLE APPOINTMENTS
 -- -----------------------------------------------------------------
-INSERT INTO appointments (patient_id, medical_staff_id, scheduled_time, reason, status) VALUES
-    (1, 1001, NOW() - INTERVAL '10 days', 'Persistent headache',        'completed'),
-    (2, 1001, NOW() - INTERVAL '7 days',  'Follow-up asthma checkup',   'completed'),
-    (3, 1006, NOW() - INTERVAL '5 days',  'Chest pain evaluation',      'completed'),
-    (4, 1001, NOW() - INTERVAL '3 days',  'Seasonal allergy symptoms',  'completed'),
-    (5, 1010, NOW() + INTERVAL '1 day',   'Annual checkup',             'confirmed'),
-    (6, 1001, NOW() + INTERVAL '2 days',  'Skin rash consultation',     'scheduled'),
-    (7, 1003, NOW() + INTERVAL '3 days',  'Stress management',          'scheduled'),
-    (1, 1001, NOW() + INTERVAL '5 days',  'Follow-up headache',         'scheduled');
+INSERT INTO appointments (patient_id, medical_staff_id, scheduled_time, reason, status, deposit_amount, deposit_account_id) VALUES
+    (1, 1001, NOW() - INTERVAL '10 days', 'Persistent headache',        'completed', 50.00, 2),
+    (2, 1001, NOW() - INTERVAL '7 days',  'Follow-up asthma checkup',   'completed', 50.00, 3),
+    (3, 1006, NOW() - INTERVAL '5 days',  'Chest pain evaluation',      'completed', 50.00, 4),
+    (4, 1001, NOW() - INTERVAL '3 days',  'Seasonal allergy symptoms',  'completed', 50.00, 5),
+    (5, 1010, NOW() + INTERVAL '1 day',   'Annual checkup',             'booked',    50.00, 6),
+    (6, 1001, NOW() + INTERVAL '2 days',  'Skin rash consultation',     'booked',    50.00, 7),
+    (7, 1003, NOW() + INTERVAL '3 days',  'Stress management',          'booked',    50.00, 8),
+    (1, 1001, NOW() + INTERVAL '5 days',  'Follow-up headache',         'booked',    50.00, 2);
 
 -- -----------------------------------------------------------------
 --  SAMPLE CONSULTATIONS

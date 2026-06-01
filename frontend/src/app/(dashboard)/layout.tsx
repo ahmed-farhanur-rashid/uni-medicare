@@ -326,7 +326,7 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 w-64 bg-obsidian dark:bg-gray-950 flex flex-col transition-transform duration-300 ease-out',
+          'fixed inset-y-0 left-0 z-50 w-64 bg-obsidian dark:bg-gray-950 flex flex-col transition-transform duration-300 ease-out border-r border-white/[0.06]',
           'lg:translate-x-0 lg:static lg:z-auto',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
@@ -393,25 +393,6 @@ export default function DashboardLayout({
                 {roleLabel(role)} &middot; ID: {userId}
               </p>
             </div>
-            <button
-              onClick={handleLogout}
-              className="p-1.5 rounded-lg text-silver/50 hover:text-rose hover:bg-white/[0.06] dark:hover:bg-white/[0.08] transition-colors"
-              title="Sign out"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
-                />
-              </svg>
-            </button>
           </div>
         </div>
       </aside>
@@ -419,7 +400,8 @@ export default function DashboardLayout({
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 h-16 flex items-center gap-4 px-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-border/40 dark:border-white/[0.06]">
+        <header className="sticky top-0 z-30 h-16 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-border/40 dark:border-white/[0.06]">
+          <div className="h-full flex items-center gap-4 px-6">
           <button
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden p-2 rounded-xl text-slate-muted hover:text-obsidian hover:bg-cream dark:hover:text-gray-200 dark:hover:bg-white/10 transition-colors"
@@ -523,6 +505,7 @@ export default function DashboardLayout({
                 </div>
               </div>
             )}
+          </div>
           </div>
         </header>
 

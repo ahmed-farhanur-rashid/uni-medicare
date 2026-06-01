@@ -98,6 +98,8 @@ export interface AppointmentResponse {
   reason: string;
   status: string;
   cancellationReason: string;
+  depositAmount: number;
+  refundAmount: number;
   createdAt: string;
 }
 
@@ -266,6 +268,13 @@ export const appointmentsApi = {
     scheduledTime: string;
     reason: string;
   }) => api.post<AppointmentResponse>('/appointments', data),
+  advanceStatus: (id: number, status: string) =>
+    api.patch<AppointmentResponse>(`/appointments/${id}/advance`, { status }),
+  markNoShow: (id: number) =>
+    api.patch<AppointmentResponse>(`/appointments/${id}/no-show`),
+  cancel: (id: number, reason?: string) =>
+    api.patch<AppointmentResponse>(`/appointments/${id}/cancel`, { reason }),
+  // backward compat
   updateStatus: (
     id: number,
     data: { status: string; reason?: string }

@@ -22,4 +22,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
           AND a.status NOT IN ('cancelled', 'no_show')
     """)
     boolean existsConflict(Integer staffId, LocalDateTime scheduledTime);
+
+    // Find all appointments with a given status that are past their scheduled time
+    List<Appointment> findByStatusAndScheduledTimeBefore(String status, LocalDateTime before);
 }

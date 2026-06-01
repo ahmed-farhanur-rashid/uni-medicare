@@ -1,6 +1,7 @@
 package com.uni.medicare.shared.dto;
 
 import com.uni.medicare.appointment.Appointment;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record AppointmentResponse(
@@ -14,6 +15,8 @@ public record AppointmentResponse(
         String reason,
         String status,
         String cancellationReason,
+        BigDecimal depositAmount,
+        BigDecimal refundAmount,
         LocalDateTime createdAt
 ) {
     public static AppointmentResponse fromEntity(Appointment a) {
@@ -25,7 +28,8 @@ public record AppointmentResponse(
                 a.getMedicalStaff().getName(),
                 a.getMedicalStaff().getDepartment() != null ? a.getMedicalStaff().getDepartment().getName() : null,
                 a.getScheduledTime(), a.getReason(), a.getStatus(),
-                a.getCancellationReason(), a.getCreatedAt()
+                a.getCancellationReason(), a.getDepositAmount(), a.getRefundAmount(),
+                a.getCreatedAt()
         );
     }
 }

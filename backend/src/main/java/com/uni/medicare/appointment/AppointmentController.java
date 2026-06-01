@@ -20,7 +20,7 @@ import java.util.Map;
 public class AppointmentController {
 
     private final AppointmentService service;
-    private final PatientRepository   patientRepo;
+    private final PatientRepository patientRepo;
 
     /** GET /api/appointments — RECEPTIONIST, ADMIN */
     @GetMapping
@@ -53,13 +53,50 @@ public class AppointmentController {
         return ResponseEntity.ok(AppointmentResponse.fromEntity(service.book(req, user)));
     }
 
-    /** PATCH /api/appointments/{id}/status — RECEPTIONIST, ADMIN */
-    @PatchMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('RECEPTIONIST','ADMIN')")
-    public ResponseEntity<AppointmentResponse> updateStatus(
+    /** PATCH /api/appointments/{id}/advance — DOCTOR, RECEPTIONIST, NURSE */
+    @PatchMapping("/{id}/advance")
+    @PreAuthorize("hasAnyRole('DOCTOR','RECEPTIONIST','NURSE')")
+    public ResponseEntity<AppointmentResponse> advanceStatus(
             @PathVariable int id,
             @RequestBody Map<String, String> body) {
         return ResponseEntity.ok(AppointmentResponse.fromEntity(
-                service.updateStatus(id, body.get("status"), body.get("reason"))));
+                service.advanceStatus(id, body.get("status"))));
+    }
+
+    /** PATCH /api/appointments/{id}/no-show — DOCTOR, RECEPTIONIST */
+    @PatchMapping("/{id}/no-show")
+    @PreAuthorize("hasAnyRole('DOCTOR','RECEPTIONIST')")
+    public ResponseEntity<AppointmentResponse> markNoShow(@PathVariable int id) {
+        return ResponseEntity.ok(AppointmentResponse.fromEntity(service.markNoShow(id)));
+    }
+
+    /** PATCH /api/appointments/{id}/cancel — STUDENT (own), RECEPTIONIST (any) */
+    @PatchMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyRole('STUDENT','RECEPTIONIST','ADMIN')")
+    public ResponseEntity<AppointmentResponse> cancel(
+            @PathVariable int id,
+            @RequestBody Map<String, String> body,
+            @AuthenticationPrincipal AppUserDetails user) {
+        return ResponseEntity.ok(AppointmentResponse.fromEntity(
+                service.cancel(id, body.get("reason"), user)));
+    }
+
+    /** PATCH /api/appointments/{id}/status — kept for backward compat, delegates to advance or cancel */
+    @PatchMapping("/{id}/status")
+    @PreAuthorize("hasAnyRole('DOCTOR','RECEPTIONIST','ADMIN','NURSE')")
+    public ResponseEntity<AppointmentResponse> updateStatus(
+            @PathVariable int id,
+            @RequestBody Map<String, String> body,
+            @AuthenticationPrincipal AppUserDetails user) {
+        String status = body.get("status");
+        if ("cancelled".equals(status)) {
+            return ResponseEntity.ok(AppointmentResponse.fromEntity(
+                    service.cancel(id, body.get("reason"), user)));
+        }
+        if ("no_show".equals(status)) {
+            return ResponseEntity.ok(AppointmentResponse.fromEntity(service.markNoShow(id)));
+        }
+        return ResponseEntity.ok(AppointmentResponse.fromEntity(
+                service.advanceStatus(id, status)));
     }
 }

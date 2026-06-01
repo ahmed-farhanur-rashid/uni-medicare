@@ -171,9 +171,12 @@ CREATE TABLE appointments (
     medical_staff_id    INT          NOT NULL REFERENCES medical_staffs(medical_staff_id),
     scheduled_time      TIMESTAMP    NOT NULL,
     reason              TEXT,
-    status              VARCHAR(20)  NOT NULL DEFAULT 'scheduled'
-                        CHECK (status IN ('scheduled','confirmed','completed','cancelled','no_show')),
+    status              VARCHAR(20)  NOT NULL DEFAULT 'booked'
+                        CHECK (status IN ('booked','arrived','in_progress','completed','no_show','cancelled')),
     cancellation_reason VARCHAR(255),
+    deposit_amount      NUMERIC(10,2) NOT NULL DEFAULT 0.00,
+    refund_amount       NUMERIC(10,2) NOT NULL DEFAULT 0.00,
+    deposit_account_id  INT          REFERENCES accounts(account_id),
     created_at          TIMESTAMP    NOT NULL DEFAULT NOW(),
     updated_at          TIMESTAMP    NOT NULL DEFAULT NOW()
 );
