@@ -251,6 +251,9 @@ export const authApi = {
     api.post('/auth/reset-password', { token, newPassword }),
   resendVerification: (email: string) => api.post('/auth/resend-verification', { email }),
   getProfile: () => api.get<ProfileResponse>('/me'),
+  updateProfile: (data: Record<string, string>) => api.put('/me', data),
+  changePassword: (currentPassword: string, newPassword: string) =>
+    api.put('/me/password', { currentPassword, newPassword }),
 };
 
 // Appointments API
@@ -393,6 +396,10 @@ export const doctorsApi = {
 
 // Admin API
 export const adminApi = {
+  // Admin verification
+  verifyPassword: (password: string) =>
+    api.post<{ valid: boolean }>('/admin/verify/password', { password }),
+
   // Students
   getStudents: (page = 0, size = 20) =>
     api.get<PaginatedResponse<StudentResponse>>(

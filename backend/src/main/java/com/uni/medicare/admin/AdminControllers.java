@@ -8,12 +8,46 @@ import com.uni.medicare.shared.entity.StaffSchedule;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
+// ── Specialty → Department mapping ────────────────────────────────────────────
+
+@org.springframework.stereotype.Component
+@RequiredArgsConstructor
+class SpecialtyDepartmentResolver {
+
+    private final DepartmentRepository deptRepo;
+
+    /**
+     * Auto-assign department based on specialty.
+     * Returns null for non-doctor roles (they pick department manually).
+     */
+    Department resolve(String specialty, String roleName) {
+        if (specialty == null || specialty.isBlank() || !"DOCTOR".equals(roleName)) {
+            return null;
+        }
+        String deptName = switch (specialty) {
+            case "General Medicine"  -> "General Medicine";
+            case "Counseling"        -> "Counseling";
+            case "Pathology"         -> "Laboratory";
+            case "Emergency Medicine"-> "Emergency";
+            case "Physiotherapy"     -> "Physiotherapy";
+            case "Gynecology"        -> "Reproductive & Sexual Health";
+            case "Urology"           -> "Reproductive & Sexual Health";
+            default -> null;
+        };
+        if (deptName == null) return null;
+        return deptRepo.findByName(deptName)
+                .orElseThrow(() -> new EntityNotFoundException("Department not found: " + deptName));
+    }
+}
 
 // ── Departments ───────────────────────────────────────────────────────────────
 
@@ -67,22 +101,51 @@ class StaffAdminController {
 
     private final StaffAdminRepository repo;
     private final PasswordEncoder     passwordEncoder;
+    private final SpecialtyDepartmentResolver deptResolver;
 
     @GetMapping          public List<MedicalStaffResponse> all()                       { return repo.findAll().stream().map(MedicalStaffResponse::fromEntity).toList(); }
     @GetMapping("/{id}") public MedicalStaffResponse one(@PathVariable int id)         { return MedicalStaffResponse.fromEntity(repo.findById(id).orElseThrow()); }
+
     @PostMapping         @Transactional
                          public MedicalStaffResponse create(@RequestBody MedicalStaff s) {
+                             // Auto-assign department for doctors based on specialty
+                             String roleName = s.getRole() != null ? s.getRole().getRoleName() : null;
+                             if ("DOCTOR".equals(roleName) && s.getDepartment() == null) {
+                                 Department dept = deptResolver.resolve(s.getSpecialty(), roleName);
+                                 s.setDepartment(dept);
+                             }
                              s.setPassword(passwordEncoder.encode(s.getPassword()));
-                             return MedicalStaffResponse.fromEntity(repo.save(s)); }
+                             return MedicalStaffResponse.fromEntity(repo.save(s));
+                         }
+
     @PutMapping("/{id}") @Transactional
                          public MedicalStaffResponse update(@PathVariable int id, @RequestBody MedicalStaff s) {
+                             MedicalStaff existing = repo.findById(id).orElseThrow();
                              s.setMedicalStaffId(id);
+
+                             // Only admins can change specialty — auto-reassign department
+                             String roleName = existing.getRole() != null ? existing.getRole().getRoleName() : null;
+                             if (s.getSpecialty() != null && !"DOCTOR".equals(roleName)) {
+                                 s.setSpecialty(existing.getSpecialty()); // non-doctors keep their specialty
+                             }
+                             if ("DOCTOR".equals(roleName) && s.getSpecialty() != null) {
+                                 Department dept = deptResolver.resolve(s.getSpecialty(), roleName);
+                                 s.setDepartment(dept);
+                             } else {
+                                 s.setDepartment(existing.getDepartment());
+                             }
+
                              if (s.getPassword() != null && !s.getPassword().isEmpty()) {
                                  s.setPassword(passwordEncoder.encode(s.getPassword()));
                              } else {
-                                 s.setPassword(repo.findById(id).orElseThrow().getPassword());
+                                 s.setPassword(existing.getPassword());
                              }
-                             return MedicalStaffResponse.fromEntity(repo.save(s)); }
+                             if (s.getRole() == null) s.setRole(existing.getRole());
+                             if (s.getName() == null) s.setName(existing.getName());
+                             if (s.getEmail() == null) s.setEmail(existing.getEmail());
+                             return MedicalStaffResponse.fromEntity(repo.save(s));
+                         }
+
     @DeleteMapping("/{id}") @Transactional
                          public void delete(@PathVariable int id)               { repo.deleteById(id); }
 }
@@ -106,4 +169,30 @@ class ScheduleController {
                              s.setScheduleId(id); return repo.save(s); }
     @DeleteMapping("/{id}") @Transactional
                          public void delete(@PathVariable int id)                  { repo.deleteById(id); }
+}
+
+// ── Admin Password Verification ──────────────────────────────────────────────
+
+@RestController
+@RequestMapping("/api/admin/verify")
+@PreAuthorize("hasRole('ADMIN')")
+@RequiredArgsConstructor
+class AdminVerifyController {
+
+    private final StaffAdminRepository staffRepo;
+    private final PasswordEncoder passwordEncoder;
+
+    @PostMapping("/password")
+    public Map<String, Boolean> verifyPassword(@RequestBody Map<String, String> body,
+                                               @org.springframework.security.core.annotation.AuthenticationPrincipal
+                                               com.uni.medicare.auth.AppUserDetails user) {
+        String password = body.get("password");
+        if (password == null || password.isBlank()) {
+            return Map.of("valid", false);
+        }
+        MedicalStaff admin = staffRepo.findByMedicalStaffId(user.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Admin not found"));
+        boolean valid = passwordEncoder.matches(password, admin.getPassword());
+        return Map.of("valid", valid);
+    }
 }
