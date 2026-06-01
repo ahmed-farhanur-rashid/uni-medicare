@@ -147,6 +147,22 @@ CREATE TABLE staff_schedules (
 );
 
 -- -----------------------------------------------------------------
+--  DEPARTMENT SCHEDULES
+-- -----------------------------------------------------------------
+CREATE TABLE department_schedules (
+    schedule_id            SERIAL PRIMARY KEY,
+    department_id          INT         NOT NULL REFERENCES departments(department_id),
+    slot_duration_minutes  INT         NOT NULL DEFAULT 20,
+    start_time             TIME        NOT NULL DEFAULT '08:00',
+    end_time               TIME        NOT NULL DEFAULT '17:00',
+    break_start            TIME        NOT NULL DEFAULT '13:00',
+    break_end              TIME        NOT NULL DEFAULT '13:30',
+    is_bookable            BOOLEAN     NOT NULL DEFAULT TRUE,
+    updated_at             TIMESTAMP   NOT NULL DEFAULT NOW(),
+    UNIQUE (department_id)
+);
+
+-- -----------------------------------------------------------------
 --  APPOINTMENTS
 -- -----------------------------------------------------------------
 CREATE TABLE appointments (

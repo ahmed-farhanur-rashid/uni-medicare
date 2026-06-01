@@ -1,6 +1,7 @@
 package com.uni.medicare.appointment;
 
 import com.uni.medicare.admin.StaffAdminRepository;
+import com.uni.medicare.department.DepartmentScheduleService;
 import com.uni.medicare.shared.dto.DoctorResponse;
 import com.uni.medicare.shared.entity.MedicalStaff;
 import com.uni.medicare.shared.entity.StaffSchedule;
@@ -8,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import java.util.Map;
 public class DoctorController {
 
     private final StaffAdminRepository staffRepo;
+    private final DepartmentScheduleService scheduleService;
     private final EntityManager em;
 
     @GetMapping("/specialties")
@@ -56,5 +59,13 @@ public class DoctorController {
             map.put("endTime", s.getEndTime().toString());
             return map;
         }).toList();
+    }
+
+    @GetMapping("/{id}/available-slots")
+    public List<Map<String, Object>> availableSlots(
+            @PathVariable int id,
+            @RequestParam String date) {
+        LocalDate d = LocalDate.parse(date);
+        return scheduleService.getAvailableSlots(id, d);
     }
 }

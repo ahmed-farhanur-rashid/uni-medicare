@@ -21,14 +21,14 @@ export default function StatsCard({
   return (
     <div
       className={cn(
-        'rounded-2xl bg-white border border-border/60 p-5 shadow-sm card-hover grain',
+        'rounded-2xl bg-white dark:bg-gray-900 border border-border/60 dark:border-white/[0.06] p-5 shadow-sm card-hover grain',
         className
       )}
     >
       <div className="flex items-start justify-between">
         <div className="space-y-2">
-          <p className="text-sm font-medium text-slate-muted">{title}</p>
-          <p className="text-2xl font-bold text-obsidian font-display tracking-tight">
+          <p className="text-sm font-medium text-slate-muted dark:text-gray-400">{title}</p>
+          <p className="text-2xl font-bold text-obsidian dark:text-gray-100 font-display tracking-tight">
             {value}
           </p>
           {trend && (
@@ -39,13 +39,13 @@ export default function StatsCard({
                   trend.isPositive ? 'text-emerald' : 'text-rose'
                 )}
               >
-                {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
+                {trend.isPositive ? '\u2191' : '\u2193'} {Math.abs(trend.value)}%
               </span>
-              <span className="text-xs text-silver">vs last month</span>
+              <span className="text-xs text-silver dark:text-gray-500">vs last month</span>
             </div>
           )}
         </div>
-        <div className="p-3 rounded-xl bg-cream text-emerald-deep">
+        <div className="p-3 rounded-xl bg-cream dark:bg-white/5 text-emerald-deep">
           {icon}
         </div>
       </div>

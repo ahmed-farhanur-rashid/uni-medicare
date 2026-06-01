@@ -22,13 +22,13 @@ export default function EmptyState({
         className
       )}
     >
-      <div className="p-4 rounded-2xl bg-cream mb-4 text-slate-muted">
+      <div className="p-4 rounded-2xl bg-cream dark:bg-white/5 mb-4 text-slate-muted dark:text-gray-500">
         {icon}
       </div>
-      <h3 className="text-lg font-semibold text-obsidian font-display mb-1">
+      <h3 className="text-lg font-semibold text-obsidian dark:text-gray-100 font-display mb-1">
         {title}
       </h3>
-      <p className="text-sm text-slate-muted max-w-sm mb-6">{description}</p>
+      <p className="text-sm text-slate-muted dark:text-gray-500 max-w-sm mb-6">{description}</p>
       {action}
     </div>
   );

@@ -56,17 +56,17 @@ export default function AdminAuditPage() {
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                     <div className="flex items-center gap-2 shrink-0">
                       <Badge variant={getActionColor(log.action)} size="sm">{log.action}</Badge>
-                      <span className="text-xs text-slate-muted">{log.tableName}</span>
+                      <span className="text-xs text-slate-muted dark:text-gray-500">{log.tableName}</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-obsidian">
+                      <p className="text-sm text-obsidian dark:text-gray-100">
                         <span className="font-medium">{log.actorType}</span> #{log.actorId}
-                        {log.recordId && <span className="text-slate-muted"> — Record #{log.recordId}</span>}
+                        {log.recordId && <span className="text-slate-muted dark:text-gray-500"> — Record #{log.recordId}</span>}
                       </p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-xs text-silver">{formatDateTime(log.createdAt)}</p>
-                      {log.ipAddress && <p className="text-xs text-slate-muted">{log.ipAddress}</p>}
+                      <p className="text-xs text-silver dark:text-gray-500">{formatDateTime(log.createdAt)}</p>
+                      {log.ipAddress && <p className="text-xs text-slate-muted dark:text-gray-500">{log.ipAddress}</p>}
                     </div>
                   </div>
                 </CardContent>
@@ -75,7 +75,7 @@ export default function AdminAuditPage() {
           </div>
           <div className="flex justify-center gap-2">
             <Button variant="outline" size="sm" disabled={page === 0} onClick={() => setPage(page - 1)}>Previous</Button>
-            <span className="px-4 py-2 text-sm text-slate-muted">Page {page + 1} of {data.totalPages}</span>
+            <span className="px-4 py-2 text-sm text-slate-muted dark:text-gray-500">Page {page + 1} of {data.totalPages}</span>
             <Button variant="outline" size="sm" disabled={page >= data.totalPages - 1} onClick={() => setPage(page + 1)}>Next</Button>
           </div>
         </>

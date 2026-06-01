@@ -116,8 +116,8 @@ export default function ProfilePage() {
         <Card className="lg:col-span-1">
           <CardContent className="p-6 flex flex-col items-center text-center">
             <Avatar name={profile.name || profile.role} size="xl" />
-            <h2 className="mt-4 text-lg font-bold text-obsidian">{profile.name}</h2>
-            <p className="text-sm text-slate-muted">{roleLabel}</p>
+            <h2 className="mt-4 text-lg font-bold text-obsidian dark:text-gray-100">{profile.name}</h2>
+            <p className="text-sm text-slate-muted dark:text-gray-500">{roleLabel}</p>
             {profile.specialty && (
               <p className="text-xs text-emerald-deep mt-1 font-medium">{profile.specialty}</p>
             )}
@@ -137,38 +137,38 @@ export default function ProfilePage() {
         {/* Details */}
         <Card className="lg:col-span-2">
           <CardContent className="p-6">
-            <h3 className="text-sm font-semibold text-obsidian mb-4">
+            <h3 className="text-sm font-semibold text-obsidian dark:text-gray-100 mb-4">
               {editing ? 'Edit Profile' : changingPassword ? 'Change Password' : 'Account Information'}
             </h3>
 
             {editing ? (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs text-slate-muted mb-1">Full Name</label>
+                  <label className="block text-xs text-slate-muted dark:text-gray-500 mb-1">Full Name</label>
                   <input
                     type="text"
                     value={editForm.name}
                     onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30"
+                    className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-muted mb-1">Phone</label>
+                  <label className="block text-xs text-slate-muted dark:text-gray-500 mb-1">Phone</label>
                   <input
                     type="text"
                     value={editForm.phone}
                     onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30"
+                    className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                   />
                 </div>
                 {isStudent && (
                   <div>
-                    <label className="block text-xs text-slate-muted mb-1">Email</label>
+                    <label className="block text-xs text-slate-muted dark:text-gray-500 mb-1">Email</label>
                     <input
                       type="email"
                       value={editForm.email}
                       onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                      className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30"
+                      className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                     />
                   </div>
                 )}
@@ -182,30 +182,30 @@ export default function ProfilePage() {
             ) : changingPassword ? (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs text-slate-muted mb-1">Current Password</label>
+                  <label className="block text-xs text-slate-muted dark:text-gray-500 mb-1">Current Password</label>
                   <input
                     type="password"
                     value={passwordForm.currentPassword}
                     onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30"
+                    className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-muted mb-1">New Password</label>
+                  <label className="block text-xs text-slate-muted dark:text-gray-500 mb-1">New Password</label>
                   <input
                     type="password"
                     value={passwordForm.newPassword}
                     onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30"
+                    className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-muted mb-1">Confirm New Password</label>
+                  <label className="block text-xs text-slate-muted dark:text-gray-500 mb-1">Confirm New Password</label>
                   <input
                     type="password"
                     value={passwordForm.confirmPassword}
                     onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30"
+                    className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 dark:bg-gray-900 dark:text-gray-100"
                   />
                 </div>
                 <div className="flex gap-2 pt-2">
@@ -243,9 +243,9 @@ export default function ProfilePage() {
 
 function InfoRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <div className="py-2 border-b border-border/30">
-      <p className="text-xs text-slate-muted">{label}</p>
-      <p className={`text-sm mt-0.5 ${highlight ? 'text-rose font-medium' : 'text-obsidian'}`}>{value}</p>
+    <div className="py-2 border-b border-border/30 dark:border-white/[0.06]">
+      <p className="text-xs text-slate-muted dark:text-gray-500">{label}</p>
+      <p className={`text-sm mt-0.5 ${highlight ? 'text-rose font-medium' : 'text-obsidian dark:text-gray-100'}`}>{value}</p>
     </div>
   );
 }

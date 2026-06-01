@@ -146,9 +146,9 @@ export default function AdminStaffPage() {
         <div className="space-y-6">
           {groupedStaff.map((group) => (
             <div key={group.role}>
-              <h3 className="text-sm font-semibold text-obsidian mb-3 flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-obsidian dark:text-gray-100 mb-3 flex items-center gap-2">
                 <span className="text-lg">{group.label}</span>
-                <span className="text-xs bg-slate-muted/10 text-slate-muted px-2 py-0.5 rounded-full">{group.members.length}</span>
+                <span className="text-xs bg-slate-muted/10 dark:bg-white/10 text-slate-muted dark:text-gray-500 px-2 py-0.5 rounded-full">{group.members.length}</span>
               </h3>
               <div className="space-y-3">
                 {group.members.map((s, i) => (
@@ -160,10 +160,10 @@ export default function AdminStaffPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <p className="font-semibold text-obsidian">{s.name}</p>
+                            <p className="font-semibold text-obsidian dark:text-gray-100">{s.name}</p>
                             <StatusBadge status={s.isActive ? 'completed' : 'cancelled'} />
                           </div>
-                          <p className="text-sm text-slate-muted mt-0.5">{s.email} {s.departmentName ? `· ${s.departmentName}` : ''}{s.specialty ? ` · ${s.specialty}` : ''}</p>
+                          <p className="text-sm text-slate-muted dark:text-gray-500 mt-0.5">{s.email} {s.departmentName ? `· ${s.departmentName}` : ''}{s.specialty ? ` · ${s.specialty}` : ''}</p>
                         </div>
                         <div className="flex gap-2 shrink-0">
                           <Button variant="danger" size="sm" onClick={() => handleDelete(s.medicalStaffId)}>Delete</Button>
@@ -185,11 +185,11 @@ export default function AdminStaffPage() {
           <Input label="Phone" placeholder="Phone number" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
           <Input label="Password" type="password" placeholder="Set a password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
           <div>
-            <label className="block text-xs text-slate-muted mb-1">Role</label>
+            <label className="block text-xs text-slate-muted dark:text-gray-500 mb-1">Role</label>
             <select
               value={form.roleName}
               onChange={(e) => setForm({ ...form, roleName: e.target.value, specialty: '', departmentId: '' })}
-              className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white"
+              className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white dark:bg-white/5 text-obsidian dark:text-gray-100"
               required
             >
               <option value="">Select role</option>
@@ -198,25 +198,25 @@ export default function AdminStaffPage() {
           </div>
           {form.roleName === 'DOCTOR' ? (
             <div>
-              <label className="block text-xs text-slate-muted mb-1">Specialty</label>
+              <label className="block text-xs text-slate-muted dark:text-gray-500 mb-1">Specialty</label>
               <select
                 value={form.specialty}
                 onChange={(e) => setForm({ ...form, specialty: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white"
+                className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white dark:bg-white/5 text-obsidian dark:text-gray-100"
                 required
               >
                 <option value="">Select specialty</option>
                 {SPECIALTIES.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
-              <p className="text-xs text-slate-muted mt-1">Department is auto-assigned based on specialty</p>
+              <p className="text-xs text-slate-muted dark:text-gray-500 mt-1">Department is auto-assigned based on specialty</p>
             </div>
           ) : form.roleName && form.roleName !== '' ? (
             <div>
-              <label className="block text-xs text-slate-muted mb-1">Department</label>
+              <label className="block text-xs text-slate-muted dark:text-gray-500 mb-1">Department</label>
               <select
                 value={form.departmentId}
                 onChange={(e) => setForm({ ...form, departmentId: e.target.value })}
-                className="w-full px-3 py-2 text-sm border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white"
+                className="w-full px-3 py-2 text-sm border border-border dark:border-white/[0.08] rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald/30 bg-white dark:bg-white/5 text-obsidian dark:text-gray-100"
               >
                 <option value="">No department</option>
                 {departments.map((d) => <option key={d.departmentId} value={d.departmentId}>{d.name}</option>)}

@@ -69,8 +69,8 @@ export default function StudentInvoicesPage() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-obsidian">Outstanding Balance</p>
-                  <p className="text-xs text-slate-muted">You have pending payments</p>
+                  <p className="text-sm font-medium text-obsidian dark:text-gray-100">Outstanding Balance</p>
+                  <p className="text-xs text-slate-muted dark:text-gray-500">You have pending payments</p>
                 </div>
               </div>
               <p className="text-xl font-bold text-amber font-display">{formatCurrency(pendingTotal)}</p>
@@ -99,7 +99,7 @@ export default function StudentInvoicesPage() {
             >
               <CardContent className="p-0">
                 <div
-                  className="px-5 py-4 flex items-center gap-4 cursor-pointer hover:bg-cream-warm/50 transition-colors"
+                  className="px-5 py-4 flex items-center gap-4 cursor-pointer hover:bg-cream-warm/50 dark:hover:bg-white/[0.02] transition-colors"
                   onClick={() => setExpandedId(expandedId === inv.invoiceId ? null : inv.invoiceId)}
                 >
                   <div className="w-10 h-10 rounded-xl bg-amber/10 flex items-center justify-center text-amber shrink-0">
@@ -109,41 +109,41 @@ export default function StudentInvoicesPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="font-semibold text-obsidian">Invoice #{inv.invoiceId}</p>
+                      <p className="font-semibold text-obsidian dark:text-gray-100">Invoice #{inv.invoiceId}</p>
                       <StatusBadge status={inv.transactionStatus} />
                     </div>
-                    <p className="text-sm text-slate-muted mt-0.5">
+                    <p className="text-sm text-slate-muted dark:text-gray-500 mt-0.5">
                       {formatDate(inv.invoiceDate)} · {inv.lineItems.length} item{inv.lineItems.length !== 1 ? 's' : ''}
                     </p>
                   </div>
                   <div className="text-right shrink-0 flex items-center gap-3">
-                    <p className="text-lg font-bold text-obsidian font-display">{formatCurrency(inv.totalAmount)}</p>
-                    <svg className={`w-5 h-5 text-silver transition-transform ${expandedId === inv.invoiceId ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <p className="text-lg font-bold text-obsidian dark:text-gray-100 font-display">{formatCurrency(inv.totalAmount)}</p>
+                    <svg className={`w-5 h-5 text-silver dark:text-gray-500 transition-transform ${expandedId === inv.invoiceId ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                     </svg>
                   </div>
                 </div>
 
                 {expandedId === inv.invoiceId && (
-                  <div className="border-t border-border/40">
+                  <div className="border-t border-border/40 dark:border-white/[0.06]">
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-b border-border/30">
-                          <th className="text-left px-5 py-2.5 font-medium text-slate-muted">Service</th>
-                          <th className="text-left px-5 py-2.5 font-medium text-slate-muted hidden sm:table-cell">Description</th>
-                          <th className="text-center px-5 py-2.5 font-medium text-slate-muted">Qty</th>
-                          <th className="text-right px-5 py-2.5 font-medium text-slate-muted">Unit Price</th>
-                          <th className="text-right px-5 py-2.5 font-medium text-slate-muted">Total</th>
+                          <th className="text-left px-5 py-2.5 font-medium text-slate-muted dark:text-gray-500">Service</th>
+                          <th className="text-left px-5 py-2.5 font-medium text-slate-muted dark:text-gray-500 hidden sm:table-cell">Description</th>
+                          <th className="text-center px-5 py-2.5 font-medium text-slate-muted dark:text-gray-500">Qty</th>
+                          <th className="text-right px-5 py-2.5 font-medium text-slate-muted dark:text-gray-500">Unit Price</th>
+                          <th className="text-right px-5 py-2.5 font-medium text-slate-muted dark:text-gray-500">Total</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border/30">
                         {inv.lineItems.map((item) => (
-                          <tr key={item.lineItemId} className="hover:bg-cream-warm/30">
-                            <td className="px-5 py-3 font-medium text-obsidian">{item.serviceName}</td>
-                            <td className="px-5 py-3 text-slate-muted hidden sm:table-cell">{item.description}</td>
-                            <td className="px-5 py-3 text-center text-slate-muted">{item.quantity}</td>
-                            <td className="px-5 py-3 text-right text-slate-muted">{formatCurrency(item.unitPrice)}</td>
-                            <td className="px-5 py-3 text-right font-medium text-obsidian">{formatCurrency(item.totalPrice)}</td>
+                          <tr key={item.lineItemId} className="hover:bg-cream-warm/30 dark:hover:bg-white/[0.02]">
+                            <td className="px-5 py-3 font-medium text-obsidian dark:text-gray-100">{item.serviceName}</td>
+                            <td className="px-5 py-3 text-slate-muted dark:text-gray-500 hidden sm:table-cell">{item.description}</td>
+                            <td className="px-5 py-3 text-center text-slate-muted dark:text-gray-500">{item.quantity}</td>
+                            <td className="px-5 py-3 text-right text-slate-muted dark:text-gray-500">{formatCurrency(item.unitPrice)}</td>
+                            <td className="px-5 py-3 text-right font-medium text-obsidian dark:text-gray-100">{formatCurrency(item.totalPrice)}</td>
                           </tr>
                         ))}
                       </tbody>

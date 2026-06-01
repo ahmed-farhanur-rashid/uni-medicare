@@ -75,10 +75,10 @@ export default function AdminStudentsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-semibold text-obsidian">{s.name}</p>
+                        <p className="font-semibold text-obsidian dark:text-gray-100">{s.name}</p>
                         <StatusBadge status={s.isActive ? 'completed' : 'cancelled'} />
                       </div>
-                      <p className="text-sm text-slate-muted mt-0.5">ID: {s.studentId} · {s.email}</p>
+                      <p className="text-sm text-slate-muted dark:text-gray-500 mt-0.5">ID: {s.studentId} · {s.email}</p>
                     </div>
                     <div className="flex gap-2 shrink-0">
                       <Button variant="outline" size="sm" onClick={() => handleToggle(s.studentId)}>{s.isActive ? 'Deactivate' : 'Activate'}</Button>
@@ -90,7 +90,7 @@ export default function AdminStudentsPage() {
           </div>
           <div className="flex justify-center gap-2">
             <Button variant="outline" size="sm" disabled={page === 0} onClick={() => setPage(page - 1)}>Previous</Button>
-            <span className="px-4 py-2 text-sm text-slate-muted">Page {page + 1} of {data.totalPages}</span>
+            <span className="px-4 py-2 text-sm text-slate-muted dark:text-gray-500">Page {page + 1} of {data.totalPages}</span>
             <Button variant="outline" size="sm" disabled={page >= data.totalPages - 1} onClick={() => setPage(page + 1)}>Next</Button>
           </div>
         </>

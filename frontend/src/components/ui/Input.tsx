@@ -17,14 +17,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-medium text-slate-mid mb-1.5"
+            className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5"
           >
             {label}
           </label>
         )}
         <div className="relative">
           {icon && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-muted">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-muted dark:text-gray-500">
               {icon}
             </div>
           )}
@@ -32,9 +32,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={inputId}
             className={cn(
-              'w-full h-11 rounded-xl border border-border bg-white px-4 text-sm text-obsidian placeholder:text-silver transition-all duration-200',
+              'w-full h-11 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-white/5 px-4 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-600 transition-all duration-200',
               'focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald',
-              'hover:border-slate-muted',
+              'hover:border-slate-muted dark:hover:border-white/[0.15]',
               icon && 'pl-10',
               error && 'border-rose focus:ring-rose/30 focus:border-rose',
               className

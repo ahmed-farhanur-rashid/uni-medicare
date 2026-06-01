@@ -49,7 +49,7 @@ function VerifyEmailContent() {
   };
 
   return (
-    <div className="min-h-screen flex bg-cream-warm">
+    <div className="min-h-screen flex bg-cream-warm dark:bg-gray-950">
       <div className="hidden lg:flex lg:w-1/2 bg-obsidian relative overflow-hidden items-center justify-center">
         <div className="absolute inset-0 mesh-gradient-dark opacity-60" />
         <div className="absolute top-20 left-20 w-72 h-72 bg-emerald/10 rounded-full blur-3xl" />
@@ -61,7 +61,7 @@ function VerifyEmailContent() {
             </svg>
           </div>
           <h1 className="text-3xl font-bold text-white font-display mb-3">Uni Medicare</h1>
-          <p className="text-silver/60 text-sm">University Medical Center Management System</p>
+          <p className="text-silver/60 dark:text-gray-500/60 text-sm">University Medical Center Management System</p>
         </div>
       </div>
 
@@ -75,7 +75,7 @@ function VerifyEmailContent() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-obsidian font-display mb-2">Verifying your email...</h2>
+              <h2 className="text-2xl font-bold text-obsidian dark:text-gray-100 font-display mb-2">Verifying your email...</h2>
             </>
           )}
 
@@ -86,8 +86,8 @@ function VerifyEmailContent() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-obsidian font-display mb-2">Email verified!</h2>
-              <p className="text-sm text-slate-muted mb-6">Your email has been verified. You can now sign in.</p>
+              <h2 className="text-2xl font-bold text-obsidian dark:text-gray-100 font-display mb-2">Email verified!</h2>
+              <p className="text-sm text-slate-muted dark:text-gray-500 mb-6">Your email has been verified. You can now sign in.</p>
               <Link href="/">
                 <Button className="w-full">Sign in</Button>
               </Link>
@@ -101,8 +101,8 @@ function VerifyEmailContent() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-obsidian font-display mb-2">Verification failed</h2>
-              <p className="text-sm text-slate-muted mb-6">{errorMsg}</p>
+              <h2 className="text-2xl font-bold text-obsidian dark:text-gray-100 font-display mb-2">Verification failed</h2>
+              <p className="text-sm text-slate-muted dark:text-gray-500 mb-6">{errorMsg}</p>
               <Link href="/">
                 <Button variant="outline" className="w-full">Back to Sign in</Button>
               </Link>
@@ -117,13 +117,13 @@ function VerifyEmailContent() {
                 </svg>
               </div>
 
-              <h2 className="text-2xl font-bold text-obsidian font-display mb-2">Check your email</h2>
-              <p className="text-sm text-slate-muted mb-6">
+              <h2 className="text-2xl font-bold text-obsidian dark:text-gray-100 font-display mb-2">Check your email</h2>
+              <p className="text-sm text-slate-muted dark:text-gray-500 mb-6">
                 We&apos;ve sent a verification link to<br />
-                <span className="font-medium text-obsidian">{email || 'your email address'}</span>
+                <span className="font-medium text-obsidian dark:text-gray-100">{email || 'your email address'}</span>
               </p>
 
-              <p className="text-sm text-slate-muted mb-8">
+              <p className="text-sm text-slate-muted dark:text-gray-500 mb-8">
                 Click the link in the email to verify your account. If you haven&apos;t received it, check your spam folder or resend below.
               </p>
 
@@ -153,8 +153,8 @@ function VerifyEmailContent() {
 export default function VerifyEmailPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-cream-warm">
-        <div className="text-sm text-slate-muted">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-cream-warm dark:bg-gray-950">
+        <div className="text-sm text-slate-muted dark:text-gray-500">Loading...</div>
       </div>
     }>
       <VerifyEmailContent />

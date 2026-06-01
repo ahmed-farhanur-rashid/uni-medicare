@@ -21,11 +21,11 @@ export default function PageHeader({
       )}
     >
       <div>
-        <h1 className="text-2xl font-bold text-obsidian font-display tracking-tight">
+        <h1 className="text-2xl font-bold text-obsidian dark:text-gray-100 font-display tracking-tight">
           {title}
         </h1>
         {description && (
-          <p className="mt-1 text-sm text-slate-muted">{description}</p>
+          <p className="mt-1 text-sm text-slate-muted dark:text-gray-500">{description}</p>
         )}
       </div>
       {actions && <div className="flex items-center gap-3 mt-3 sm:mt-0">{actions}</div>}

@@ -57,8 +57,8 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="animate-fade-in-up stagger-3 opacity-0">
           <CardContent className="p-0">
-            <div className="px-6 py-4 border-b border-border/40 flex items-center justify-between">
-              <h2 className="font-semibold text-obsidian font-display">Quick Actions</h2>
+            <div className="px-6 py-4 border-b border-border/40 dark:border-white/[0.06] flex items-center justify-between">
+              <h2 className="font-semibold text-obsidian dark:text-gray-100 font-display">Quick Actions</h2>
             </div>
             <div className="p-6 grid grid-cols-2 gap-3">
               {[
@@ -68,8 +68,8 @@ export default function AdminDashboard() {
                 { label: 'Services', href: '/admin/services', color: 'amber' },
                 { label: 'Audit Logs', href: '/admin/audit', color: 'rose' },
               ].map((item) => (
-                <button key={item.href} onClick={() => router.push(item.href)} className={`p-4 rounded-xl border border-border hover:border-${item.color} hover:bg-${item.color}/5 transition-all text-center group`}>
-                  <p className="text-sm font-medium text-obsidian group-hover:text-current">{item.label}</p>
+                <button key={item.href} onClick={() => router.push(item.href)} className={`p-4 rounded-xl border border-border dark:border-white/[0.08] hover:border-${item.color} hover:bg-${item.color}/5 transition-all text-center group`}>
+                  <p className="text-sm font-medium text-obsidian dark:text-gray-100 group-hover:text-current">{item.label}</p>
                 </button>
               ))}
             </div>
@@ -78,23 +78,23 @@ export default function AdminDashboard() {
 
         <Card className="animate-fade-in-up stagger-4 opacity-0">
           <CardContent className="p-0">
-            <div className="px-6 py-4 border-b border-border/40 flex items-center justify-between">
-              <h2 className="font-semibold text-obsidian font-display">Recent Staff</h2>
+            <div className="px-6 py-4 border-b border-border/40 dark:border-white/[0.06] flex items-center justify-between">
+              <h2 className="font-semibold text-obsidian dark:text-gray-100 font-display">Recent Staff</h2>
               <Button variant="ghost" size="sm" onClick={() => router.push('/admin/staff')}>View all</Button>
             </div>
             <div className="divide-y divide-border/30">
               {staff.length === 0 ? (
-                <div className="px-6 py-8 text-center text-sm text-slate-muted">No staff members found.</div>
+                <div className="px-6 py-8 text-center text-sm text-slate-muted dark:text-gray-500">No staff members found.</div>
               ) : staff.slice(0, 5).map((s) => (
-                <div key={s.medicalStaffId} className="px-6 py-4 flex items-center gap-4 hover:bg-cream-warm/50 transition-colors">
+                <div key={s.medicalStaffId} className="px-6 py-4 flex items-center gap-4 hover:bg-cream-warm/50 dark:hover:bg-white/[0.02] transition-colors">
                   <div className="w-10 h-10 rounded-xl bg-sky/10 flex items-center justify-center text-sky shrink-0">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-obsidian truncate">{s.name}</p>
-                    <p className="text-xs text-slate-muted">{s.roleName} · {s.departmentName}</p>
+                    <p className="text-sm font-medium text-obsidian dark:text-gray-100 truncate">{s.name}</p>
+                    <p className="text-xs text-slate-muted dark:text-gray-500">{s.roleName} · {s.departmentName}</p>
                   </div>
-                  <div className={`w-2 h-2 rounded-full ${s.isActive ? 'bg-emerald' : 'bg-silver'}`} />
+                  <div className={`w-2 h-2 rounded-full ${s.isActive ? 'bg-emerald' : 'bg-silver dark:bg-gray-500'}`} />
                 </div>
               ))}
             </div>

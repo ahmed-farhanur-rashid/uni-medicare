@@ -52,22 +52,22 @@ export default function Modal({
         if (e.target === overlayRef.current) onClose();
       }}
     >
-      <div className="absolute inset-0 bg-obsidian/40 backdrop-blur-sm animate-fade-in" />
+      <div className="absolute inset-0 bg-obsidian/40 dark:bg-black/60 backdrop-blur-sm animate-fade-in" />
       <div
         className={cn(
-          'relative w-full bg-white rounded-2xl shadow-xl animate-scale-in',
+          'relative w-full bg-white dark:bg-gray-900 rounded-2xl shadow-xl animate-scale-in',
           sizes[size],
           className
         )}
       >
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-border/40">
-            <h2 className="text-lg font-semibold text-obsidian font-display">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-border/40 dark:border-white/[0.06]">
+            <h2 className="text-lg font-semibold text-obsidian dark:text-gray-100 font-display">
               {title}
             </h2>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-muted hover:text-obsidian hover:bg-cream transition-colors"
+              className="p-1.5 rounded-lg text-slate-muted hover:text-obsidian hover:bg-cream dark:hover:text-gray-200 dark:hover:bg-white/10 transition-colors"
             >
               <svg
                 className="w-5 h-5"

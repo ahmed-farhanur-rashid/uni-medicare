@@ -54,21 +54,21 @@ export default function LabDashboard() {
 
       <Card className="animate-fade-in-up stagger-3 opacity-0">
         <CardContent className="p-0">
-          <div className="px-6 py-4 border-b border-border/40 flex items-center justify-between">
-            <h2 className="font-semibold text-obsidian font-display">Pending Lab Results</h2>
+          <div className="px-6 py-4 border-b border-border/40 dark:border-white/[0.06] flex items-center justify-between">
+            <h2 className="font-semibold text-obsidian dark:text-gray-100 font-display">Pending Lab Results</h2>
             <Button variant="ghost" size="sm" onClick={() => router.push('/lab/results')}>View all</Button>
           </div>
-          <div className="divide-y divide-border/30">
+          <div className="divide-y divide-border/30 dark:divide-white/[0.06]">
             {pending.length === 0 ? (
               <EmptyState icon={<svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5" /></svg>} title="No pending results" description="All lab results have been completed." />
             ) : pending.slice(0, 5).map((r) => (
-              <div key={r.resultId} className="px-6 py-4 flex items-center gap-4 hover:bg-cream-warm/50 transition-colors">
+              <div key={r.resultId} className="px-6 py-4 flex items-center gap-4 hover:bg-cream-warm/50 dark:hover:bg-white/[0.02] transition-colors">
                 <div className="w-10 h-10 rounded-xl bg-amber/10 flex items-center justify-center text-amber shrink-0">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5" /></svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-obsidian truncate">{r.labTestName}</p>
-                  <p className="text-xs text-slate-muted">{formatDateTime(r.createdAt)}</p>
+                  <p className="text-sm font-medium text-obsidian dark:text-gray-100 truncate">{r.labTestName}</p>
+                  <p className="text-xs text-slate-muted dark:text-gray-500">{formatDateTime(r.createdAt)}</p>
                 </div>
                 <StatusBadge status={r.resultStatus} />
               </div>

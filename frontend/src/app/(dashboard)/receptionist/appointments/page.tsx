@@ -46,7 +46,7 @@ export default function ReceptionistAppointmentsPage() {
 
       <div className="flex gap-2 overflow-x-auto pb-2">
         {['all', 'scheduled', 'confirmed', 'completed', 'cancelled'].map((f) => (
-          <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filter === f ? 'bg-emerald text-white shadow-sm' : 'bg-white text-slate-muted border border-border hover:border-emerald hover:text-emerald'}`}>
+          <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filter === f ? 'bg-emerald text-white shadow-sm' : 'bg-white dark:bg-gray-900 text-slate-muted dark:text-gray-500 border border-border dark:border-white/[0.08] hover:border-emerald hover:text-emerald'}`}>
             {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
           </button>
         ))}
@@ -65,13 +65,13 @@ export default function ReceptionistAppointmentsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-semibold text-obsidian">{apt.patientName} — Dr. {apt.doctorName}</p>
+                      <p className="font-semibold text-obsidian dark:text-gray-100">{apt.patientName} — Dr. {apt.doctorName}</p>
                       <StatusBadge status={apt.status} />
                     </div>
-                    <p className="text-sm text-slate-muted mt-0.5">{apt.department || 'General'} · {apt.reason || 'General checkup'}</p>
+                    <p className="text-sm text-slate-muted dark:text-gray-500 mt-0.5">{apt.department || 'General'} · {apt.reason || 'General checkup'}</p>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <p className="text-sm font-medium text-obsidian">{formatDateTime(apt.scheduledTime)}</p>
+                    <p className="text-sm font-medium text-obsidian dark:text-gray-100">{formatDateTime(apt.scheduledTime)}</p>
                     {apt.status === 'scheduled' && (
                       <Button size="sm" onClick={() => handleStatus(apt.appointmentId, 'confirmed')}>Confirm</Button>
                     )}

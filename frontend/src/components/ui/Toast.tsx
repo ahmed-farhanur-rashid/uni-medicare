@@ -44,7 +44,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               'pointer-events-auto px-4 py-3 rounded-xl shadow-lg text-sm font-medium animate-fade-in-up max-w-sm',
               t.type === 'success' && 'bg-emerald text-white',
               t.type === 'error' && 'bg-rose text-white',
-              t.type === 'info' && 'bg-obsidian text-white'
+              t.type === 'info' && 'bg-obsidian dark:bg-gray-800 text-white'
             )}
           >
             {t.message}

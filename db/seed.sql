@@ -37,7 +37,7 @@ INSERT INTO medical_staff_roles (role_id, role_name, can_prescribe) VALUES
 
 -- -----------------------------------------------------------------
 --  MEDICAL STAFFS
---  12 doctors + 6 nurses + 1 lab tech + 1 receptionist + 1 admin
+--  13 doctors + 6 nurses + 1 lab tech + 1 receptionist + 1 admin
 -- -----------------------------------------------------------------
 INSERT INTO medical_staffs (medical_staff_id, role_id, department_id, name, specialty, email, phone, password) VALUES
     -- Doctors — General Medicine (dept 1)
@@ -48,9 +48,10 @@ INSERT INTO medical_staffs (medical_staff_id, role_id, department_id, name, spec
     (1004, 1, 2, 'Dr. Marcus Weber',       'Counseling',        'marcus.weber@unimedicare.edu',    '07700100004', '$2a$10$QqTmSDNgTcpt4lKh25pFLeHuRdWRyFF/7dugoCVnOReQh4bddWiyS'),
     -- Doctor — Laboratory (dept 3) — Pathologist
     (1005, 1, 3, 'Dr. Elena Rossi',        'Pathology',         'elena.rossi@unimedicare.edu',     '07700100005', '$2a$10$QqTmSDNgTcpt4lKh25pFLeHuRdWRyFF/7dugoCVnOReQh4bddWiyS'),
-    -- Doctors — Emergency (dept 4)
+    -- Doctors — Emergency (dept 4) — 3 doctors for 24/7 coverage
     (1006, 1, 4, 'Dr. Daniel Fischer',     'Emergency Medicine','daniel.fischer@unimedicare.edu',  '07700100006', '$2a$10$QqTmSDNgTcpt4lKh25pFLeHuRdWRyFF/7dugoCVnOReQh4bddWiyS'),
     (1007, 1, 4, 'Dr. Olivia Barnes',      'Emergency Medicine','olivia.barnes@unimedicare.edu',   '07700100007', '$2a$10$QqTmSDNgTcpt4lKh25pFLeHuRdWRyFF/7dugoCVnOReQh4bddWiyS'),
+    (1022, 1, 4, 'Dr. Nadia Petrova',      'Emergency Medicine','nadia.petrova@unimedicare.edu',   '07700100022', '$2a$10$QqTmSDNgTcpt4lKh25pFLeHuRdWRyFF/7dugoCVnOReQh4bddWiyS'),
     -- Doctors — Physiotherapy (dept 5)
     (1008, 1, 5, 'Dr. Lucas Martin',       'Physiotherapy',     'lucas.martin@unimedicare.edu',    '07700100008', '$2a$10$QqTmSDNgTcpt4lKh25pFLeHuRdWRyFF/7dugoCVnOReQh4bddWiyS'),
     (1009, 1, 5, 'Dr. Anna Kowalski',      'Physiotherapy',     'anna.kowalski@unimedicare.edu',   '07700100009', '$2a$10$QqTmSDNgTcpt4lKh25pFLeHuRdWRyFF/7dugoCVnOReQh4bddWiyS'),
@@ -111,7 +112,21 @@ INSERT INTO staff_schedules (medical_staff_id, day_of_week, start_time, end_time
     (1011, 3, '14:00', '19:00'), (1011, 4, '14:00', '19:00'),
     -- Dr. Thomas Eriksson (Urology): Mon-Fri 10:00-15:00
     (1012, 1, '10:00', '15:00'), (1012, 2, '10:00', '15:00'), (1012, 3, '10:00', '15:00'),
-    (1012, 4, '10:00', '15:00'), (1012, 5, '10:00', '15:00');
+    (1012, 4, '10:00', '15:00'), (1012, 5, '10:00', '15:00'),
+    -- Dr. Nadia Petrova (Emergency): Sun-Thu 00:00-08:00 (night shift)
+    (1022, 0, '00:00', '08:00'), (1022, 1, '00:00', '08:00'), (1022, 2, '00:00', '08:00'),
+    (1022, 3, '00:00', '08:00'), (1022, 4, '00:00', '08:00');
+
+-- -----------------------------------------------------------------
+--  DEPARTMENT SCHEDULES
+-- -----------------------------------------------------------------
+INSERT INTO department_schedules (department_id, slot_duration_minutes, start_time, end_time, break_start, break_end, is_bookable) VALUES
+    (1, 20, '08:00', '17:10', '13:00', '13:30', TRUE),   -- General Medicine
+    (2, 50, '09:00', '17:00', '13:00', '13:30', TRUE),   -- Counseling
+    (3, 20, '08:00', '16:00', '12:00', '12:30', FALSE),  -- Laboratory (walk-in/referral only)
+    (4, 20, '00:00', '23:59', '13:00', '13:30', FALSE),  -- Emergency (24/7, walk-in only)
+    (5, 30, '08:00', '17:00', '13:00', '13:30', TRUE),   -- Physiotherapy
+    (6, 30, '09:00', '17:00', '13:00', '13:30', TRUE);   -- Reproductive & Sexual Health
 
 -- -----------------------------------------------------------------
 --  STUDENTS (15 students, account_id = 2..16)

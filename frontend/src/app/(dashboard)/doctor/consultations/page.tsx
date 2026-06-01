@@ -59,9 +59,9 @@ export default function DoctorConsultationsPage() {
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-obsidian">{c.patientName}</p>
-                    <p className="text-sm text-slate-muted mt-0.5">{formatDateTime(c.consultTime)}</p>
-                    {c.notes && <p className="text-sm text-slate-soft mt-2 line-clamp-2">{c.notes}</p>}
+                    <p className="font-semibold text-obsidian dark:text-gray-100">{c.patientName}</p>
+                    <p className="text-sm text-slate-muted dark:text-gray-500 mt-0.5">{formatDateTime(c.consultTime)}</p>
+                    {c.notes && <p className="text-sm text-slate-soft dark:text-gray-400 mt-2 line-clamp-2">{c.notes}</p>}
                   </div>
                   <Button variant="outline" size="sm" onClick={() => { setSelectedConsult(c); setNotes(c.notes || ''); }}>Update Notes</Button>
                 </div>
@@ -74,12 +74,12 @@ export default function DoctorConsultationsPage() {
       <Modal isOpen={!!selectedConsult} onClose={() => setSelectedConsult(null)} title="Update Consultation Notes">
         <div className="space-y-4">
           {selectedConsult && (
-            <div className="p-3 rounded-xl bg-cream-warm border border-border/40">
-              <p className="text-sm font-medium text-obsidian">{selectedConsult.patientName}</p>
-              <p className="text-xs text-slate-muted">{formatDateTime(selectedConsult.consultTime)}</p>
+            <div className="p-3 rounded-xl bg-cream-warm dark:bg-white/[0.02] border border-border/40 dark:border-white/[0.06]">
+              <p className="text-sm font-medium text-obsidian dark:text-gray-100">{selectedConsult.patientName}</p>
+              <p className="text-xs text-slate-muted dark:text-gray-500">{formatDateTime(selectedConsult.consultTime)}</p>
             </div>
           )}
-          <textarea className="w-full h-32 rounded-xl border border-border bg-white px-4 py-3 text-sm text-obsidian placeholder:text-silver transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none" placeholder="Enter consultation notes..." value={notes} onChange={(e) => setNotes(e.target.value)} />
+          <textarea className="w-full h-32 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none" placeholder="Enter consultation notes..." value={notes} onChange={(e) => setNotes(e.target.value)} />
           <div className="flex justify-end gap-3">
             <Button variant="ghost" onClick={() => setSelectedConsult(null)}>Cancel</Button>
             <Button isLoading={saving} onClick={handleUpdateNotes}>Save Notes</Button>

@@ -38,7 +38,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-cream-warm">
+    <div className="min-h-screen flex bg-cream-warm dark:bg-gray-950">
       <div className="hidden lg:flex lg:w-1/2 bg-obsidian relative overflow-hidden items-center justify-center">
         <div className="absolute inset-0 mesh-gradient-dark opacity-60" />
         <div className="absolute top-20 left-20 w-72 h-72 bg-emerald/10 rounded-full blur-3xl" />
@@ -50,15 +50,15 @@ export default function ForgotPasswordPage() {
             </svg>
           </div>
           <h1 className="text-3xl font-bold text-white font-display mb-3">Uni Medicare</h1>
-          <p className="text-silver/60 text-sm">University Medical Center Management System</p>
+          <p className="text-silver/60 dark:text-gray-500/60 text-sm">University Medical Center Management System</p>
         </div>
       </div>
 
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-md">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-obsidian font-display">Forgot your password?</h2>
-            <p className="text-sm text-slate-muted mt-1">Enter your email and we&apos;ll send you a reset link</p>
+            <h2 className="text-2xl font-bold text-obsidian dark:text-gray-100 font-display">Forgot your password?</h2>
+            <p className="text-sm text-slate-muted dark:text-gray-500 mt-1">Enter your email and we&apos;ll send you a reset link</p>
           </div>
 
           {error && (
@@ -81,7 +81,7 @@ export default function ForgotPasswordPage() {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-muted">
+          <p className="mt-6 text-center text-sm text-slate-muted dark:text-gray-500">
             Remember your password?{' '}
             <Link href="/" className="text-emerald-deep font-medium hover:underline">
               Sign in

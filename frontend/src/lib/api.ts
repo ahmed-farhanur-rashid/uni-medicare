@@ -387,11 +387,31 @@ export interface StaffScheduleResponse {
   endTime: string;
 }
 
+export interface DepartmentScheduleResponse {
+  scheduleId: number;
+  departmentId: number;
+  departmentName: string;
+  slotDurationMinutes: number;
+  startTime: string;
+  endTime: string;
+  breakStart: string;
+  breakEnd: string;
+  isBookable: boolean;
+}
+
+export interface SlotResponse {
+  time: string;
+  endTime: string;
+  status: 'available' | 'booked' | 'break';
+}
+
 export const doctorsApi = {
   getSpecialties: () => api.get<string[]>('/doctors/specialties'),
   getAll: (specialty?: string) =>
     api.get<DoctorResponse[]>('/doctors', { params: specialty ? { specialty } : {} }),
   getSchedule: (id: number) => api.get<StaffScheduleResponse[]>(`/doctors/${id}/schedule`),
+  getAvailableSlots: (id: number, date: string) =>
+    api.get<SlotResponse[]>(`/doctors/${id}/available-slots`, { params: { date } }),
 };
 
 // Admin API
@@ -475,6 +495,17 @@ export const adminApi = {
     data: { dayOfWeek: number; startTime: string; endTime: string }
   ) => api.put(`/admin/schedules/${id}`, data),
   deleteSchedule: (id: number) => api.delete(`/admin/schedules/${id}`),
+
+  // Department schedules
+  getDepartmentSchedules: () => api.get<DepartmentScheduleResponse[]>('/admin/department-schedules'),
+  getDepartmentSchedule: (departmentId: number) =>
+    api.get<DepartmentScheduleResponse>(`/admin/department-schedules/${departmentId}`),
+  updateDepartmentSchedule: (
+    departmentId: number,
+    data: Partial<DepartmentScheduleResponse>
+  ) => api.put<DepartmentScheduleResponse>(`/admin/department-schedules/${departmentId}`, data),
+  deleteDepartmentSchedule: (departmentId: number) =>
+    api.delete(`/admin/department-schedules/${departmentId}`),
 };
 
 // Audit API

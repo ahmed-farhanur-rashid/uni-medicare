@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuthStore } from '@/store/auth';
 import { notificationsApi, type NotificationResponse } from '@/lib/api';
 import Avatar from '@/components/ui/Avatar';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 import { cn } from '@/lib/utils';
 
 interface NavItem {
@@ -313,11 +314,11 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen flex bg-cream-warm">
+    <div className="min-h-screen flex bg-cream-warm dark:bg-gray-950">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-obsidian/40 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-obsidian/40 dark:bg-black/60 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -325,7 +326,7 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 w-64 bg-obsidian flex flex-col transition-transform duration-300 ease-out',
+          'fixed inset-y-0 left-0 z-50 w-64 bg-obsidian dark:bg-gray-950 flex flex-col transition-transform duration-300 ease-out',
           'lg:translate-x-0 lg:static lg:z-auto',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         )}
@@ -394,7 +395,7 @@ export default function DashboardLayout({
             </div>
             <button
               onClick={handleLogout}
-              className="p-1.5 rounded-lg text-silver/50 hover:text-rose hover:bg-white/[0.06] transition-colors"
+              className="p-1.5 rounded-lg text-silver/50 hover:text-rose hover:bg-white/[0.06] dark:hover:bg-white/[0.08] transition-colors"
               title="Sign out"
             >
               <svg
@@ -418,10 +419,10 @@ export default function DashboardLayout({
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 h-16 flex items-center gap-4 px-6 bg-white/80 backdrop-blur-md border-b border-border/40">
+        <header className="sticky top-0 z-30 h-16 flex items-center gap-4 px-6 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-border/40 dark:border-white/[0.06]">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden p-2 rounded-xl text-slate-muted hover:text-obsidian hover:bg-cream transition-colors"
+            className="lg:hidden p-2 rounded-xl text-slate-muted hover:text-obsidian hover:bg-cream dark:hover:text-gray-200 dark:hover:bg-white/10 transition-colors"
           >
             <svg
               className="w-5 h-5"
@@ -440,11 +441,14 @@ export default function DashboardLayout({
 
           <div className="flex-1" />
 
+          {/* Theme toggle */}
+          <ThemeToggle />
+
           {/* Notification bell */}
           <div ref={notifRef} className="relative">
             <button
               onClick={() => { setShowNotifications(!showNotifications); setShowProfileMenu(false); }}
-              className="relative p-2 rounded-xl text-slate-muted hover:text-obsidian hover:bg-cream transition-colors"
+              className="relative p-2 rounded-xl text-slate-muted hover:text-obsidian hover:bg-cream dark:hover:text-gray-200 dark:hover:bg-white/10 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
@@ -454,26 +458,26 @@ export default function DashboardLayout({
               )}
             </button>
             {showNotifications && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-lg border border-border/40 overflow-hidden z-50">
-                <div className="px-4 py-3 border-b border-border/40 flex items-center justify-between">
-                  <p className="text-sm font-semibold text-obsidian">Notifications</p>
+              <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-border/40 dark:border-white/[0.06] overflow-hidden z-50">
+                <div className="px-4 py-3 border-b border-border/40 dark:border-white/[0.06] flex items-center justify-between">
+                  <p className="text-sm font-semibold text-obsidian dark:text-gray-100">Notifications</p>
                   {unreadCount > 0 && <span className="text-xs text-emerald-deep font-medium">{unreadCount} new</span>}
                 </div>
                 <div className="max-h-80 overflow-y-auto">
                   {notifications.length === 0 ? (
-                    <div className="px-4 py-8 text-center text-sm text-slate-muted">No notifications yet.</div>
+                    <div className="px-4 py-8 text-center text-sm text-slate-muted dark:text-gray-500">No notifications yet.</div>
                   ) : (
                     notifications.slice(0, 10).map((n) => (
                       <button
                         key={n.notificationId}
                         onClick={() => markNotificationRead(n.notificationId)}
                         className={cn(
-                          'w-full text-left px-4 py-3 border-b border-border/20 hover:bg-cream/50 transition-colors',
-                          !n.isRead && 'bg-emerald/5'
+                          'w-full text-left px-4 py-3 border-b border-border/20 dark:border-white/[0.04] hover:bg-cream/50 dark:hover:bg-white/5 transition-colors',
+                          !n.isRead && 'bg-emerald/5 dark:bg-emerald/10'
                         )}
                       >
-                        <p className="text-sm font-medium text-obsidian">{n.title}</p>
-                        <p className="text-xs text-slate-muted mt-0.5 line-clamp-2">{n.message}</p>
+                        <p className="text-sm font-medium text-obsidian dark:text-gray-100">{n.title}</p>
+                        <p className="text-xs text-slate-muted dark:text-gray-500 mt-0.5 line-clamp-2">{n.message}</p>
                       </button>
                     ))
                   )}
@@ -486,21 +490,21 @@ export default function DashboardLayout({
           <div ref={profileRef} className="relative">
             <button
               onClick={() => { setShowProfileMenu(!showProfileMenu); setShowNotifications(false); }}
-              className="flex items-center gap-2 p-1 rounded-xl hover:bg-cream transition-colors"
+              className="flex items-center gap-2 p-1 rounded-xl hover:bg-cream dark:hover:bg-white/10 transition-colors"
             >
               <Avatar name={userName || role || 'U'} size="sm" />
             </button>
             {showProfileMenu && (
-              <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-lg border border-border/40 overflow-hidden z-50">
-                <div className="px-4 py-3 border-b border-border/40">
-                  <p className="text-sm font-semibold text-obsidian truncate">{userName || roleLabel(role)}</p>
-                  <p className="text-xs text-slate-muted">{roleLabel(role)} &middot; ID: {userId}</p>
+              <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-border/40 dark:border-white/[0.06] overflow-hidden z-50">
+                <div className="px-4 py-3 border-b border-border/40 dark:border-white/[0.06]">
+                  <p className="text-sm font-semibold text-obsidian dark:text-gray-100 truncate">{userName || roleLabel(role)}</p>
+                  <p className="text-xs text-slate-muted dark:text-gray-500">{roleLabel(role)} &middot; ID: {userId}</p>
                 </div>
                 <div className="py-1">
                   <Link
                     href="/profile"
                     onClick={() => setShowProfileMenu(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-soft hover:bg-cream hover:text-obsidian transition-colors"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-soft dark:text-gray-400 hover:bg-cream dark:hover:bg-white/5 hover:text-obsidian dark:hover:text-gray-200 transition-colors"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -509,7 +513,7 @@ export default function DashboardLayout({
                   </Link>
                   <button
                     onClick={() => { handleLogout(); setShowProfileMenu(false); }}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-rose hover:bg-rose/5 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-rose hover:bg-rose/5 dark:hover:bg-rose/10 transition-colors"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
@@ -523,7 +527,7 @@ export default function DashboardLayout({
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-6 lg:p-8 overflow-auto">{children}</main>
+        <main className="flex-1 p-6 lg:p-8 overflow-auto dark:text-gray-200">{children}</main>
       </div>
     </div>
   );

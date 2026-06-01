@@ -70,19 +70,19 @@ export default function StudentLabResultsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-semibold text-obsidian">
+                      <p className="font-semibold text-obsidian dark:text-gray-100">
                         {lr.labTestName}
                       </p>
                       <StatusBadge status={lr.resultStatus} />
                     </div>
-                    <p className="text-sm text-slate-muted mt-0.5">
+                    <p className="text-sm text-slate-muted dark:text-gray-500 mt-0.5">
                       {formatDateTime(lr.createdAt)}
                     </p>
                   </div>
                   {lr.resultValue && (
                     <div className="text-right shrink-0">
-                      <p className="text-xs text-slate-muted">Result</p>
-                      <p className="text-lg font-bold text-obsidian font-display">
+                      <p className="text-xs text-slate-muted dark:text-gray-500">Result</p>
+                      <p className="text-lg font-bold text-obsidian dark:text-gray-100 font-display">
                         {lr.resultValue}
                       </p>
                     </div>

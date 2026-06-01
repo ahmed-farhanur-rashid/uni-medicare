@@ -16,16 +16,16 @@ export default function Badge({
   className,
 }: BadgeProps) {
   const variants = {
-    default: 'bg-silver/15 text-slate-soft',
-    success: 'bg-emerald/10 text-emerald-deep',
-    warning: 'bg-amber/10 text-amber',
-    danger: 'bg-rose/10 text-rose',
-    info: 'bg-sky/10 text-sky',
-    purple: 'bg-violet/10 text-violet',
+    default: 'bg-silver/15 dark:bg-white/10 text-slate-soft dark:text-gray-400',
+    success: 'bg-emerald/10 dark:bg-emerald/15 text-emerald-deep dark:text-emerald-light',
+    warning: 'bg-amber/10 dark:bg-amber/15 text-amber',
+    danger: 'bg-rose/10 dark:bg-rose/15 text-rose',
+    info: 'bg-sky/10 dark:bg-sky/15 text-sky',
+    purple: 'bg-violet/10 dark:bg-violet/15 text-violet',
   };
 
   const dotColors = {
-    default: 'bg-slate-soft',
+    default: 'bg-slate-soft dark:bg-gray-400',
     success: 'bg-emerald',
     warning: 'bg-amber',
     danger: 'bg-rose',

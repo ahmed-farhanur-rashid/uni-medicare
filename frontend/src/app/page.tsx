@@ -123,7 +123,7 @@ export default function LoginPage() {
               university life.
             </h1>
 
-            <p className="text-lg text-silver/80 max-w-md leading-relaxed">
+            <p className="text-lg text-silver/80 dark:text-gray-500/80 max-w-md leading-relaxed">
               Seamless appointment booking, digital prescriptions, lab results,
               and billing — all in one elegant platform.
             </p>
@@ -150,7 +150,7 @@ export default function LoginPage() {
                   <p className="text-2xl font-bold text-white font-display">
                     {stat.value}
                   </p>
-                  <p className="text-xs text-silver/60 mt-1">{stat.label}</p>
+                  <p className="text-xs text-silver/60 dark:text-gray-500/60 mt-1">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -178,16 +178,16 @@ export default function LoginPage() {
                 />
               </svg>
             </div>
-            <span className="text-xl font-bold text-obsidian font-display">
+            <span className="text-xl font-bold text-obsidian dark:text-gray-100 font-display">
               Uni Medicare
             </span>
           </div>
 
           <div className="animate-fade-in-up stagger-1">
-            <h2 className="text-3xl font-bold text-obsidian font-display mb-2">
+            <h2 className="text-3xl font-bold text-obsidian dark:text-gray-100 font-display mb-2">
               Welcome back
             </h2>
-            <p className="text-slate-muted mb-8">
+            <p className="text-slate-muted dark:text-gray-500 mb-8">
               Sign in to access your medical portal
             </p>
           </div>
@@ -299,7 +299,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-[38px] text-silver hover:text-slate-soft transition-colors"
+                className="absolute right-3 top-[38px] text-silver hover:text-slate-soft transition-colors dark:text-gray-500 dark:hover:text-gray-400"
               >
                 {showPassword ? (
                   <svg
@@ -354,7 +354,7 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 text-center animate-fade-in-up stagger-3">
-            <p className="text-sm text-slate-muted">
+            <p className="text-sm text-slate-muted dark:text-gray-500">
               Don&apos;t have an account?{' '}
               <Link href="/register" className="text-emerald-deep font-medium hover:underline">
                 Create one here
@@ -362,7 +362,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <p className="mt-8 text-center text-xs text-silver animate-fade-in-up stagger-4">
+          <p className="mt-8 text-center text-xs text-silver dark:text-gray-500 animate-fade-in-up stagger-4">
             © 2026 Uni Medicare. All rights reserved.
           </p>
         </div>

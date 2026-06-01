@@ -69,7 +69,7 @@ export default function StudentConsultationsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-semibold text-obsidian">
+                      <p className="font-semibold text-obsidian dark:text-gray-100">
                         Consultation #{c.consultId}
                       </p>
                       {c.appointmentId && (
@@ -78,13 +78,13 @@ export default function StudentConsultationsPage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-slate-muted mt-0.5">
+                    <p className="text-sm text-slate-muted dark:text-gray-500 mt-0.5">
                       With {c.staffName} · {formatDateTime(c.consultTime)}
                     </p>
                     {c.notes && (
-                      <div className="mt-3 p-3 rounded-xl bg-cream-warm border border-border/40">
-                        <p className="text-xs font-medium text-slate-muted mb-1">Clinical Notes</p>
-                        <p className="text-sm text-obsidian">{c.notes}</p>
+                      <div className="mt-3 p-3 rounded-xl bg-cream-warm dark:bg-white/5 border border-border/40 dark:border-white/[0.06]">
+                        <p className="text-xs font-medium text-slate-muted dark:text-gray-500 mb-1">Clinical Notes</p>
+                        <p className="text-sm text-obsidian dark:text-gray-100">{c.notes}</p>
                       </div>
                     )}
                   </div>

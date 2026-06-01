@@ -72,10 +72,10 @@ export default function StudentPrescriptionsPage() {
               <CardContent>
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div>
-                    <h3 className="font-semibold text-obsidian font-display text-lg">
+                    <h3 className="font-semibold text-obsidian dark:text-gray-100 font-display text-lg">
                       Prescription #{p.prescriptionId}
                     </h3>
-                    <p className="text-sm text-slate-muted">
+                    <p className="text-sm text-slate-muted dark:text-gray-500">
                       {formatDate(p.prescriptionDate)}
                       {p.followUpDate &&
                         ` · Follow-up: ${formatDate(p.followUpDate)}`}
@@ -84,22 +84,22 @@ export default function StudentPrescriptionsPage() {
                 </div>
 
                 {p.chiefComplaint && (
-                  <div className="mb-4 p-3 rounded-xl bg-cream-warm border border-border/40">
-                    <p className="text-xs font-medium text-slate-muted mb-1">Chief Complaint</p>
-                    <p className="text-sm text-obsidian">{p.chiefComplaint}</p>
+                  <div className="mb-4 p-3 rounded-xl bg-cream-warm dark:bg-white/5 border border-border/40 dark:border-white/[0.06]">
+                    <p className="text-xs font-medium text-slate-muted dark:text-gray-500 mb-1">Chief Complaint</p>
+                    <p className="text-sm text-obsidian dark:text-gray-100">{p.chiefComplaint}</p>
                   </div>
                 )}
 
                 {p.diagnosis && (
                   <div className="mb-4 p-3 rounded-xl bg-emerald/5 border border-emerald/10">
                     <p className="text-xs font-medium text-emerald-deep mb-1">Diagnosis</p>
-                    <p className="text-sm text-obsidian">{p.diagnosis}</p>
+                    <p className="text-sm text-obsidian dark:text-gray-100">{p.diagnosis}</p>
                   </div>
                 )}
 
                 {p.labTests.length > 0 && (
                   <div>
-                    <p className="text-xs font-semibold text-slate-muted uppercase tracking-wider mb-2">
+                    <p className="text-xs font-semibold text-slate-muted dark:text-gray-500 uppercase tracking-wider mb-2">
                       Lab Tests
                     </p>
                     <div className="flex flex-wrap gap-2">

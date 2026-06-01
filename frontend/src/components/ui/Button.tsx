@@ -30,13 +30,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           {
             'bg-emerald text-white hover:bg-emerald-deep shadow-sm hover:shadow-md active:scale-[0.98]':
               variant === 'primary',
-            'bg-cream text-obsidian hover:bg-pearl border border-border':
+            'bg-cream dark:bg-white/10 text-obsidian dark:text-gray-200 hover:bg-pearl dark:hover:bg-white/15 border border-border dark:border-white/[0.08]':
               variant === 'secondary',
-            'bg-transparent text-slate-soft hover:text-obsidian hover:bg-cream':
+            'bg-transparent text-slate-soft dark:text-gray-400 hover:text-obsidian dark:hover:text-gray-200 hover:bg-cream dark:hover:bg-white/5':
               variant === 'ghost',
-            'bg-rose/10 text-rose hover:bg-rose/20 border border-rose/20':
+            'bg-rose/10 text-rose hover:bg-rose/20 border border-rose/20 dark:border-rose/30':
               variant === 'danger',
-            'bg-transparent text-obsidian border border-border hover:border-emerald hover:text-emerald':
+            'bg-transparent text-obsidian dark:text-gray-200 border border-border dark:border-white/[0.08] hover:border-emerald hover:text-emerald':
               variant === 'outline',
           },
           {

@@ -82,13 +82,13 @@ export default function AdminServicesPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="font-semibold text-obsidian">{s.serviceName}</p>
+                        <p className="font-semibold text-obsidian dark:text-gray-100">{s.serviceName}</p>
                         <StatusBadge status={s.isActive ? 'completed' : 'cancelled'} />
                       </div>
-                      <p className="text-sm text-slate-muted mt-0.5">{s.category} · {s.description || 'No description'}</p>
+                      <p className="text-sm text-slate-muted dark:text-gray-500 mt-0.5">{s.category} · {s.description || 'No description'}</p>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
-                      <p className="text-lg font-bold text-obsidian font-display">{formatCurrency(s.unitPrice)}</p>
+                      <p className="text-lg font-bold text-obsidian dark:text-gray-100 font-display">{formatCurrency(s.unitPrice)}</p>
                       <Button variant="outline" size="sm" onClick={() => handleToggle(s.serviceId)}>{s.isActive ? 'Deactivate' : 'Activate'}</Button>
                     </div>
                   </div>
@@ -98,7 +98,7 @@ export default function AdminServicesPage() {
           </div>
           <div className="flex justify-center gap-2">
             <Button variant="outline" size="sm" disabled={page === 0} onClick={() => setPage(page - 1)}>Previous</Button>
-            <span className="px-4 py-2 text-sm text-slate-muted">Page {page + 1} of {data.totalPages}</span>
+            <span className="px-4 py-2 text-sm text-slate-muted dark:text-gray-500">Page {page + 1} of {data.totalPages}</span>
             <Button variant="outline" size="sm" disabled={page >= data.totalPages - 1} onClick={() => setPage(page + 1)}>Next</Button>
           </div>
         </>
@@ -110,8 +110,8 @@ export default function AdminServicesPage() {
           <Input label="Category" placeholder="e.g. Consultation, Lab Test" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} required />
           <Input label="Price" type="number" step="0.01" placeholder="0.00" value={form.unitPrice} onChange={(e) => setForm({ ...form, unitPrice: e.target.value })} required />
           <div>
-            <label className="block text-sm font-medium text-slate-mid mb-1.5">Description</label>
-            <textarea className="w-full h-24 rounded-xl border border-border bg-white px-4 py-3 text-sm text-obsidian placeholder:text-silver transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none" placeholder="Brief description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Description</label>
+            <textarea className="w-full h-24 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-gray-500 resize-none" placeholder="Brief description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           </div>
           <div className="flex justify-end gap-3">
             <Button type="button" variant="ghost" onClick={() => setShowCreate(false)}>Cancel</Button>

@@ -26,7 +26,7 @@ export function TableSkeleton({ rows = 5, cols = 4 }: { rows?: number; cols?: nu
 
 export function CardSkeleton() {
   return (
-    <div className="rounded-2xl bg-white border border-border/60 p-6 space-y-4">
+    <div className="rounded-2xl bg-white dark:bg-gray-900 border border-border/60 dark:border-white/[0.06] p-6 space-y-4">
       <Skeleton className="h-5 w-1/3" />
       <Skeleton className="h-8 w-1/4" />
       <Skeleton className="h-4 w-2/3" />
@@ -44,11 +44,11 @@ export function DashboardSkeleton() {
         ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="rounded-2xl bg-white border border-border/60 p-6 space-y-4">
+        <div className="rounded-2xl bg-white dark:bg-gray-900 border border-border/60 dark:border-white/[0.06] p-6 space-y-4">
           <Skeleton className="h-5 w-1/3" />
           <TableSkeleton rows={4} cols={3} />
         </div>
-        <div className="rounded-2xl bg-white border border-border/60 p-6 space-y-4">
+        <div className="rounded-2xl bg-white dark:bg-gray-900 border border-border/60 dark:border-white/[0.06] p-6 space-y-4">
           <Skeleton className="h-5 w-1/3" />
           <TableSkeleton rows={4} cols={3} />
         </div>

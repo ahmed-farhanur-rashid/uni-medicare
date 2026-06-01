@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap');
 @import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
 
 :root {
   /* Core palette */
@@ -135,8 +136,14 @@
   background: var(--silver);
   border-radius: 3px;
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
 ::-webkit-scrollbar-thumb:hover {
   background: var(--slate-muted);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
 }
 
 /* Base styles */
@@ -284,6 +291,10 @@ body {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
+.dark .glass {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
 
 .glass-dark {
   background: rgba(10, 14, 23, 0.8);
@@ -300,6 +311,13 @@ body {
     radial-gradient(at 50% 50%, rgba(2, 132, 199, 0.04) 0%, transparent 50%),
     var(--cream-warm);
 }
+.dark .mesh-gradient-1 {
+  background:
+    radial-gradient(at 20% 20%, rgba(5, 150, 105, 0.12) 0%, transparent 50%),
+    radial-gradient(at 80% 80%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(2, 132, 199, 0.05) 0%, transparent 50%),
+    #0f172a;
+}
 
 .mesh-gradient-dark {
   background:
@@ -313,6 +331,9 @@ body {
 ::selection {
   background: rgba(5, 150, 105, 0.2);
   color: var(--obsidian);
+}
+.dark ::selection {
+  color: #f1f5f9;
 }
 
 /* Focus ring */
@@ -328,6 +349,10 @@ body {
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 6px;
+}
+.dark .skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
 }
 
 /* Sidebar link styles */
@@ -354,6 +379,9 @@ body {
 .sidebar-link.active {
   background: rgba(5, 150, 105, 0.1);
   color: var(--emerald-light);
+}
+.dark .sidebar-link.active {
+  background: rgba(52, 211, 153, 0.15);
 }
 
 /* Card hover lift */

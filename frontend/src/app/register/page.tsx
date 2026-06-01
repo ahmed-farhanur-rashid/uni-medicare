@@ -50,7 +50,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-cream-warm">
+    <div className="min-h-screen flex bg-cream-warm dark:bg-gray-950">
       {/* Left panel — decorative */}
       <div className="hidden lg:flex lg:w-1/2 bg-obsidian relative overflow-hidden items-center justify-center">
         <div className="absolute inset-0 mesh-gradient-dark opacity-60" />
@@ -63,7 +63,7 @@ export default function RegisterPage() {
             </svg>
           </div>
           <h1 className="text-3xl font-bold text-white font-display mb-3">Uni Medicare</h1>
-          <p className="text-silver/60 text-sm">University Medical Center Management System</p>
+          <p className="text-silver/60 dark:text-gray-500/60 text-sm">University Medical Center Management System</p>
         </div>
       </div>
 
@@ -71,8 +71,8 @@ export default function RegisterPage() {
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-md">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-obsidian font-display">Create your account</h2>
-            <p className="text-sm text-slate-muted mt-1">Register as a student to access medical services</p>
+            <h2 className="text-2xl font-bold text-obsidian dark:text-gray-100 font-display">Create your account</h2>
+            <p className="text-sm text-slate-muted dark:text-gray-500 mt-1">Register as a student to access medical services</p>
           </div>
 
           {error && (
@@ -107,17 +107,17 @@ export default function RegisterPage() {
               {...register('phone')}
             />
             <div>
-              <label className="block text-sm font-medium text-slate-mid mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  className={`w-full rounded-xl border bg-white px-4 py-3 pr-12 text-sm text-obsidian placeholder:text-silver transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted ${errors.password ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border'}`}
+                  className={`w-full rounded-xl border bg-white dark:bg-gray-900 px-4 py-3 pr-12 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-gray-600 ${errors.password ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border dark:border-white/[0.08]'}`}
                   placeholder="Min 8 characters"
                   {...register('password')}
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-silver hover:text-slate-muted transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-silver hover:text-slate-muted transition-colors dark:text-gray-500 dark:hover:text-gray-400"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -144,9 +144,9 @@ export default function RegisterPage() {
             />
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-mid mb-1.5">Blood Group</label>
+                <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Blood Group</label>
                 <select
-                  className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-obsidian transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted ${errors.bloodgroup ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border'}`}
+                  className={`w-full rounded-xl border bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-gray-600 ${errors.bloodgroup ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border dark:border-white/[0.08]'}`}
                   {...register('bloodgroup')}
                 >
                   <option value="">Select</option>
@@ -161,9 +161,9 @@ export default function RegisterPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-mid mb-1.5">Sex</label>
+                <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Sex</label>
                 <select
-                  className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-obsidian transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted ${errors.sex ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border'}`}
+                  className={`w-full rounded-xl border bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted dark:hover:border-gray-600 ${errors.sex ? 'border-rose focus:ring-rose/30 focus:border-rose' : 'border-border dark:border-white/[0.08]'}`}
                   {...register('sex')}
                 >
                   <option value="">Select</option>
@@ -179,7 +179,7 @@ export default function RegisterPage() {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-muted">
+          <p className="mt-6 text-center text-sm text-slate-muted dark:text-gray-500">
             Already have an account?{' '}
             <Link href="/" className="text-emerald-deep font-medium hover:underline">
               Sign in

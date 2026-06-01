@@ -59,7 +59,7 @@ export default function LabResultsPage() {
 
       <div className="flex gap-2 overflow-x-auto pb-2">
         {['all', 'pending', 'completed'].map((f) => (
-          <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filter === f ? 'bg-emerald text-white shadow-sm' : 'bg-white text-slate-muted border border-border hover:border-emerald hover:text-emerald'}`}>
+          <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${filter === f ? 'bg-emerald text-white shadow-sm' : 'bg-white dark:bg-gray-900 text-slate-muted dark:text-gray-500 border border-border dark:border-white/[0.08] hover:border-emerald hover:text-emerald'}`}>
             {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
           </button>
         ))}
@@ -78,10 +78,10 @@ export default function LabResultsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="font-semibold text-obsidian">{r.labTestName}</p>
+                      <p className="font-semibold text-obsidian dark:text-gray-100">{r.labTestName}</p>
                       <StatusBadge status={r.resultStatus} />
                     </div>
-                    <p className="text-sm text-slate-muted mt-0.5">{formatDateTime(r.createdAt)} · {r.resultValue ? `Result: ${r.resultValue}` : 'Awaiting results'}</p>
+                    <p className="text-sm text-slate-muted dark:text-gray-500 mt-0.5">{formatDateTime(r.createdAt)} · {r.resultValue ? `Result: ${r.resultValue}` : 'Awaiting results'}</p>
                   </div>
                   {r.resultStatus === 'pending' && (
                     <Button variant="outline" size="sm" onClick={() => { setSelectedResult(r); setResultValue(''); setResultNotes(''); }}>Enter Results</Button>
@@ -96,14 +96,14 @@ export default function LabResultsPage() {
       <Modal isOpen={!!selectedResult} onClose={() => setSelectedResult(null)} title="Enter Lab Results">
         <div className="space-y-4">
           {selectedResult && (
-            <div className="p-3 rounded-xl bg-cream-warm border border-border/40">
-              <p className="text-sm font-medium text-obsidian">{selectedResult.labTestName}</p>
+            <div className="p-3 rounded-xl bg-cream-warm dark:bg-white/[0.02] border border-border/40 dark:border-white/[0.06]">
+              <p className="text-sm font-medium text-obsidian dark:text-gray-100">{selectedResult.labTestName}</p>
             </div>
           )}
           <Input label="Result Value" placeholder="Enter test result" value={resultValue} onChange={(e) => setResultValue(e.target.value)} />
           <div>
-            <label className="block text-sm font-medium text-slate-mid mb-1.5">Notes</label>
-            <textarea className="w-full h-24 rounded-xl border border-border bg-white px-4 py-3 text-sm text-obsidian placeholder:text-silver transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none" placeholder="Additional notes..." value={resultNotes} onChange={(e) => setResultNotes(e.target.value)} />
+            <label className="block text-sm font-medium text-slate-mid dark:text-gray-300 mb-1.5">Notes</label>
+            <textarea className="w-full h-24 rounded-xl border border-border dark:border-white/[0.08] bg-white dark:bg-gray-900 px-4 py-3 text-sm text-obsidian dark:text-gray-100 placeholder:text-silver dark:placeholder:text-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald/30 focus:border-emerald hover:border-slate-muted resize-none" placeholder="Additional notes..." value={resultNotes} onChange={(e) => setResultNotes(e.target.value)} />
           </div>
           <div className="flex justify-end gap-3">
             <Button variant="ghost" onClick={() => setSelectedResult(null)}>Cancel</Button>
