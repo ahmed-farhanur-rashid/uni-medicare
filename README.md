@@ -2,6 +2,10 @@
 
 University medical center management system — full-stack monorepo with Spring Boot backend, Next.js frontend, and PostgreSQL database.
 
+![Java](https://img.shields.io/badge/Java-17+-ED8B00?logo=java&logoColor=white) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?logo=springboot&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178c6?logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/React-61dafb?logo=react&logoColor=black) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?logo=postgresql&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ed?logo=docker&logoColor=white) ![License](https://img.shields.io/badge/License-MIT-blue)
+
+---
+
 ## Tech Stack
 
 | Layer | Technology |
